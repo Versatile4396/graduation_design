@@ -34,6 +34,14 @@ module.exports = defineConfig({
     distPath: {
       root: path.resolve(cwdPath, "./dist"),
     },
+    sourceMap: {
+      js:
+        process.env.NODE_ENV === "production"
+          ? // 生产模式使用高质量的 source map 格式
+            "source-map"
+          : // 开发模式使用性能更好的 source map 格式
+            "cheap-module-source-map",
+    },
     externals: [/node_modules/],
   },
 });
