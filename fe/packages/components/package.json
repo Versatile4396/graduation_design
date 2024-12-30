@@ -1,10 +1,14 @@
 {
-  "name": "components",
+  "name": "@mono/components",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "peerDependencies": {
+    "vue": "3.3.8",
+    "lodash-es": "4.17.21"
   },
   "keywords": [],
   "author": "",

@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
   <div>
     <a href="https://vite.dev" target="_blank">
@@ -10,10 +6,13 @@ import HelloWorld from './components/HelloWorld.vue'
     <a href="https://vuejs.org/" target="_blank">
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
+    <Navigator></Navigator>
   </div>
   <HelloWorld msg="Vite + Vue" />
 </template>
-
+<script lang="ts" setup>
+import { Navigator } from "@mono/components";
+</script>
 <style scoped>
 .logo {
   height: 6em;
