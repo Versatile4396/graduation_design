@@ -6,7 +6,7 @@
   "private": "true",
   "scripts": {
     "dev": "cd app && pnpm run dev",
-    "build": "",
+    "build": "cd app && pnpm run build",
     "reset": "node reset.js"
   },
   "keywords": [],

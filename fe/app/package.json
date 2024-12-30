@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "dev:rs": "NODE_ENV=development build-cli dev",
-    "build:rs": "NODE_ENV=development build-cli build",
+    "build:rs": "NODE_ENV=production build-cli build",
     "preview": "vite preview"
   },
   "dependencies": {
