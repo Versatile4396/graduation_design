@@ -1,0 +1,14 @@
+{
+  "name": "graduation-design-fe-mono",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": "true",
+  "scripts": {
+    "dev": "cd app && pnpm run dev",
+    "build": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
