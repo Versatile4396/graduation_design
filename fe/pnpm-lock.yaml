@@ -10,6 +10,9 @@ importers:
 
   app:
     dependencies:
+      '@mono/build-cli':
+        specifier: workspace:^
+        version: link:../packages/build-cli
       '@mono/components':
         specifier: workspace:^
         version: link:../packages/components

@@ -6,14 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
+    "dev:rs": "NODE_ENV=development build-cli dev",
+    "build:rs": "NODE_ENV=development build-cli build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mono/build-cli": "workspace:^",
     "@mono/components": "workspace:^",
+    "@mono/utils": "workspace:^",
     "axios": "^1.7.9",
     "lodash-es": "^4.17.21",
     "sass": "^1.83.0",
-    "@mono/utils": "workspace:^",
     "vue": "^3.5.13"
   },
   "devDependencies": {
