@@ -18,6 +18,9 @@ CREATE TABLE
         `email` varchar(320) NOT NULL COMMENT '邮箱',
         `phone_number` varchar(11) DEFAULT NULL COMMENT '手机号',
         `password` varchar(255) NOT NULL COMMENT '密码',
+        `is_email_verified` tinyint(1) NOT NULL DEFAULT '0' COMMENT '邮箱是否已验证',
+        `is_phone_verified` tinyint(1) NOT NULL DEFAULT '0' COMMENT '手机号是否已验证',
+        `third_party_accounts` json DEFAULT NULL COMMENT '第三方账号信息',
         `avatar` varchar(255) DEFAULT NULL COMMENT '头像token',
         `cover` varchar(50) DEFAULT NULL COMMENT '封面图片token',
         `follower_count` int (11) unsigned NOT NULL DEFAULT '0' COMMENT '关注我的人数',
@@ -32,7 +35,6 @@ CREATE TABLE
         `inbox_unread` int (11) unsigned NOT NULL DEFAULT '0' COMMENT '未读私信数',
         `headline` varchar(40) DEFAULT NULL COMMENT '一句话介绍',
         `bio` varchar(160) DEFAULT NULL COMMENT '个人简介',
-        `blog` varchar(255) DEFAULT NULL COMMENT '个人主页',
         `company` varchar(255) DEFAULT NULL COMMENT '公司名称',
         `location` varchar(255) DEFAULT NULL COMMENT '地址',
         `created_at` int (10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
@@ -41,5 +43,5 @@ CREATE TABLE
         PRIMARY KEY (`user_id`),
         KEY `user_name` (`username`),
         KEY `email` (`email`),
-        KEY `create_at` (`create_time`)
+        KEY `created_at` (`created_at`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '用户表';
