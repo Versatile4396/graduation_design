@@ -1,21 +1,21 @@
--- 删除数据库中的所有表数据
-SET FOREIGN_KEY_CHECKS = 0;
--- 获取所有表名并拼接成 DROP TABLE 语句，这里假设表名之间不存在空格等特殊情况干扰
-SELECT CONCAT('DROP TABLE ', table_name, ';') INTO @drop_tables_sql
-FROM information_schema.tables
-WHERE table_schema = DATABASE() AND table_type = 'BASE TABLE';
+-- -- 删除数据库中的所有表数据
+-- SET FOREIGN_KEY_CHECKS = 0;
+-- -- 获取所有表名并拼接成 DROP TABLE 语句，这里假设表名之间不存在空格等特殊情况干扰
+-- SELECT CONCAT('DROP TABLE ', table_name, ';') INTO @drop_tables_sql
+-- FROM information_schema.tables
+-- WHERE table_schema = DATABASE() AND table_type = 'BASE TABLE';
 
--- 执行拼接好的语句来删除表
-PREPARE stmt FROM @drop_tables_sql;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
-SET FOREIGN_KEY_CHECKS = 1;
+-- -- 执行拼接好的语句来删除表
+-- PREPARE stmt FROM @drop_tables_sql;
+-- EXECUTE stmt;
+-- DEALLOCATE PREPARE stmt;
+-- SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE
     `user` (
         `user_id` int (11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
         `username` varchar(20) NOT NULL COMMENT '用户名',
-        `email` varchar(320) NOT NULL COMMENT '邮箱',
+        `email` varchar(320)  COMMENT '邮箱',
         `phone_number` varchar(11) DEFAULT NULL COMMENT '手机号',
         `password` varchar(255) NOT NULL COMMENT '密码',
         `is_email_verified` tinyint(1) NOT NULL DEFAULT '0' COMMENT '邮箱是否已验证',

@@ -1,12 +1,13 @@
 package main
 
 import (
+	"be/config"
 	_ "be/docs"
 	"be/routers"
-	"log"
+	"log/slog"
 
-	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 // @title           Swagger Example API
@@ -19,8 +20,9 @@ import (
 
 // @BasePath  /api
 func main() {
+	config.InitConfig()
 	router := routers.InitRouters()
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	log.Println("Server started at http://127.0.0.1:5555")
+	slog.Info("Server started at http://127.0.0.1:5555")
 	router.Run(":5555")
 }

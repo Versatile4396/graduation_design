@@ -1,4 +1,4 @@
-package model
+package models
 
 type MyCode int64
 

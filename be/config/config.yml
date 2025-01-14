@@ -1,0 +1,11 @@
+app:
+  name: "grdudation_design"
+  port: :5555
+
+database:
+  name: "grdudation_design"
+  host: "localhost"
+  port: 3306
+  user: "root"
+  password: "123456"
+  charset: "utf8mb4"

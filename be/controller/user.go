@@ -1,6 +1,8 @@
 package controller
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 // Ping godoc
 // @Summary      用户注册
@@ -10,6 +12,7 @@ import "github.com/gin-gonic/gin"
 // @Produce      json
 // @Router       /register [post]
 func UserRegisterController(c *gin.Context) {
+	// 控制dao层 修改数据库
 	c.JSON(200, gin.H{
 		"message": "register success",
 	})
