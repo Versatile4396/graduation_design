@@ -13,7 +13,7 @@ import (
 
 var Db *gorm.DB
 
-func initDB() (err error) {
+func InitDB() (err error) {
 	dsn := AppConfig.Database.Dsn
 	Db, err = gorm.Open(mysql.Open(dsn))
 	if err != nil {

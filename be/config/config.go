@@ -1,13 +1,14 @@
 package config
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	App struct {
+	Mode string `mapstructrue:"mode"`
+	App  struct {
 		Name string
 		Port string
 	}
@@ -21,22 +22,40 @@ type Config struct {
 		DB       int
 		Password string
 	}
+
+	*RedisConfig `mapstructure:"redis"`
+	*LogConfig   `mapstructure:"log"`
 }
 
-var AppConfig *Config
+type LogConfig struct {
+	Level      string `mapstructure:"level"`
+	Filename   string `mapstructure:"filename"`
+	MaxSize    int    `mapstructure:"max_size"`
+	MaxAge     int    `mapstructure:"max_age"`
+	MaxBackups int    `mapstructure:"max_backups"`
+}
 
-func InitConfig() {
+type RedisConfig struct {
+	Host         string `mapstructure:"host"`
+	Password     string `mapstructure:"password"`
+	Port         int    `mapstructure:"port"`
+	DB           int    `mapstructure:"db"`
+	PoolSize     int    `mapstructure:"pool_size"`
+	MinIdleConns int    `mapstructure:"min_idle_conns"`
+}
+
+var AppConfig = new(Config)
+
+func InitConfig() error {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("./config")
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatal("Error reading config file:", err)
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(fmt.Errorf("ReadInConfig failed, err: %v", err))
 	}
-	AppConfig = &Config{}
-
 	if err := viper.Unmarshal(AppConfig); err != nil {
-		log.Fatal("Error unmarshaling config:", err)
+		panic(fmt.Errorf("unmarshal to Conf failed, err:%v", err))
 	}
-	initDB()
-
+	return err
 }
