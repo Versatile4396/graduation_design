@@ -1,6 +1,8 @@
 package controller
 
 import (
+	models "be/model"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,10 +14,11 @@ import (
 // @Produce      json
 // @Router       /register [post]
 func UserRegisterController(c *gin.Context) {
-	// 控制dao层 修改数据库
-	c.JSON(200, gin.H{
-		"message": "register success",
-	})
+	var user models.User
+	if err := c.ShouldBindJSON(&user); err != nil {
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+	}
+
 }
 
 func UserLoginController(c *gin.Context) {

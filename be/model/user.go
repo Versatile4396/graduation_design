@@ -1,6 +1,6 @@
 package models
 
-type RegisterForm struct {
+type User struct {
 	UserName        string `json:"username" binding:"required"`  // 用户名
 	Email           string `json:"email" binding:"required"`     // 邮箱
 	Gender          int    `json:"gender" binding:"oneof=0 1 2"` // 性别 0:未知 1:男 2:女
