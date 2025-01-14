@@ -3,6 +3,6 @@ app:
   port: :5555
 
 database:
-  dsn: "root:123456@tcp(127.0.0.1:3306)/gindb?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn: "root:123456@tcp(127.0.0.1:3306)/appDB?charset=utf8mb4&parseTime=True&loc=Local"
   maxIdleConns: 11
   maxOpenConns: 114

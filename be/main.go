@@ -4,7 +4,6 @@ import (
 	"be/config"
 	_ "be/docs"
 	"be/routers"
-	"fmt"
 	"log"
 
 	swaggerFiles "github.com/swaggo/files"
@@ -22,7 +21,6 @@ import (
 // @BasePath  /api
 func main() {
 	config.InitConfig()
-	fmt.Println("config init success", config.AppConfig)
 	router := routers.InitRouters()
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	log.Println("Server started at http://127.0.0.1:5555")

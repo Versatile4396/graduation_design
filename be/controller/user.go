@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"be/Log"
+	"be/global"
 	models "be/model"
 
 	"github.com/gin-gonic/gin"
@@ -18,7 +20,13 @@ func UserRegisterController(c *gin.Context) {
 	if err := c.ShouldBindJSON(&user); err != nil {
 		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
 	}
-
+	Log.Fmt(user)
+	// c.JSON(200, gin.H{
+	// 	"message": user.Email,
+	// })
+	if err := global.Db.Create(&user).Error; err != nil {
+		ResponseErrorWithMsg(c, CodeInvalidParams, "注册失败"+err.Error())
+	}
 }
 
 func UserLoginController(c *gin.Context) {
