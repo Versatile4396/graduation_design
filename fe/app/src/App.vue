@@ -1,20 +1,15 @@
 <template>
-   <Navigator></Navigator>
+  <Navigator v-if="navigatorStatus"></Navigator>
+  <RouterView />
 </template>
 <script lang="ts" setup>
 import { Navigator } from "@mono/components";
+import { RouterView } from "vue-router";
+import { computed } from "vue";
+import "@/assets/style/global.css";
+
+const navigatorStatus = computed(() => {
+  return !location.href.includes("/login");
+});
 </script>
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<style scoped></style>
