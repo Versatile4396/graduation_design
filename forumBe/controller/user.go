@@ -27,4 +27,5 @@ func UserRegisterController(c *gin.Context) {
 	if err := global.Db.Create(&user).Error; err != nil {
 		ResponseErrorWithMsg(c, CodeInvalidParams, "注册失败"+err.Error())
 	}
+	ResponseSuccess(c, "注册成功")
 }
