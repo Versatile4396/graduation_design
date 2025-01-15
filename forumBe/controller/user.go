@@ -8,6 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Ping godoc
+// @Summary      用户注册
+// @Description  用户注册接口
+// @Success      200  {string}  string
+// @body        name body     string  true  "name"
+// @Produce      json
+// @Router       /register [post]
 func UserRegisterController(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {

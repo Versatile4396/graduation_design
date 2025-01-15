@@ -7,3 +7,5 @@ go get -u pkg.in/natefinch/lumberjack.v2
 go get -u github.com/go-redis/redis/v8
 go get -u github.com/gin-gonic/gin
 go get -u github.com/juju/ratelimit
+swagger相关
+go get -u github.com/swaggo/swag/cmd/swag

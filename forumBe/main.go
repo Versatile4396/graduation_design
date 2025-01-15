@@ -4,7 +4,12 @@ import (
 	"fmt"
 	"forum/config"
 	"forum/dao/mysql"
+	_ "forum/docs"
 	"forum/logger"
+	"forum/router"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
@@ -23,4 +28,10 @@ func main() {
 		fmt.Printf("Db init failed, err:%v\n", err)
 		return
 	}
+
+	// 路由初始化
+
+	r := router.SetupRouter()
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.Run(config.AppConf.AppBaseConfig.Port)
 }

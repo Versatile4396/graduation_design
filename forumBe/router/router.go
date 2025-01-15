@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRouter() {
+func SetupRouter() *gin.Engine {
 	router := gin.New()
 	// 设置中间件 recovery 中间件会recovery项目中kennel会出现的panic
 	router.Use(logger.GinLogger(),
@@ -20,5 +20,5 @@ func SetupRouter() {
 	{
 		user.POST("/register", controller.UserRegisterController)
 	}
-
+	return router
 }

@@ -1,0 +1,15 @@
+info:
+  contact: {}
+paths:
+  /register:
+    post:
+      description: 用户注册接口
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 用户注册
+swagger: "2.0"
