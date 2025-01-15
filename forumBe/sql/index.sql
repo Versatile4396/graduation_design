@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS users;
 
 CREATE TABLE
     `users` (
@@ -32,7 +31,7 @@ CREATE TABLE
         `created_at` int (10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
         `updated_at` int (10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
         `deleted_at` int (10) unsigned NOT NULL DEFAULT '0' COMMENT '禁用时间',
-        PRIMARY KEY (`user_id`),
+        PRIMARY KEY (`user_index`),
         KEY `user_name` (`user_name`),
         KEY `email` (`email`),
         KEY `created_at` (`created_at`)
