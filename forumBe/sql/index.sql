@@ -2,7 +2,8 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE
     `users` (
-        `user_id` int (11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+        `user_index` int (11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+        `user_id` int (11) unsigned NOT NULL COMMENT '用户ID',
         `user_name` varchar(20) NOT NULL COMMENT '用户名',
         `email` varchar(320) COMMENT '邮箱',
         `phone_number` varchar(11) DEFAULT NULL COMMENT '手机号',
