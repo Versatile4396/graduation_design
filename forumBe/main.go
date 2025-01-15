@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"forum/config"
+	"forum/controller"
 	mysql "forum/dao"
 	_ "forum/docs"
 	"forum/logger"
@@ -33,6 +34,10 @@ func main() {
 	// 雪花算法 生成分布式ID
 	if err := snowflake.Init(1); err != nil {
 		logger.Error("init snowflake failed err:\n")
+		return
+	}
+	if err := controller.InitTrans("zh"); err != nil {
+		fmt.Printf("init validator Trans failed,err:%v\n", err)
 		return
 	}
 	// 路由初始化

@@ -26,7 +26,8 @@ func UserRegisterController(c *gin.Context) {
 	}
 	logger.Fmt(user)
 	// 业务处理-注册用户
-	if err := logic.SignUp(user); err != nil {
+	userId, err := logic.SignUp(user)
+	if err != nil {
 		zap.L().Error("logic.signUp failed", zap.Error(err))
 		if err.Error() == mysql.ErrorUserExit {
 			ResponseError(c, CodeUserExist)
@@ -35,5 +36,11 @@ func UserRegisterController(c *gin.Context) {
 		ResponseError(c, CodeServerBusy)
 		return
 	}
-	ResponseSuccess(c, "注册成功")
+	res := &models.User{
+		UserId:   userId,
+		Email:    user.Email,
+		Gender:   user.Gender,
+		UserName: user.UserName,
+	}
+	ResponseSuccess(c, res)
 }
