@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 	"forum/config"
-	"forum/dao/mysql"
+	mysql "forum/dao"
 	_ "forum/docs"
 	"forum/logger"
+	"forum/pkg/snowflake"
 	"forum/router"
 
 	swaggerFiles "github.com/swaggo/files"
@@ -29,8 +30,12 @@ func main() {
 		return
 	}
 
+	// 雪花算法 生成分布式ID
+	if err := snowflake.Init(1); err != nil {
+		logger.Error("init snowflake failed err:\n")
+		return
+	}
 	// 路由初始化
-
 	r := router.SetupRouter()
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.Run(config.AppConf.AppBaseConfig.Port)

@@ -1,1 +1,112 @@
 {"level":"INFO","time":"2025-01-15 11:34:35","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 11:40:22","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 11:47:02","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:05:19","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:06:08","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:06:11","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:06:50","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:07:29","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:09:40","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:10:44","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:10:59","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:11:52","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:11:59","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:12:20","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:13:00","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:13:09","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:13:12","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:13:23","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:15:09","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:18:21","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:19:01","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:19:15","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:19:27","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:20:11","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:20:36","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:20:53","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:21:10","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:21:12","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:21:52","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:21:53","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:22:12","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:22:16","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:22:45","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:24:32","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:25:22","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:25:24","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:25:33","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:25:43","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:25:49","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:25:51","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:27:08","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:27:20","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:27:22","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:29:18","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:29:42","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:30:06","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:30:13","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:30:42","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:30:51","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:31:09","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:31:13","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:31:15","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:31:18","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:31:19","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:31:21","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:35:29","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:35:46","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:36:12","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:36:20","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:36:27","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:39:54","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:40:00","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:40:31","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:41:01","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:42:18","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:42:24","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:42:37","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:43:38","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:43:41","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:43:50","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:43:53","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:44:08","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:44:47","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:46:00","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:46:36","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:46:44","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:47:28","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:47:34","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:47:55","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:48:05","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:48:07","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:48:50","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:49:03","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:50:30","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:51:11","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:51:12","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:55:16","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"ERROR","time":"2025-01-15 13:55:35","caller":"controller/user.go:23","msg":"SignUp with invalid param","error":"Key: 'User.UserId' Error:Field validation for 'UserId' failed on the 'required' tag"}
+{"level":"ERROR","time":"2025-01-15 13:55:35","caller":"controller/user.go:29","msg":"logic.signUp failed","error":"用户已存在"}
+{"level":"INFO","time":"2025-01-15 13:55:35","caller":"logger/logger.go:88","msg":"/api/user/register","status":200,"method":"POST","path":"/api/user/register","query":"","ip":"127.0.0.1","user-agent":"Apifox/1.0.0 (https://apifox.com)","errors":"","cost":0.005709417}
+{"level":"ERROR","time":"2025-01-15 13:56:03","caller":"controller/user.go:23","msg":"SignUp with invalid param","error":"Key: 'User.UserId' Error:Field validation for 'UserId' failed on the 'required' tag"}
+{"level":"ERROR","time":"2025-01-15 13:56:03","caller":"controller/user.go:29","msg":"logic.signUp failed","error":"用户已存在"}
+{"level":"INFO","time":"2025-01-15 13:56:03","caller":"logger/logger.go:88","msg":"/api/user/register","status":200,"method":"POST","path":"/api/user/register","query":"","ip":"127.0.0.1","user-agent":"Apifox/1.0.0 (https://apifox.com)","errors":"","cost":0.002025875}
+{"level":"INFO","time":"2025-01-15 13:56:21","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"INFO","time":"2025-01-15 13:56:27","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"ERROR","time":"2025-01-15 13:56:34","caller":"controller/user.go:23","msg":"SignUp with invalid param","error":"Key: 'User.UserId' Error:Field validation for 'UserId' failed on the 'required' tag"}
+{"level":"INFO","time":"2025-01-15 13:56:34","caller":"logger/logger.go:88","msg":"/api/user/register","status":200,"method":"POST","path":"/api/user/register","query":"","ip":"127.0.0.1","user-agent":"Apifox/1.0.0 (https://apifox.com)","errors":"","cost":0.000650833}
+{"level":"INFO","time":"2025-01-15 13:57:35","caller":"logger/logger.go:46","msg":"init logger success"}
+{"level":"ERROR","time":"2025-01-15 13:57:36","caller":"controller/user.go:30","msg":"logic.signUp failed","error":"用户已存在"}
+{"level":"INFO","time":"2025-01-15 13:57:36","caller":"logger/logger.go:88","msg":"/api/user/register","status":200,"method":"POST","path":"/api/user/register","query":"","ip":"127.0.0.1","user-agent":"Apifox/1.0.0 (https://apifox.com)","errors":"","cost":0.002779625}
+{"level":"ERROR","time":"2025-01-15 13:57:38","caller":"controller/user.go:30","msg":"logic.signUp failed","error":"用户已存在"}
+{"level":"INFO","time":"2025-01-15 13:57:38","caller":"logger/logger.go:88","msg":"/api/user/register","status":200,"method":"POST","path":"/api/user/register","query":"","ip":"127.0.0.1","user-agent":"Apifox/1.0.0 (https://apifox.com)","errors":"","cost":0.001725916}
+{"level":"ERROR","time":"2025-01-15 13:57:42","caller":"controller/user.go:30","msg":"logic.signUp failed","error":"Error 1264 (22003): Out of range value for column 'user_id' at row 1"}
+{"level":"INFO","time":"2025-01-15 13:57:42","caller":"logger/logger.go:88","msg":"/api/user/register","status":200,"method":"POST","path":"/api/user/register","query":"","ip":"127.0.0.1","user-agent":"Apifox/1.0.0 (https://apifox.com)","errors":"","cost":0.003014083}
+{"level":"ERROR","time":"2025-01-15 13:57:44","caller":"controller/user.go:30","msg":"logic.signUp failed","error":"Error 1264 (22003): Out of range value for column 'user_id' at row 1"}
+{"level":"INFO","time":"2025-01-15 13:57:44","caller":"logger/logger.go:88","msg":"/api/user/register","status":200,"method":"POST","path":"/api/user/register","query":"","ip":"127.0.0.1","user-agent":"Apifox/1.0.0 (https://apifox.com)","errors":"","cost":0.002893625}
+{"level":"ERROR","time":"2025-01-15 13:57:45","caller":"controller/user.go:30","msg":"logic.signUp failed","error":"Error 1264 (22003): Out of range value for column 'user_id' at row 1"}
+{"level":"INFO","time":"2025-01-15 13:57:45","caller":"logger/logger.go:88","msg":"/api/user/register","status":200,"method":"POST","path":"/api/user/register","query":"","ip":"127.0.0.1","user-agent":"Apifox/1.0.0 (https://apifox.com)","errors":"","cost":0.00332325}
+{"level":"ERROR","time":"2025-01-15 13:57:46","caller":"controller/user.go:30","msg":"logic.signUp failed","error":"Error 1264 (22003): Out of range value for column 'user_id' at row 1"}
+{"level":"INFO","time":"2025-01-15 13:57:46","caller":"logger/logger.go:88","msg":"/api/user/register","status":200,"method":"POST","path":"/api/user/register","query":"","ip":"127.0.0.1","user-agent":"Apifox/1.0.0 (https://apifox.com)","errors":"","cost":0.003569125}
+{"level":"ERROR","time":"2025-01-15 13:57:46","caller":"controller/user.go:30","msg":"logic.signUp failed","error":"Error 1264 (22003): Out of range value for column 'user_id' at row 1"}
+{"level":"INFO","time":"2025-01-15 13:57:46","caller":"logger/logger.go:88","msg":"/api/user/register","status":200,"method":"POST","path":"/api/user/register","query":"","ip":"127.0.0.1","user-agent":"Apifox/1.0.0 (https://apifox.com)","errors":"","cost":0.002807416}
