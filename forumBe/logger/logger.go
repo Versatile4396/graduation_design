@@ -66,7 +66,7 @@ func getEncoder() zapcore.Encoder {
 func getLogWriter(filename string, maxSize, maxBackup, maxAge int) zapcore.WriteSyncer {
 	stSeperator := string(filepath.Separator)
 	stRootDir, _ := os.Getwd()
-	stLogPath := stRootDir + stSeperator + filename + "Log" + stSeperator + time.Now().Format(time.DateOnly)
+	stLogPath := stRootDir + stSeperator + filename + "log" + stSeperator + time.Now().Format(time.DateOnly)
 	lumberJackLogger := &lumberjack.Logger{
 		Filename:   stLogPath,
 		MaxSize:    maxSize,

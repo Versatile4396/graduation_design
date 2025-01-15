@@ -178,3 +178,4 @@
 {"level":"ERROR","time":"2025-01-15 15:31:50","caller":"controller/user.go:31","msg":"logic.signUp failed","error":"用户已存在"}
 {"level":"INFO","time":"2025-01-15 15:31:50","caller":"logger/logger.go:88","msg":"/api/user/register","status":200,"method":"POST","path":"/api/user/register","query":"","ip":"127.0.0.1","user-agent":"Apifox/1.0.0 (https://apifox.com)","errors":"","cost":0.004000334}
 {"level":"INFO","time":"2025-01-15 15:31:57","caller":"logger/logger.go:88","msg":"/api/user/register","status":200,"method":"POST","path":"/api/user/register","query":"","ip":"127.0.0.1","user-agent":"Apifox/1.0.0 (https://apifox.com)","errors":"","cost":0.004777917}
+{"level":"INFO","time":"2025-01-15 15:34:27","caller":"logger/logger.go:46","msg":"init logger success"}
