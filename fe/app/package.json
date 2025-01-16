@@ -11,11 +11,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@formily/core": "^2.3.2",
+    "@formily/vue": "^2.3.2",
     "@mono/build-cli": "workspace:^",
     "@mono/components": "workspace:^",
     "@mono/utils": "workspace:^",
+    "ant-design-vue": "^4.2.6",
     "axios": "^1.7.9",
+    "install": "^0.13.0",
     "lodash-es": "^4.17.21",
+    "moment": "^2.30.1",
     "pinia": "^2.3.0",
     "query-string": "^9.1.1",
     "sass": "^1.83.0",
@@ -26,6 +31,7 @@
     "@types/node": "^22.10.2",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
+    "less": "^4.2.1",
     "typescript": "~5.6.2",
     "vite": "^6.0.5",
     "vue-tsc": "^2.2.0"
