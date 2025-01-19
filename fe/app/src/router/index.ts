@@ -21,6 +21,14 @@ export const routes: RouteRecordRaw[] = [
     },
     component: () => import("@/page/login/index.vue"),
   },
+  {
+    path: "/test",
+    name: "test",
+    meta: {
+      title: "测试界面",
+    },
+    component: () => import("@/page/test/index.vue"),
+  },
 ];
 const BASE = "forum";
 const router = createRouter({

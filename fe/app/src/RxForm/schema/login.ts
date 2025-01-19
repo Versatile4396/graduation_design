@@ -1,22 +1,25 @@
+import type { ISchema } from "@formily/vue";
+
 export const loginSchema = {
   type: "object",
   properties: {
     account: {
       type: "string",
-      required: true,
+      "x-decorator": "FormItem",
       "x-component": "Input",
       "x-component-props": {
         placeholder: "请输入手机号/邮箱号",
       },
-      "x-validator": [
-        {
-          minimum: 5,
-        },
-      ],
+      "x-validator": {
+        required: true,
+      },
     },
     password: {
       type: "string",
-      required: true,
+      "x-validator": {
+        required: true,
+      },
+      "x-decorator": "FormItem",
       "x-component": "InputPassword",
       "x-component-props": {
         style: {
@@ -26,7 +29,7 @@ export const loginSchema = {
       },
     },
   },
-};
+} as ISchema;
 
 export const registerSchema = {
   type: "object",

@@ -39,6 +39,7 @@ import {
   RadioGroup,
   Select,
   InputPassword,
+  FormItem,
 } from "ant-design-vue";
 interface Props {
   schema: any;
@@ -60,6 +61,7 @@ const form = createForm({
 setValidateLanguage("cn");
 
 const submitHandle = () => {
+  form.submit();
   emits("submit", form);
 };
 const cancelHandle = () => {
@@ -74,6 +76,7 @@ const fieldSchema = createSchemaField({
     RadioGroup,
     Select,
     InputPassword,
+    FormItem,
   },
 }).SchemaField;
 </script>
