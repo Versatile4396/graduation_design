@@ -5,14 +5,26 @@
       <slot name="submit_wrapper"></slot>
     </div>
     <div v-else class="default_submit_wrapper">
-      <Button type="primary" @click="submitHandle">提交</Button>
-      <Button type="default" @click="cancelHandle">取消</Button>
+      <Button
+        class="submit_btn"
+        :block="true"
+        type="primary"
+        @click="submitHandle"
+        >{{ submitText }}</Button
+      >
+      <Button
+        class="cancel_btn"
+        :block="true"
+        type="default"
+        @click="cancelHandle"
+        >{{ cancelText }}</Button
+      >
     </div>
   </FormProvider>
 </template>
 <script lang="ts">
 export default {
-  name: "RxForm",
+  name: "Form",
 };
 </script>
 <script lang="ts" setup>
@@ -26,21 +38,32 @@ import {
   Radio,
   RadioGroup,
   Select,
+  InputPassword,
 } from "ant-design-vue";
 interface Props {
   schema: any;
+  submitText?: string;
+  cancelText?: string;
+  initialValues?: any;
+  effects?: () => void;
 }
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  submitText: "提交",
+  cancelText: "取消",
+});
 const emits = defineEmits(["submit", "cancel"]);
-
-const form = createForm({ validateFirst: true });
+const form = createForm({
+  validateFirst: true, // 只展示第一个校验错误提示
+  initialValues: props.initialValues,
+  effects: props.effects,
+});
 setValidateLanguage("cn");
 
 const submitHandle = () => {
-  emits("submit");
+  emits("submit", form);
 };
 const cancelHandle = () => {
-  emits("cancel");
+  emits("cancel", form);
 };
 
 const fieldSchema = createSchemaField({
@@ -50,14 +73,22 @@ const fieldSchema = createSchemaField({
     Radio,
     RadioGroup,
     Select,
+    InputPassword,
   },
 }).SchemaField;
 </script>
 <style scoped lang="scss">
 /* @import url(); 引入css类 */
 .default_submit_wrapper {
+  margin-top: 16px;
   display: flex;
   justify-content: space-between;
-  width: 300px;
+  .submit_btn {
+    width: 240px;
+    margin-right: 40px;
+  }
+  .cancel_btn {
+    width: 240px;
+  }
 }
 </style>

@@ -1,14 +1,46 @@
 <template>
   <div class="page-content">
     <div class="login-form">
-      <Form :schema="loginSchema"></Form>
+      <Tabs v-model:active-key="activeKey">
+        <TabPane :key="0" tab="登录">
+          <Form
+            :schema="loginSchema"
+            submit-text="登录"
+            @submit="submitHandle"
+          ></Form>
+        </TabPane>
+        <TabPane :key="1" tab="注册">
+          <Form
+            :schema="registerSchema"
+            submit-text="注册"
+            @submit="(v) => submitHandle(v, loginType.Register)"
+          ></Form>
+        </TabPane>
+      </Tabs>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { Tabs, TabPane } from "ant-design-vue";
 import Form from "@/RxForm/index.vue";
-import { loginSchema } from "@/RxForm/login";
+import { loginSchema, registerSchema } from "@/RxForm/schema/login";
+import { ref } from "vue";
+
+enum loginType {
+  Login,
+  Register,
+}
+
+const submitHandle = (form: any, type = loginType.Login) => {
+  if (type) {
+    console.log(form.values);
+  } else {
+    console.log(form.values);
+  }
+};
+
+const activeKey = ref(loginType.Login);
 </script>
 <style scoped lang="scss">
 /* @import url(); 引入css类 */
