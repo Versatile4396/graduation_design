@@ -3,34 +3,68 @@
     <div class="login-form">
       <Tabs v-model:active-key="activeKey">
         <TabPane :key="0" tab="登录">
-          <Form
-            :schema="loginSchema"
-            submit-text="登录"
-            @submit="submitHandle"
-          ></Form>
+          <FormItem
+            label="用户名"
+            name="username"
+            :rules="[
+              { required: true, message: 'Please input your username!' },
+            ]"
+          >
+            <Input v-model:value="formState.username" />
+          </FormItem>
+
+          <FormItem
+            label="密码"
+            name="password"
+            :rules="[{ required: true, message: '请输入密码' }]"
+          >
+            <InputPassword v-model:value="formState.password" />
+          </FormItem>
+
+          <FormItem name="remember" :wrapper-col="{ offset: 8, span: 16 }">
+            <Checkbox v-model:checked="formState.remember"
+              >Remember me</Checkbox
+            >
+          </FormItem>
+
+          <FormItem :wrapper-col="{ offset: 8, span: 16 }">
+            <Button type="primary" html-type="submit">Submit</Button>
+          </FormItem>
         </TabPane>
-        <TabPane :key="1" tab="注册">
-          <Form
-            :schema="registerSchema"
-            submit-text="注册"
-            @submit="(v) => submitHandle(v, loginType.Register)"
-          ></Form>
-        </TabPane>
+        <TabPane :key="1" tab="注册"> </TabPane>
       </Tabs>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Tabs, TabPane } from "ant-design-vue";
-import Form from "@/RxForm/index.vue";
-import { loginSchema, registerSchema } from "@/RxForm/schema/login";
-import { ref } from "vue";
+import {
+  Tabs,
+  TabPane,
+  FormItem,
+  Checkbox,
+  InputPassword,
+  Input,
+  Button,
+} from "ant-design-vue";
+import { ref, reactive } from "vue";
 
 enum loginType {
   Login,
   Register,
 }
+
+interface FormState {
+  username: string;
+  password: string;
+  remember: boolean;
+}
+
+const formState = reactive<FormState>({
+  username: "",
+  password: "",
+  remember: true,
+});
 
 const submitHandle = (form: any, type = loginType.Login) => {
   if (type) {
@@ -39,7 +73,6 @@ const submitHandle = (form: any, type = loginType.Login) => {
     console.log(form.values);
   }
 };
-
 const activeKey = ref(loginType.Login);
 </script>
 <style scoped lang="scss">
