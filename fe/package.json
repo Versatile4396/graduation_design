@@ -5,9 +5,9 @@
   "main": "index.js",
   "private": "true",
   "scripts": {
-    "dev": "cd app && pnpm run dev",
+    "dev": "cd app-react && pnpm run dev",
     "build": "cd app && pnpm run build",
-    "dev:rs":"cd app && pnpm run dev:rs",
+    "dev:rs": "cd app && pnpm run dev:rs",
     "build:rs": "cd app && pnpm run build:rs",
     "reset": "node reset.js"
   },

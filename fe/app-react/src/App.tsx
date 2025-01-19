@@ -1,11 +1,13 @@
-import './App.css';
+import "./App.css";
+import { createBrowserRouter, RouterProvider } from "react-router";
+import { routes } from "./router";
+import { ConfigProvider } from "antd";
 
 const App = () => {
   return (
-    <div className="content">
-      <h1>Rsbuild with React</h1>
-      <p>Start building amazing things with Rsbuild.</p>
-    </div>
+    <ConfigProvider>
+      <RouterProvider router={createBrowserRouter(routes)} />
+    </ConfigProvider>
   );
 };
 
