@@ -1,11 +1,11 @@
-import { Spin } from "antd";
+import { Spin } from 'antd'
 
 const LazyLoading = () => {
   return (
     <div>
       <Spin spinning />
     </div>
-  );
-};
+  )
+}
 
-export default LazyLoading;
+export default LazyLoading
