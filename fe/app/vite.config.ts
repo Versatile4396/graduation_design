@@ -11,9 +11,8 @@ export default defineConfig({
     port: 5199,
     proxy: {
       "/api": {
-        target: "http://karrysmile.top:8100/api", // 设置代理目标
+        target: "http://localhost:5555", // 设置代理目标
         changeOrigin: true, // 是否改变请求源地址
-        rewrite: (path: any) => path.replace(/^\/api/, ""), // 将 /api 替换为空字符串
       },
     },
   },

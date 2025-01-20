@@ -83,9 +83,11 @@ const onFormSubmit = async () => {
     .submit(onSubmit)
     .then((res: any) => {
       onSubmitSuccess(res);
+      updateSubmittingStatus(false);
     })
     .catch((err: any) => {
       onSubmitFaild(err);
+      updateSubmittingStatus(false);
     });
 };
 const onSubmitFaild = (args: any) => {

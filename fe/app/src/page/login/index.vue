@@ -41,7 +41,8 @@ const submitHandle = async (values: any, type = loginType.Login) => {
     Ajax.post("/login", values);
     console.log(values);
   } else {
-    Ajax.post("/register", values);
+    console.log(values);
+    Ajax.post("/user/register", values);
     console.log(values);
   }
 };

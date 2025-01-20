@@ -4,11 +4,9 @@ class AjaxClass {
   post(
     url: string,
     data: any,
-    config?: any,
     contentType = ContentType.Application
   ) {
     instance.post(url, data, {
-      ...config,
       headers: { "Content-Type": contentType },
     });
   }

@@ -6,11 +6,13 @@ import (
 	"forum/middleware"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter() *gin.Engine {
 	router := gin.New()
+	router.Use(cors.Default())
 	// 设置中间件 recovery 中间件会recovery项目中kennel会出现的panic
 	router.Use(logger.GinLogger(),
 		logger.GinRecovery(true),
