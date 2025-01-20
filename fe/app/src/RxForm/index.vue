@@ -38,7 +38,6 @@ import {
   Select,
   FormItem,
   Password,
-  Submit,
 } from "@formily/element-plus";
 import { ElButton } from "element-plus";
 import { ref } from "vue";
@@ -47,7 +46,6 @@ interface Props {
   submitText?: string;
   cancelText?: string;
   initialValues?: any;
-  submit?: any;
   effects?: () => void;
 }
 const props = withDefaults(defineProps<Props>(), {
@@ -75,8 +73,7 @@ const updateSubmittingStatus = (status: boolean) => {
 };
 
 const onSubmit = async () => {
-  const res = await props.submit();
-  return res;
+  emits("submit", form.value.values);
 };
 
 const onFormSubmit = async () => {

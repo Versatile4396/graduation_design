@@ -6,6 +6,7 @@
           <Form
             :schema="loginSchema"
             submit-text="登录"
+            cancel-text="注册"
             @submit="submitHandle"
             @onSubmitSuccess="onSubmitSuccess"
           ></Form>
@@ -14,7 +15,8 @@
           <Form
             :schema="registerSchema"
             submit-text="注册"
-            @submit="submitHandle"
+            cancel-text="登录"
+            @submit="(f: any) => submitHandle(f, loginType.Register)"
           ></Form>
         </el-tab-pane>
       </el-tabs>
@@ -27,15 +29,20 @@ import { ElTabPane, ElTabs } from "element-plus";
 import { ref } from "vue";
 import Form from "@/RxForm/index.vue";
 import { loginSchema, registerSchema } from "@/RxForm/schema/login";
+import Ajax from "@/ajax";
+
 enum loginType {
   Login,
   Register,
 }
 
-const submitHandle = async (form: any, type = loginType.Login) => {
+const submitHandle = async (values: any, type = loginType.Login) => {
   if (type) {
+    Ajax.post("/login", values);
+    console.log(values);
   } else {
-    console.log(form.values);
+    Ajax.post("/register", values);
+    console.log(values);
   }
 };
 const onSubmitSuccess = (res: any) => {

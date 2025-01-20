@@ -4,7 +4,7 @@ class AjaxClass {
   post(
     url: string,
     data: any,
-    config: any,
+    config?: any,
     contentType = ContentType.Application
   ) {
     instance.post(url, data, {
