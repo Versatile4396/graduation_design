@@ -45,7 +45,7 @@
 
 <script lang="ts">
 import { createForm } from "@formily/core";
-import { InputNumber, FormItem, Space } from "@formily/antdv-x3";
+import { InputNumber, FormItem, Space } from "@formily/element-plus";
 import { FormProvider, FormConsumer, Field } from "@formily/vue";
 
 const formInstance = createForm();

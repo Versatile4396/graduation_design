@@ -12,15 +12,17 @@ export const loginSchema = {
       },
       "x-validator": {
         required: true,
+        minLength: 4,
       },
     },
     password: {
       type: "string",
       "x-validator": {
         required: true,
+        minLength: 6,
       },
       "x-decorator": "FormItem",
-      "x-component": "InputPassword",
+      "x-component": "Password",
       "x-component-props": {
         style: {
           marginTop: "16px",
@@ -53,7 +55,7 @@ export const registerSchema = {
     password: {
       required: true,
       type: "string",
-      "x-component": "InputPassword",
+      "x-component": "Password",
       "x-component-props": {
         style: {
           marginTop: "16px",
@@ -63,7 +65,7 @@ export const registerSchema = {
     },
     confirm_password: {
       type: "string",
-      "x-component": "InputPassword",
+      "x-component": "Password",
       "x-component-props": {
         style: {
           marginTop: "16px",

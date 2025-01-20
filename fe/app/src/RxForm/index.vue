@@ -5,19 +5,19 @@
       <slot name="submit_wrapper"></slot>
     </div>
     <div v-else class="default_submit_wrapper">
-      <Button
+      <ElButton
         class="submit_btn"
         :block="true"
         type="primary"
-        @click="submitHandle"
-        >{{ submitText }}</Button
+        @click="onFormSubmit"
+        >{{ submitText }}</ElButton
       >
-      <Button
+      <ElButton
         class="cancel_btn"
         :block="true"
         type="default"
-        @click="cancelHandle"
-        >{{ cancelText }}</Button
+        @click="onFormSubmitCancel"
+        >{{ cancelText }}</ElButton
       >
     </div>
   </FormProvider>
@@ -32,40 +32,74 @@ import { createForm, setValidateLanguage } from "@formily/core";
 
 import { createSchemaField, FormProvider } from "@formily/vue";
 import {
-  Button,
   Input,
   Switch,
   Radio,
-  RadioGroup,
   Select,
-  InputPassword,
   FormItem,
-} from "ant-design-vue";
+  Password,
+  Submit,
+} from "@formily/element-plus";
+import { ElButton } from "element-plus";
+import { ref } from "vue";
 interface Props {
   schema: any;
   submitText?: string;
   cancelText?: string;
   initialValues?: any;
+  submit?: any;
   effects?: () => void;
 }
 const props = withDefaults(defineProps<Props>(), {
   submitText: "提交",
   cancelText: "取消",
 });
-const emits = defineEmits(["submit", "cancel"]);
-const form = createForm({
+const emits = defineEmits([
+  "submit",
+  "cancel",
+  "onSubmitFailed",
+  "onSubmitSuccess",
+]);
+const form = ref();
+form.value = createForm({
   validateFirst: true, // 只展示第一个校验错误提示
   initialValues: props.initialValues,
   effects: props.effects,
 });
 setValidateLanguage("cn");
 
-const submitHandle = () => {
-  form.submit();
-  emits("submit", form);
+const isSubmitting = ref(false);
+
+const updateSubmittingStatus = (status: boolean) => {
+  isSubmitting.value = status;
 };
-const cancelHandle = () => {
+
+const onSubmit = async () => {
+  const res = await props.submit();
+  return res;
+};
+
+const onFormSubmit = async () => {
+  if (isSubmitting.value) return;
+  updateSubmittingStatus(true);
+  form.value
+    .submit(onSubmit)
+    .then((res: any) => {
+      onSubmitSuccess(res);
+    })
+    .catch((err: any) => {
+      onSubmitFaild(err);
+    });
+};
+const onSubmitFaild = (args: any) => {
+  emits("onSubmitFailed", args);
+};
+const onFormSubmitCancel = () => {
   emits("cancel", form);
+};
+
+const onSubmitSuccess = (res: any) => {
+  emits("onSubmitSuccess", res);
 };
 
 const fieldSchema = createSchemaField({
@@ -73,9 +107,8 @@ const fieldSchema = createSchemaField({
     Input,
     Switch,
     Radio,
-    RadioGroup,
     Select,
-    InputPassword,
+    Password,
     FormItem,
   },
 }).SchemaField;

@@ -2,8 +2,9 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "@/router/index";
 import "@/assets/style/global.css";
-import 'ant-design-vue/dist/reset.css';
-
+import ElementPlus from "element-plus";
+import "element-plus/dist/index.css";
 const vueInstance = createApp(App);
-vueInstance.use(router)
-vueInstance.mount("#app")
+vueInstance.use(ElementPlus);
+vueInstance.use(router);
+vueInstance.mount("#app");

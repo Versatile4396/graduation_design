@@ -1,77 +1,45 @@
 <template>
   <div class="page-content">
     <div class="login-form">
-      <Tabs v-model:active-key="activeKey">
-        <TabPane :key="0" tab="登录">
-          <FormItem
-            label="用户名"
-            name="username"
-            :rules="[
-              { required: true, message: 'Please input your username!' },
-            ]"
-          >
-            <Input v-model:value="formState.username" />
-          </FormItem>
-
-          <FormItem
-            label="密码"
-            name="password"
-            :rules="[{ required: true, message: '请输入密码' }]"
-          >
-            <InputPassword v-model:value="formState.password" />
-          </FormItem>
-
-          <FormItem name="remember" :wrapper-col="{ offset: 8, span: 16 }">
-            <Checkbox v-model:checked="formState.remember"
-              >Remember me</Checkbox
-            >
-          </FormItem>
-
-          <FormItem :wrapper-col="{ offset: 8, span: 16 }">
-            <Button type="primary" html-type="submit">Submit</Button>
-          </FormItem>
-        </TabPane>
-        <TabPane :key="1" tab="注册"> </TabPane>
-      </Tabs>
+      <el-tabs v-model:active-key="activeKey">
+        <el-tab-pane :key="0" label="登录">
+          <Form
+            :schema="loginSchema"
+            submit-text="登录"
+            @submit="submitHandle"
+            @onSubmitSuccess="onSubmitSuccess"
+          ></Form>
+        </el-tab-pane>
+        <el-tab-pane :key="1" label="注册">
+          <Form
+            :schema="registerSchema"
+            submit-text="注册"
+            @submit="submitHandle"
+          ></Form>
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {
-  Tabs,
-  TabPane,
-  FormItem,
-  Checkbox,
-  InputPassword,
-  Input,
-  Button,
-} from "ant-design-vue";
-import { ref, reactive } from "vue";
-
+import { ElTabPane, ElTabs } from "element-plus";
+import { ref } from "vue";
+import Form from "@/RxForm/index.vue";
+import { loginSchema, registerSchema } from "@/RxForm/schema/login";
 enum loginType {
   Login,
   Register,
 }
 
-interface FormState {
-  username: string;
-  password: string;
-  remember: boolean;
-}
-
-const formState = reactive<FormState>({
-  username: "",
-  password: "",
-  remember: true,
-});
-
-const submitHandle = (form: any, type = loginType.Login) => {
+const submitHandle = async (form: any, type = loginType.Login) => {
   if (type) {
-    console.log(form.values);
   } else {
     console.log(form.values);
   }
+};
+const onSubmitSuccess = (res: any) => {
+  console.log("onSubmitSuccess", res);
 };
 const activeKey = ref(loginType.Login);
 </script>

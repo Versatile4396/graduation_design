@@ -6,6 +6,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    "types": ["element-plus/global"],
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
