@@ -1,7 +1,7 @@
 import axios from "axios";
 // import { tokenExpire } from "./helper";
 import { logB, logN } from "@/utils/log";
-// import { Message } from "@/utils/message";
+import { Message } from "@/utils/message";
 
 // 处理  类型“AxiosResponse<any, any>”上不存在属性“...”。ts(2339) 脑壳疼！关键一步。
 declare module "axios" {
@@ -52,7 +52,11 @@ instance.interceptors.response.use(
     logB.success("响应数据：", response.data);
     hideLoading();
     if (response.data.code !== 1000) {
-      // Message("error", response.data?.message || "未知错误");
+      Message.err(response?.data.msg || "未知错误");
+    } else {
+      if (response.data?.msg) {
+        Message.success(response.data.msg);
+      }
     }
     return response.data;
   },
