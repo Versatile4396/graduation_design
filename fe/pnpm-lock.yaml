@@ -129,6 +129,12 @@ importers:
       '@rsbuild/plugin-react':
         specifier: ^1.1.0
         version: 1.1.0(@rsbuild/core@1.1.13)
+      '@rsbuild/plugin-sass':
+        specifier: 1.0.1
+        version: 1.0.1(@rsbuild/core@1.1.13)
+      '@rsbuild/plugin-typed-css-modules':
+        specifier: ^1.0.2
+        version: 1.0.2(@rsbuild/core@1.1.13)
       '@types/react':
         specifier: ^19.0.1
         version: 19.0.7
@@ -1108,6 +1114,14 @@ packages:
     resolution: {integrity: sha512-gybEWXc5kUAc3eur7LJRfWiG9tA5sdDUNo++Fy2pSRhVdYRMLUtKq4YOTmLCYHQ8b7vWRbmv8keqX34ynBm8Bg==}
     peerDependencies:
       '@rsbuild/core': 1.x || ^1.0.1-rc.0
+
+  '@rsbuild/plugin-typed-css-modules@1.0.2':
+    resolution: {integrity: sha512-QX376pBXWeBrZBvYLP2HGGrHiWA5O0SDHwRoBNto5BqYDXhi6y+Eol2Hb/cY+h2ARKZVanMfUiJRABULOJ/FCQ==}
+    peerDependencies:
+      '@rsbuild/core': 1.x || ^1.0.1-beta.0
+    peerDependenciesMeta:
+      '@rsbuild/core':
+        optional: true
 
   '@rsbuild/plugin-vue-jsx@1.0.1':
     resolution: {integrity: sha512-+Oo6FT7hT5Jb8K43qOgwNP35nXZbCopIlSOFa9KC1DKBJ1n0VueqshRY4pP5pVl6R2BeU87RRnmv0pbc2hH5Mg==}
@@ -5418,6 +5432,19 @@ snapshots:
       postcss: 8.5.1
       reduce-configs: 1.1.0
       sass-embedded: 1.83.4
+
+  '@rsbuild/plugin-sass@1.0.1(@rsbuild/core@1.1.13)':
+    dependencies:
+      '@rsbuild/core': 1.1.13
+      deepmerge: 4.3.1
+      loader-utils: 2.0.4
+      postcss: 8.5.1
+      reduce-configs: 1.1.0
+      sass-embedded: 1.83.4
+
+  '@rsbuild/plugin-typed-css-modules@1.0.2(@rsbuild/core@1.1.13)':
+    optionalDependencies:
+      '@rsbuild/core': 1.1.13
 
   '@rsbuild/plugin-vue-jsx@1.0.1(@babel/core@7.26.0)(@rsbuild/core@1.0.5)':
     dependencies:

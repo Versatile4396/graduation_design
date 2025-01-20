@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { createForm } from '@formily/core'
 import { createSchemaField } from '@formily/react'
 import { Form, FormItem, Input, Password, Submit } from '@formily/antd'
-import { Tabs, Card } from 'antd'
+import { Tabs, Card, TabsProps } from 'antd'
 import * as ICONS from '@ant-design/icons'
 import { VerifyCode } from './VerifyCode'
+import moduleScss from './index.module.scss'
 
 const normalForm = createForm({
   validateFirst: true,
@@ -92,58 +93,34 @@ const phoneSchema = {
   },
 }
 
-const LoginForm = () => {
+const LoginForm = function () {
+  const items: TabsProps['items'] = [
+    {
+      key: '1',
+      label: 'Tab 1',
+      children: 'Content of Tab Pane 1',
+    },
+    {
+      key: '2',
+      label: 'Tab 2',
+      children: 'Content of Tab Pane 2',
+    },
+    {
+      key: '3',
+      label: 'Tab 3',
+      children: 'Content of Tab Pane 3',
+    },
+  ]
+  const onChange = (key: string) => {
+    console.log(key)
+  }
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        background: '#eee',
-        padding: '40px 0',
-      }}
-    >
-      <Card style={{ width: 400 }}>
-        <Tabs style={{ overflow: 'visible', marginTop: -10 }}>
-          <Tabs.TabPane key="1" tab="账密登录">
-            <Form
-              form={normalForm}
-              layout="vertical"
-              size="large"
-              onAutoSubmit={console.log}
-            >
-              <SchemaField schema={normalSchema} />
-              <Submit block size="large">
-                登录
-              </Submit>
-            </Form>
-          </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="手机登录">
-            <Form
-              form={phoneForm}
-              layout="vertical"
-              size="large"
-              onAutoSubmit={console.log}
-            >
-              <SchemaField schema={phoneSchema} />
-              <Submit block size="large">
-                登录
-              </Submit>
-            </Form>
-          </Tabs.TabPane>
-        </Tabs>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
-          <a href="#新用户注册">新用户注册</a>
-          <a href="#忘记密码">忘记密码?</a>
-        </div>
-      </Card>
+    <div className={moduleScss.loginForm}>
+      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
     </div>
   )
 }
+
 LoginForm.displayName = 'MyApp'
 
 export default LoginForm
