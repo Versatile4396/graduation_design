@@ -9,6 +9,7 @@
             cancel-text="去注册"
             @submit="submitHandle"
             @onSubmitSuccess="onSubmitSuccess"
+            @cancel="() => (activeKey = loginType.Register)"
           ></Form>
         </el-tab-pane>
         <el-tab-pane label="注册" name="register">
@@ -16,7 +17,9 @@
             :schema="registerSchema"
             submit-text="注册"
             cancel-text="去登录"
+            :initialValues="{ gender: 2 }"
             @submit="(f: any) => submitHandle(f, loginType.Register)"
+            @cancel="() => (activeKey = loginType.Login)"
           ></Form>
         </el-tab-pane>
       </el-tabs>
@@ -46,7 +49,7 @@ const submitHandle = async (values: any, type = loginType.Login) => {
 const onSubmitSuccess = (res: any) => {
   console.log("onSubmitSuccess", res);
 };
-const activeKey = ref(loginType.Register);
+const activeKey = ref(loginType.Login);
 </script>
 <style scoped lang="scss">
 /* @import url(); 引入css类 */
@@ -62,7 +65,6 @@ const activeKey = ref(loginType.Register);
   .login-form {
     padding: 16px;
     width: 360px;
-    min-height: 300px;
     background-color: #fff;
     border-radius: 12px;
     position: absolute;

@@ -3,7 +3,7 @@ import type { ISchema } from "@formily/vue";
 export const loginSchema = {
   type: "object",
   properties: {
-    account: {
+    username: {
       type: "string",
       "x-decorator": "FormItem",
       "x-component": "Input",
@@ -87,6 +87,10 @@ export const registerSchema = {
       title: "性别",
       "x-decorator": "FormItem",
       "x-component": "Radio.Group",
+      "x-component-props": {
+        default: 2,
+      },
+      initialValue: 2,
       enum: [
         {
           label: "男",

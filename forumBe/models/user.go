@@ -8,3 +8,8 @@ type User struct {
 	Password        string `json:"password,omitempty" binding:"required"` // 密码
 	ConfirmPassword string `json:"confirm_password,omitempty" binding:"required,eqfield=Password"`
 }
+
+type LoginForm struct {
+	UserName string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}

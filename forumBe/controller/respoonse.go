@@ -37,3 +37,12 @@ func ResponseSuccess(ctx *gin.Context, data interface{}) {
 	}
 	ctx.JSON(http.StatusOK, rd)
 }
+
+func ResponseSuccessWithMsg(ctx *gin.Context, data interface{}, msg string) {
+	rd := &ResponseData{
+		Code:    CodeSuccess,
+		Message: msg,
+		Data:    data,
+	}
+	ctx.JSON(http.StatusOK, rd)
+}

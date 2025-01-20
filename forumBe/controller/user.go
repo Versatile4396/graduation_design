@@ -7,6 +7,7 @@ import (
 	"forum/models"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 )
 
@@ -21,6 +22,7 @@ func UserRegisterController(c *gin.Context) {
 	var user *models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
 		zap.L().Error("SignUp with invalid param", zap.Error(err))
+
 		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
 		return
 	}
@@ -42,16 +44,22 @@ func UserRegisterController(c *gin.Context) {
 		Gender:   user.Gender,
 		UserName: user.UserName,
 	}
-	ResponseSuccess(c, res)
+	ResponseSuccessWithMsg(c, res, "注册成功")
 }
 
 func UserLoginController(c *gin.Context) {
-	var user *models.User
+	var user *models.LoginForm
 	if err := c.ShouldBindJSON(&user); err != nil {
 		zap.L().Error("login faild", zap.Error(err))
-		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		errs, ok := err.(validator.ValidationErrors)
+		if !ok {
+			ResponseError(c, CodeInvalidParams)
+			return
+		}
+		ResponseErrorWithMsg(c, CodeInvalidParams, removeTopStruct(errs.Translate(trans)))
 		return
 	}
 	logger.Fmt(user)
+
 	// 业务处理 用户登录
 }
