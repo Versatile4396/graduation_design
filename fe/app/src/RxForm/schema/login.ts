@@ -24,9 +24,6 @@ export const loginSchema = {
       "x-decorator": "FormItem",
       "x-component": "Password",
       "x-component-props": {
-        style: {
-          marginTop: "16px",
-        },
         placeholder: "输入账号密码",
       },
     },
@@ -36,42 +33,78 @@ export const loginSchema = {
 export const registerSchema = {
   type: "object",
   properties: {
-    account: {
+    username: {
       type: "string",
       required: true,
+      "x-decorator": "FormItem",
       "x-component": "Input",
       "x-component-props": {
-        placeholder: "请输入手机号/邮箱号",
+        placeholder: "输入用户名",
       },
-      "x-validator": `{{(value)=> {
-        if(value.length > 18) {
-          return '密码长度不能超过18';
-        }
-        if(value.length < 4) {
-          return '密码长度至少为4个字符';
-        }
-      }}}`,
+      "x-validator": {
+        maxLength: 16,
+      },
     },
-    password: {
-      required: true,
+    email: {
       type: "string",
+      "x-decorator": "FormItem",
+      "x-component": "Input",
+      "x-component-props": {
+        placeholder: "输入你的邮箱",
+      },
+      "x-validator": {
+        required: true,
+        format: "email",
+      },
+    },
+
+    password: {
+      type: "string",
+      "x-validator": {
+        required: true,
+        minLength: 6,
+      },
+      "x-decorator": "FormItem",
       "x-component": "Password",
       "x-component-props": {
-        style: {
-          marginTop: "16px",
-        },
         placeholder: "输入密码",
       },
     },
     confirm_password: {
       type: "string",
+      "x-validator": {
+        required: true,
+        minLength: 6,
+      },
+      "x-decorator": "FormItem",
       "x-component": "Password",
       "x-component-props": {
-        style: {
-          marginTop: "16px",
-        },
-        placeholder: "请再次输入密码",
+        placeholder: "再次输入密码",
       },
+    },
+    gender: {
+      type: "number",
+      title: "性别",
+      "x-decorator": "FormItem",
+      "x-component": "Radio.Group",
+      enum: [
+        {
+          label: "男",
+          value: 0,
+        },
+        {
+          label: "女",
+          value: 1,
+        },
+        {
+          label: "武装直升机",
+          value: 2,
+        },
+        {
+          label: "胖东来洗发水",
+          value: 3,
+        },
+      ],
     },
   },
 };

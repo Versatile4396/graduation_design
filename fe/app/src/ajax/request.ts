@@ -51,7 +51,7 @@ instance.interceptors.response.use(
   (response) => {
     logB.success("响应数据：", response.data);
     hideLoading();
-    if (response.data.code !== 20000) {
+    if (response.data.code !== 1000) {
       // Message("error", response.data?.message || "未知错误");
     }
     return response.data;

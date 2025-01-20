@@ -1,21 +1,21 @@
 <template>
   <div class="page-content">
     <div class="login-form">
-      <el-tabs v-model:active-key="activeKey">
-        <el-tab-pane :key="0" label="登录">
+      <el-tabs v-model="activeKey" type="border-card">
+        <el-tab-pane label="登录" name="login">
           <Form
             :schema="loginSchema"
             submit-text="登录"
-            cancel-text="注册"
+            cancel-text="去注册"
             @submit="submitHandle"
             @onSubmitSuccess="onSubmitSuccess"
           ></Form>
         </el-tab-pane>
-        <el-tab-pane :key="1" label="注册">
+        <el-tab-pane label="注册" name="register">
           <Form
             :schema="registerSchema"
             submit-text="注册"
-            cancel-text="登录"
+            cancel-text="去登录"
             @submit="(f: any) => submitHandle(f, loginType.Register)"
           ></Form>
         </el-tab-pane>
@@ -32,24 +32,21 @@ import { loginSchema, registerSchema } from "@/RxForm/schema/login";
 import Ajax from "@/ajax";
 
 enum loginType {
-  Login,
-  Register,
+  Login = "login",
+  Register = "register",
 }
 
 const submitHandle = async (values: any, type = loginType.Login) => {
-  if (type) {
-    Ajax.post("/login", values);
-    console.log(values);
+  if (type === loginType.Login) {
+    Ajax.post("/user/login", values);
   } else {
-    console.log(values);
     Ajax.post("/user/register", values);
-    console.log(values);
   }
 };
 const onSubmitSuccess = (res: any) => {
   console.log("onSubmitSuccess", res);
 };
-const activeKey = ref(loginType.Login);
+const activeKey = ref(loginType.Register);
 </script>
 <style scoped lang="scss">
 /* @import url(); 引入css类 */
@@ -65,7 +62,7 @@ const activeKey = ref(loginType.Login);
   .login-form {
     padding: 16px;
     width: 360px;
-    height: 500px;
+    min-height: 300px;
     background-color: #fff;
     border-radius: 12px;
     position: absolute;

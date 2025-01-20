@@ -44,3 +44,14 @@ func UserRegisterController(c *gin.Context) {
 	}
 	ResponseSuccess(c, res)
 }
+
+func UserLoginController(c *gin.Context) {
+	var user *models.User
+	if err := c.ShouldBindJSON(&user); err != nil {
+		zap.L().Error("login faild", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	logger.Fmt(user)
+	// 业务处理 用户登录
+}
