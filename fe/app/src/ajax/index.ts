@@ -1,12 +1,21 @@
 import instance from "./request";
 import { ContentType } from "./type";
+interface IResponse {
+  code: number;
+  data: any;
+  msg: string;
+}
 class AjaxClass {
-  post(
-    url: string,
-    data: any,
-    contentType = ContentType.Application
-  ) {
-    instance.post(url, data, {
+  post(url: string, data: any, contentType = ContentType.Application) {
+    // 也许code 也会有用到的业务逻辑🤔️？
+    // return new Promise(async (res) => {
+    //   const { data: responseData } = await instance.post(url, data, {
+    //     headers: { "Content-Type": contentType },
+    //   });
+    //   res(responseData);
+    // });
+
+    return instance.post(url, data, {
       headers: { "Content-Type": contentType },
     });
   }
@@ -16,7 +25,7 @@ class AjaxClass {
     config: any,
     contentType = ContentType.Application
   ) {
-    instance.get(url, {
+    return instance.get(url, {
       params: data,
       ...config,
       headers: { "Content-Type": contentType },
@@ -28,7 +37,7 @@ class AjaxClass {
     config: any,
     contentType = ContentType.Application
   ) {
-    instance.put(url, data, { ...config, contentType });
+    return instance.put(url, data, { ...config, contentType });
   }
   delete(
     url: string,
@@ -36,7 +45,7 @@ class AjaxClass {
     config: any,
     contentType = ContentType.Application
   ) {
-    instance.delete(url, {
+    return instance.delete(url, {
       params: data,
       ...config,
       headers: { "Content-Type": contentType },
@@ -45,4 +54,7 @@ class AjaxClass {
 }
 
 const Ajax = new AjaxClass();
+export const getReponseData = function (res: IResponse) {
+  return res.msg;
+};
 export default Ajax;

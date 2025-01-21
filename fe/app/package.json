@@ -17,6 +17,7 @@
     "@mono/build-cli": "workspace:^",
     "@mono/components": "workspace:^",
     "@mono/utils": "workspace:^",
+    "@vueuse/core": "^12.4.0",
     "axios": "^1.7.9",
     "element-plus": "^2.9.3",
     "install": "^0.13.0",

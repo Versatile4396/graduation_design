@@ -29,7 +29,7 @@ func UserRegisterController(c *gin.Context) {
 	}
 	logger.Fmt(user)
 	// 业务处理-注册用户
-	userId, err := logic.SignUp(user)
+	rUser, err := logic.SignUp(user)
 	if err != nil {
 		zap.L().Error("logic.signUp failed", zap.Error(err))
 		if err.Error() == mysql.ErrorUserExit {
@@ -39,13 +39,8 @@ func UserRegisterController(c *gin.Context) {
 		ResponseError(c, CodeServerBusy)
 		return
 	}
-	res := &models.User{
-		UserId:   userId,
-		Email:    user.Email,
-		Gender:   user.Gender,
-		UserName: user.UserName,
-	}
-	ResponseSuccessWithMsg(c, res, "注册成功")
+	fmt.Println(rUser)
+	ResponseSuccessWithMsg(c, rUser, "注册成功")
 }
 
 func UserLoginController(c *gin.Context) {

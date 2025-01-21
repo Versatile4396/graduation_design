@@ -7,6 +7,10 @@
             :schema="loginSchema"
             submit-text="登录"
             cancel-text="去注册"
+            :initial-values="{
+              username: 'username',
+              password: '123456',
+            }"
             @submit="submitHandle"
             @onSubmitSuccess="onSubmitSuccess"
             @cancel="() => (activeKey = loginType.Register)"
@@ -20,6 +24,7 @@
             :initialValues="{ gender: 2 }"
             @submit="(f: any) => submitHandle(f, loginType.Register)"
             @cancel="() => (activeKey = loginType.Login)"
+            @onSubmitSuccess="onSubmitSuccess"
           ></Form>
         </el-tab-pane>
       </el-tabs>
@@ -33,20 +38,24 @@ import { ref } from "vue";
 import Form from "@/RxForm/index.vue";
 import { loginSchema, registerSchema } from "@/RxForm/schema/login";
 import Ajax from "@/ajax";
+import type { Password } from "@formily/element-plus";
 
 enum loginType {
   Login = "login",
   Register = "register",
 }
-
+const userInfo = ref();
 const submitHandle = async (values: any, type = loginType.Login) => {
   if (type === loginType.Login) {
-    Ajax.post("/user/login", values);
+    const { data } = await Ajax.post("/user/login", values);
+    userInfo.value = data;
   } else {
-    Ajax.post("/user/register", values);
+    const { data } = await Ajax.post("/user/register", values);
+    userInfo.value = data;
   }
 };
 const onSubmitSuccess = (res: any) => {
+  // 登录注册成功之后的回掉 存储token信息 存储userInfo
   console.log("onSubmitSuccess", res);
 };
 const activeKey = ref(loginType.Login);
