@@ -38,20 +38,19 @@ import { ref } from "vue";
 import Form from "@/RxForm/index.vue";
 import { loginSchema, registerSchema } from "@/RxForm/schema/login";
 import Ajax from "@/ajax";
-import type { Password } from "@formily/element-plus";
-
+import { userInfoStore } from "@/store/user";
+const { setUserInfo } = userInfoStore();
 enum loginType {
   Login = "login",
   Register = "register",
 }
-const userInfo = ref();
 const submitHandle = async (values: any, type = loginType.Login) => {
   if (type === loginType.Login) {
     const { data } = await Ajax.post("/user/login", values);
-    userInfo.value = data;
+    setUserInfo(data);
   } else {
     const { data } = await Ajax.post("/user/register", values);
-    userInfo.value = data;
+    setUserInfo(data);
   }
 };
 const onSubmitSuccess = (res: any) => {
