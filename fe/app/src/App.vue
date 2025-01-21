@@ -1,11 +1,13 @@
 <template>
   <Navigator v-if="navigatorStatus"></Navigator>
-  <RouterView />
+  <div class="occpancy">
+    <RouterView />
+  </div>
 </template>
 <script lang="ts" setup>
-import { Navigator } from "@mono/components";
+import Navigator from "@/page/components/navigator/index.vue";
 import { RouterView } from "vue-router";
-import { computed, onMounted } from "vue";
+import { computed } from "vue";
 import router from "./router";
 import { userLocalInfo } from "@/utils/common";
 
@@ -27,4 +29,8 @@ const initApp = () => {
 };
 initApp();
 </script>
-<style scoped></style>
+<style scoped>
+.occpancy {
+  margin-top: 16px;
+}
+</style>

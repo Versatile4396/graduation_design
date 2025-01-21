@@ -15,8 +15,6 @@
     "@formily/element-plus": "^1.1.0",
     "@formily/vue": "^2.3.2",
     "@mono/build-cli": "workspace:^",
-    "@mono/components": "workspace:^",
-    "@mono/utils": "workspace:^",
     "@vueuse/core": "^12.4.0",
     "axios": "^1.7.9",
     "element-plus": "^2.9.3",

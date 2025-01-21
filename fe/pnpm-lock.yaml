@@ -22,12 +22,6 @@ importers:
       '@mono/build-cli':
         specifier: workspace:^
         version: link:../packages/build-cli
-      '@mono/components':
-        specifier: workspace:^
-        version: link:../packages/components
-      '@mono/utils':
-        specifier: workspace:^
-        version: link:../packages/utils
       '@vueuse/core':
         specifier: ^12.4.0
         version: 12.4.0(typescript@5.6.3)
