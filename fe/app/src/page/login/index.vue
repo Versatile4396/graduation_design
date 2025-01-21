@@ -11,7 +11,7 @@
               username: 'username',
               password: '123456',
             }"
-            @submit="submitHandle"
+            :submit="submitHandle"
             @onSubmitSuccess="onSubmitSuccess"
             @cancel="() => (activeKey = loginType.Register)"
           ></Form>
@@ -39,23 +39,35 @@ import Form from "@/RxForm/index.vue";
 import { loginSchema, registerSchema } from "@/RxForm/schema/login";
 import Ajax from "@/ajax";
 import { userInfoStore } from "@/store/user";
+import router from "@/router";
+import type { userInfo } from "@/ajax/type/user";
+
 const { setUserInfo } = userInfoStore();
 enum loginType {
   Login = "login",
   Register = "register",
 }
 const submitHandle = async (values: any, type = loginType.Login) => {
-  if (type === loginType.Login) {
-    const { data } = await Ajax.post("/user/login", values);
-    setUserInfo(data);
-  } else {
-    const { data } = await Ajax.post("/user/register", values);
-    setUserInfo(data);
-  }
+  try {
+    if (type === loginType.Login) {
+      const { data } = await Ajax.post("/user/login", values);
+      return data;
+    } else {
+      const { data } = await Ajax.post("/user/register", values);
+      return data;
+    }
+  } catch (error) {}
 };
-const onSubmitSuccess = (res: any) => {
+const onSubmitSuccess = (data: userInfo) => {
   // 登录注册成功之后的回掉 存储token信息 存储userInfo
-  console.log("onSubmitSuccess", res);
+  setUserInfo(data);
+  // 携带uid跳转主页
+  router.push({
+    name: "home",
+    query: {
+      uid: data.user_id,
+    },
+  });
 };
 const activeKey = ref(loginType.Login);
 </script>

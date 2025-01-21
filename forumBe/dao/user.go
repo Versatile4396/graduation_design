@@ -22,7 +22,7 @@ func CheckUserExit(user *models.User) (error error) {
 	return
 }
 
-func Login(user *models.User) (error error) {
+func Login(user *models.User) (u *models.User, error error) {
 	// 记录用户原始密码
 	originPassword := user.Password
 	// 根据用户名查询数据库用户 信息
@@ -31,9 +31,9 @@ func Login(user *models.User) (error error) {
 	// 密码比对
 	password := EncryptPassword([]byte(originPassword))
 	if newUser.Password != password {
-		return errors.New(ErrorPasswordWrong)
+		return nil, errors.New(ErrorPasswordWrong)
 	}
-	return nil
+	return newUser, nil
 }
 
 func EncryptPassword(data []byte) (result string) {

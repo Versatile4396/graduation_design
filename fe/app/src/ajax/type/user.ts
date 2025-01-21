@@ -4,4 +4,5 @@ export interface userInfo {
   username: string;
   email: string;
   gender: number;
+  user_id: string;
 }

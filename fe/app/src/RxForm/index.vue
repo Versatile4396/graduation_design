@@ -47,6 +47,7 @@ interface Props {
   cancelText?: string;
   initialValues?: any;
   effects?: () => void;
+  submit?: (...args: any) => any;
 }
 const props = withDefaults(defineProps<Props>(), {
   submitText: "提交",
@@ -73,7 +74,14 @@ const updateSubmittingStatus = (status: boolean) => {
 };
 
 const onSubmit = async () => {
-  emits("submit", form.value.values);
+  if (props?.submit) {
+    // 传入的submit 返回的内容会在onsubmitSuccess
+    const res = await props?.submit(form.value.values);
+    return res;
+  } else {
+    emits("submit", form.value.values);
+  }
+  return null;
 };
 
 const onFormSubmit = async () => {

@@ -51,7 +51,8 @@ func Login(u *models.LoginForm) (user *models.User, error error) {
 		UserName: u.UserName,
 		Password: u.Password,
 	}
-	if err := mysql.Login(user); err != nil {
+	dbuser, err := mysql.Login(user)
+	if err != nil {
 		return nil, err
 	}
 	//  生产JWT
@@ -61,5 +62,8 @@ func Login(u *models.LoginForm) (user *models.User, error error) {
 	}
 	user.AccessToken = accessToken
 	user.RefreshToken = refreshToken
+	user.UserId = dbuser.UserId
+	user.Email = dbuser.Email
+	user.UserName = dbuser.UserName
 	return
 }

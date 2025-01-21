@@ -1,10 +1,12 @@
 // import qs from "query-string";
 import type { userInfo } from "@/ajax/type/user";
 import { useLocalStorage } from "@vueuse/core";
-const userLocalInfo = useLocalStorage<string>("userinfo", "");
+import qs from "query-string";
+
+const userLocalInfo = useLocalStorage<Partial<userInfo>>("userinfo", {});
 const acccess_token = useLocalStorage<string>("acccess_token", "");
 const refresh_token = useLocalStorage<string>("refresh_token", "");
-import qs from "query-string";
+
 export type Obj = Record<string, any>;
 
 export const getUrlQuery = () => {
@@ -19,9 +21,12 @@ export const setToken = (aToken: string, rToken: string) => {
   refresh_token.value = rToken;
 };
 export const setLocalStorageUserInfo = (uinfo: userInfo) => {
-  userLocalInfo.value = JSON.stringify(uinfo);
+  userLocalInfo.value = uinfo;
 };
 export const clearLocalInfo = () => {
-  userLocalInfo.value = "";
+  userLocalInfo.value = {};
   acccess_token.value = "";
+  refresh_token.value = "";
 };
+
+export { userLocalInfo };
