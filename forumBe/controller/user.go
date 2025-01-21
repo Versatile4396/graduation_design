@@ -60,6 +60,19 @@ func UserLoginController(c *gin.Context) {
 		return
 	}
 	logger.Fmt(user)
-
 	// 业务处理 用户登录
+	u, err := logic.Login(user)
+	if err != nil {
+		zap.L().Error("logic.Login failed", zap.String("username", u.UserName), zap.Error(err))
+		if err.Error() == mysql.ErrorUserNotExit {
+			ResponseError(c, CodeUserNotExist)
+			return
+		}
+		ResponseError(c, CodeInvalidParams)
+	}
+	// 3、返回响应
+	ResponseSuccess(c, gin.H{
+		"user_id":   "asdas", //js识别的最大值：id值大于1<<53-1  int64: i<<63-1
+		"user_name": user.UserName,
+	})
 }
