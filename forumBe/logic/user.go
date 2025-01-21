@@ -4,6 +4,7 @@ import (
 	mysql "forum/dao"
 	"forum/global"
 	"forum/models"
+	"forum/pkg/jwt"
 	"forum/pkg/snowflake"
 )
 
@@ -33,13 +34,20 @@ func SignUp(fo *models.User) (userId uint64, err error) {
 	return
 }
 
-func Login(p *models.LoginForm) (user *models.User, error error) {
+func Login(u *models.LoginForm) (user *models.User, error error) {
 	user = &models.User{
-		UserName: p.UserName,
-		Password: p.Password,
+		UserName: u.UserName,
+		Password: u.Password,
 	}
 	if err := mysql.Login(user); err != nil {
 		return nil, err
 	}
+	//  生产JWT
+	accessToken, refreshToken, err := jwt.GenToken(user.UserId, u.UserName)
+	if err != nil {
+		return
+	}
+	user.AccessToken = accessToken
+	user.RefreshToken = refreshToken
 	return
 }

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	mysql "forum/dao"
 	"forum/logger"
 	"forum/logic"
@@ -48,8 +49,8 @@ func UserRegisterController(c *gin.Context) {
 }
 
 func UserLoginController(c *gin.Context) {
-	var user *models.LoginForm
-	if err := c.ShouldBindJSON(&user); err != nil {
+	var u *models.LoginForm
+	if err := c.ShouldBindJSON(&u); err != nil {
 		zap.L().Error("login faild", zap.Error(err))
 		errs, ok := err.(validator.ValidationErrors)
 		if !ok {
@@ -59,11 +60,11 @@ func UserLoginController(c *gin.Context) {
 		ResponseErrorWithMsg(c, CodeInvalidParams, removeTopStruct(errs.Translate(trans)))
 		return
 	}
-	logger.Fmt(user)
+	logger.Fmt(u)
 	// 业务处理 用户登录
-	u, err := logic.Login(user)
+	user, err := logic.Login(u)
 	if err != nil {
-		zap.L().Error("logic.Login failed", zap.String("username", u.UserName), zap.Error(err))
+		zap.L().Error("logic.Login failed", zap.String("username", user.UserName), zap.Error(err))
 		if err.Error() == mysql.ErrorUserNotExit {
 			ResponseError(c, CodeUserNotExist)
 			return
@@ -72,7 +73,9 @@ func UserLoginController(c *gin.Context) {
 	}
 	// 3、返回响应
 	ResponseSuccess(c, gin.H{
-		"user_id":   "asdas", //js识别的最大值：id值大于1<<53-1  int64: i<<63-1
-		"user_name": user.UserName,
+		"user_id":       fmt.Sprintf("%d", user.UserId), //js识别的最大值：id值大于1<<53-1  int64: i<<63-1
+		"user_name":     user.UserName,
+		"access_token":  user.AccessToken,
+		"refresh_token": user.RefreshToken,
 	})
 }
