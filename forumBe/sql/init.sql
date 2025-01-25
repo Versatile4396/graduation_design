@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS user;
 
 CREATE TABLE
-    `users` (
+    IF NOT EXISTS `users` (
         `user_index` int (11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
         `user_id` varchar(20) NOT NULL COMMENT '用户ID',
         `user_name` varchar(20) NOT NULL COMMENT '用户名',
@@ -37,3 +37,64 @@ CREATE TABLE
         KEY `email` (`email`),
         KEY `created_at` (`created_at`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '用户表';
+
+-- 创建文章分类表
+CREATE TABLE
+    IF NOT EXISTS article_categories (
+        category_id INT AUTO_INCREMENT PRIMARY KEY,
+        category_name VARCHAR(100) NOT NULL,
+        parent_id INT NULL,
+        -- 外键关联自身，用于多级分类
+        FOREIGN KEY (parent_id) REFERENCES article_categories (category_id)
+    );
+
+-- 创建文章表
+CREATE TABLE
+    IF NOT EXISTS articles (
+        article_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '文章ID',
+        title VARCHAR(255) NOT NULL COMMENT '文章标题',
+        content TEXT NOT NULL COMMENT '文章内容',
+        author_id INT NOT NULL COMMENT '文章作者',
+        category_id INT NOT NULL COMMENT '分类id',
+        `created_at` int (10) unsigned NOT NULL DEFAULT '0' COMMENT '注册时间',
+        `updated_at` int (10) unsigned NOT NULL DEFAULT '0' COMMENT '更新时间',
+        `deleted_at` int (10) unsigned NOT NULL DEFAULT '0' COMMENT '禁用时间',
+        view_count INT NOT NULL DEFAULT 0,
+        is_published TINYINT (1) NOT NULL DEFAULT 0,
+        -- 外键关联文章分类表
+        FOREIGN KEY (category_id) REFERENCES article_categories (category_id)
+    );
+
+-- 创建文章标签表
+CREATE TABLE
+    IF NOT EXISTS article_tags (
+        tag_id INT AUTO_INCREMENT PRIMARY KEY,
+        tag_name VARCHAR(50) NOT NULL
+    );
+
+-- 创建文章 - 标签关联表
+CREATE TABLE
+    IF NOT EXISTS article_tag_relations (
+        relation_id INT AUTO_INCREMENT PRIMARY KEY,
+        article_id INT NOT NULL,
+        tag_id INT NOT NULL,
+        -- 外键关联文章表
+        FOREIGN KEY (article_id) REFERENCES articles (article_id),
+        -- 外键关联文章标签表
+        FOREIGN KEY (tag_id) REFERENCES article_tags (tag_id)
+    );
+
+-- 创建文章评论表
+CREATE TABLE
+    IF NOT EXISTS article_comments (
+        comment_id INT AUTO_INCREMENT PRIMARY KEY,
+        article_id INT NOT NULL,
+        user_id INT NOT NULL,
+        content TEXT NOT NULL,
+        create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        parent_comment_id INT NULL,
+        -- 外键关联文章表
+        FOREIGN KEY (article_id) REFERENCES articles (article_id),
+        -- 外键关联自身，用于多级评论
+        FOREIGN KEY (parent_comment_id) REFERENCES article_comments (comment_id)
+    );

@@ -25,7 +25,25 @@
               </div>
             </div>
           </div>
-          <div class="avator"></div>
+          <div class="right-side-nav">
+            <div class="search-create-node">
+              <div class="search-node">
+                <el-input
+                  v-model="searchValue"
+                  style="width: 240px"
+                  size="large"
+                  placeholder="探索跨知领域"
+                  :suffix-icon="Search"
+                />
+              </div>
+              <div class="create-node">
+                <el-button size="large" type="primary">创作者中心</el-button>
+              </div>
+            </div>
+            <div class="avator-node">
+              <div class="">瓦达西</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -36,6 +54,9 @@
 import router from "@/router";
 import { getUrlQuery } from "@/utils/common";
 import { ref } from "vue";
+import { Search } from "@element-plus/icons-vue";
+import { ElButton, ElInput } from "element-plus";
+
 const navStatus = ref(true);
 var isScrolling = false;
 const scrollCallback = () => {
@@ -97,10 +118,11 @@ const naviConfig: naviNode[] = [
 const activeNodeIndex = ref(0);
 //
 router.afterEach((to) => {
-  console.log(to);
   activeNodeIndex.value = naviConfig.findIndex((item) => item.path === to.path);
-  console.log(activeNodeIndex.value);
 });
+
+// 搜索逻辑
+const searchValue = ref("");
 </script>
 <style scoped lang="scss">
 /* @import url(); 引入css类 */
@@ -136,7 +158,7 @@ router.afterEach((to) => {
       display: flex;
       align-items: center;
       font-size: 24px;
-      margin-right: 24px;
+      margin-right: 16px;
       .logo-img {
         height: 50px;
         width: 50px;
@@ -144,12 +166,14 @@ router.afterEach((to) => {
       .logo-text {
         font-family: cursive;
         cursor: pointer;
+        width: 100px;
       }
     }
     .nav-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 100%;
       .nav-link {
         display: flex;
         .nav-node {
@@ -159,6 +183,21 @@ router.afterEach((to) => {
         }
         .active-node {
           color: rgb(63, 126, 247);
+        }
+      }
+      .right-side-nav {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        .search-create-node {
+          display: flex;
+          align-items: center;
+          .search-node {
+            margin-right: 24px;
+          }
+          .create-node {
+            margin-right: 24px;
+          }
         }
       }
     }

@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "@formily/core": "^2.3.2",
     "@formily/element-plus": "^1.1.0",
     "@formily/vue": "^2.3.2",
