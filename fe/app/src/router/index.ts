@@ -4,10 +4,21 @@ import {
   type RouteRecordRaw,
 } from "vue-router";
 
+export enum routerName {
+  HOME = "home",
+  LOGIN = "login",
+  RECOMMEND = "recommend",
+  COURSE = "course",
+  POPULAR = "popular",
+  PERSONAL = "personal",
+  CREATE_ARTICLE = "editor",
+  TEST = "test",
+}
+
 export const routes: RouteRecordRaw[] = [
   {
     path: "/",
-    name: "home",
+    name: routerName.HOME,
     meta: {
       title: "互助首页",
     },
@@ -15,7 +26,7 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: "/login",
-    name: "login",
+    name: routerName.LOGIN,
     meta: {
       title: "互助登录页",
     },
@@ -23,7 +34,7 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: "/recommend",
-    name: "recommend",
+    name: routerName.RECOMMEND,
     meta: {
       title: "推荐页",
     },
@@ -31,7 +42,7 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: "/course",
-    name: "course",
+    name: routerName.COURSE,
     meta: {
       title: "课程",
     },
@@ -39,7 +50,7 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: "/popular",
-    name: "popular",
+    name: routerName.POPULAR,
     meta: {
       title: "互助登录页",
     },
@@ -47,15 +58,23 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: "/personal",
-    name: "personal",
+    name: routerName.PERSONAL,
     meta: {
       title: "个人中心",
     },
     component: () => import("@/page/personal/index.vue"),
   },
   {
+    path: "/create-article",
+    name: routerName.CREATE_ARTICLE,
+    meta: {
+      title: "创建文章",
+    },
+    component: () => import("@/page/create/index.vue"),
+  },
+  {
     path: "/test",
-    name: "test",
+    name: routerName.TEST,
     meta: {
       title: "测试界面",
     },

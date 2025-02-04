@@ -19,6 +19,7 @@
     "@vueuse/core": "^12.4.0",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.12",
+    "@wangeditor/plugin-md": "^1.0.0",
     "axios": "^1.7.9",
     "element-plus": "^2.9.3",
     "install": "^0.13.0",

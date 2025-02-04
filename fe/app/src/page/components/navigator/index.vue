@@ -37,7 +37,9 @@
                 />
               </div>
               <div class="create-node">
-                <el-button size="large" type="primary">创作者中心</el-button>
+                <el-button size="large" type="primary" @click="createArticle"
+                  >创作者中心</el-button
+                >
               </div>
             </div>
             <div class="avator-node">
@@ -51,11 +53,12 @@
 </template>
 
 <script lang="ts" setup>
-import router from "@/router";
+import router, { routerName } from "@/router";
 import { getUrlQuery } from "@/utils/common";
 import { ref } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { ElButton, ElInput } from "element-plus";
+import { FormType } from "@/ajax/type/ariticle";
 
 const navStatus = ref(true);
 var isScrolling = false;
@@ -123,6 +126,12 @@ router.afterEach((to) => {
 
 // 搜索逻辑
 const searchValue = ref("");
+
+// 跳转创建文章界面
+const createArticle = () => {
+  const query = { ...getUrlQuery(), scene: FormType.create };
+  router.push({ name: routerName.CREATE_ARTICLE, query });
+};
 </script>
 <style scoped lang="scss">
 /* @import url(); 引入css类 */

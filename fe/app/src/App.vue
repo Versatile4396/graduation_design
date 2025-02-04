@@ -1,6 +1,10 @@
 <template>
-  <Navigator v-if="navigatorStatus"></Navigator>
-  <div class="occpancy">
+  <Navigator v-show="navigatorStatus"></Navigator>
+  <div
+    :class="{
+      occpancy: navigatorStatus,
+    }"
+  >
     <RouterView />
   </div>
 </template>
@@ -8,11 +12,14 @@
 import Navigator from "@/page/components/navigator/index.vue";
 import { RouterView } from "vue-router";
 import { computed } from "vue";
-import router from "./router";
-import { userLocalInfo } from "@/utils/common";
+import router, { routerName } from "./router";
+import { getUrlQuery, userLocalInfo } from "@/utils/common";
 
 const navigatorStatus = computed(() => {
-  return router.currentRoute.value.name !== "login";
+  return ![routerName.LOGIN, routerName.CREATE_ARTICLE].includes(
+    // @ts-ignore
+    router.currentRoute.value.name
+  );
 });
 
 const initApp = () => {
@@ -25,6 +32,8 @@ const initApp = () => {
         uid: userLocalInfo.value?.user_id,
       },
     });
+    const query = getUrlQuery();
+    router.push({ name: routerName.CREATE_ARTICLE, query });
   }
 };
 initApp();
