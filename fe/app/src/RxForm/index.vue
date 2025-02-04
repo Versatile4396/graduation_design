@@ -1,6 +1,6 @@
 <template>
   <FormProvider v-if="form" :form="form">
-    <component :is="fieldSchema" :schema="props.schema"></component>
+    <component :is="fieldSchema" :schema="compShcema"></component>
     <div v-if="$slots['submit_wrapper']">
       <slot name="submit_wrapper"></slot>
     </div>
@@ -40,7 +40,8 @@ import {
   Password,
 } from "@formily/element-plus";
 import { ElButton } from "element-plus";
-import { ref } from "vue";
+import { computed, provide, ref } from "vue";
+import { formContextKey } from "./context/formcontext";
 interface Props {
   schema: any;
   submitText?: string;
@@ -53,6 +54,14 @@ const props = withDefaults(defineProps<Props>(), {
   submitText: "提交",
   cancelText: "取消",
 });
+
+const compShcema = computed(() => {
+  if (props.schema instanceof Function) {
+    return props.schema(form.value);
+  }
+  return props.schema;
+});
+
 const emits = defineEmits([
   "submit",
   "cancel",
@@ -119,6 +128,9 @@ const fieldSchema = createSchemaField({
     FormItem,
   },
 }).SchemaField;
+
+provide(formContextKey, form.value);
+defineExpose(form.value);
 </script>
 <style scoped lang="scss">
 /* @import url(); 引入css类 */

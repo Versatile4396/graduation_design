@@ -3,7 +3,7 @@
     <div class="login-form">
       <el-tabs v-model="activeKey" type="border-card">
         <el-tab-pane label="登录" name="login">
-          <Form
+          <RxForm
             :schema="loginSchema"
             submit-text="登录"
             cancel-text="去注册"
@@ -14,10 +14,11 @@
             :submit="submitHandle"
             @onSubmitSuccess="onSubmitSuccess"
             @cancel="() => (activeKey = loginType.Register)"
-          ></Form>
+          ></RxForm>
         </el-tab-pane>
         <el-tab-pane label="注册" name="register">
-          <Form
+          <RxForm
+            ref="registerForm"
             :schema="registerSchema"
             submit-text="注册"
             cancel-text="去登录"
@@ -25,7 +26,7 @@
             @submit="(f: any) => submitHandle(f, loginType.Register)"
             @cancel="() => (activeKey = loginType.Login)"
             @onSubmitSuccess="onSubmitSuccess"
-          ></Form>
+          ></RxForm>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -34,13 +35,20 @@
 
 <script lang="ts" setup>
 import { ElTabPane, ElTabs } from "element-plus";
-import { ref } from "vue";
-import Form from "@/RxForm/index.vue";
+import { onMounted, ref } from "vue";
+import RxForm from "@/RxForm/index.vue";
 import { loginSchema, registerSchema } from "@/RxForm/schema/login";
 import Ajax from "@/ajax";
 import { userInfoStore } from "@/store/user";
 import router from "@/router";
 import type { userInfo } from "@/ajax/type/user";
+import type { Field, Form } from "@formily/core/esm/models";
+import {
+  onFieldInit,
+  onFieldValueChange,
+  type DataField,
+  type GeneralField,
+} from "@formily/core";
 
 const { setUserInfo } = userInfoStore();
 enum loginType {
@@ -70,6 +78,23 @@ const onSubmitSuccess = (data: userInfo) => {
   });
 };
 const activeKey = ref(loginType.Login);
+
+// const registerForm = ref<Form>();
+// onMounted(() => {
+//   registerForm.value?.addEffects("passwordConfirm", () => {
+//     onFieldInit("password", (field: Field, form) => {
+//       field.setValidator((value) => {
+//         const confirm_password = form.query("confirm_password").value();
+//         console.log(value, confirm_password);
+//         if (confirm_password && value !== confirm_password) {
+//           field.setComponentProps({ status: "error" });
+//           return "两次密码输入不一致";
+//         }
+//       });
+//     });
+//     onFieldInit("password", (field) => {});
+//   });
+// });
 </script>
 <style scoped lang="scss">
 /* @import url(); 引入css类 */

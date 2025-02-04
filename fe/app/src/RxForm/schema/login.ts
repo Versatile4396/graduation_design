@@ -1,3 +1,4 @@
+import type { Form } from "@formily/core";
 import type { ISchema } from "@formily/vue";
 
 export const loginSchema = {
@@ -29,86 +30,114 @@ export const loginSchema = {
     },
   },
 } as ISchema;
+const validatorConfirmPassWord = (form: Form) => {
+  return (field: string) => {
+    const password = form.query("password").value();
+    if (password && password !== field) {
+      return "两次密码不一致";
+    }
+    return true;
+  };
+};
 
-export const registerSchema = {
-  type: "object",
-  properties: {
-    username: {
-      type: "string",
-      required: true,
-      "x-decorator": "FormItem",
-      "x-component": "Input",
-      "x-component-props": {
-        placeholder: "输入用户名",
-      },
-      "x-validator": {
-        maxLength: 16,
-      },
-    },
-    email: {
-      type: "string",
-      "x-decorator": "FormItem",
-      "x-component": "Input",
-      "x-component-props": {
-        placeholder: "输入你的邮箱",
-      },
-      "x-validator": {
-        required: true,
-        format: "email",
-      },
-    },
+const validatorPassword = (form: Form) => {
+  return (field: string) => {
+    const password = form.query("confirm_password").value();
+    if (password && password !== field) {
+      return "两次密码不一致";
+    }
+    return true;
+  };
+};
 
-    password: {
-      type: "string",
-      "x-validator": {
+export const registerSchema = (form: Form) => {
+  return {
+    type: "object",
+    properties: {
+      username: {
+        type: "string",
         required: true,
-        minLength: 6,
+        "x-decorator": "FormItem",
+        "x-component": "Input",
+        "x-component-props": {
+          placeholder: "输入用户名",
+        },
+        "x-validator": {
+          maxLength: 16,
+        },
       },
-      "x-decorator": "FormItem",
-      "x-component": "Password",
-      "x-component-props": {
-        placeholder: "输入密码",
+      email: {
+        type: "string",
+        "x-decorator": "FormItem",
+        "x-component": "Input",
+        "x-component-props": {
+          placeholder: "输入你的邮箱",
+        },
+        "x-validator": {
+          required: true,
+          format: "email",
+        },
+      },
+
+      password: {
+        type: "string",
+        "x-validator": [
+          {
+            required: true,
+            minLength: 6,
+          },
+          validatorPassword(form),
+        ],
+        "x-decorator": "FormItem",
+        "x-component": "Password",
+        "x-component-props": {
+          placeholder: "输入密码",
+        },
+      },
+      confirm_password: {
+        type: "string",
+        "x-validator": [
+          {
+            required: true,
+            minLength: 6,
+          },
+          validatorConfirmPassWord(form),
+        ],
+
+        "x-decorator": "FormItem",
+        "x-component": "Password",
+        "x-component-props": {
+          placeholder: "再次输入密码",
+        },
+      },
+      gender: {
+        type: "number",
+        title: "性别",
+        "x-decorator": "FormItem",
+        "x-component": "Radio.Group",
+        "x-component-props": {
+          default: 2,
+        },
+        initialValue: 2,
+        enum: [
+          {
+            label: "男",
+            value: 0,
+          },
+          {
+            label: "女",
+            value: 1,
+          },
+          {
+            label: "武装直升机",
+            value: 2,
+          },
+          {
+            label: "胖东来洗发水",
+            value: 3,
+          },
+        ],
       },
     },
-    confirm_password: {
-      type: "string",
-      "x-validator": {
-        required: true,
-        minLength: 6,
-      },
-      "x-decorator": "FormItem",
-      "x-component": "Password",
-      "x-component-props": {
-        placeholder: "再次输入密码",
-      },
-    },
-    gender: {
-      type: "number",
-      title: "性别",
-      "x-decorator": "FormItem",
-      "x-component": "Radio.Group",
-      "x-component-props": {
-        default: 2,
-      },
-      initialValue: 2,
-      enum: [
-        {
-          label: "男",
-          value: 0,
-        },
-        {
-          label: "女",
-          value: 1,
-        },
-        {
-          label: "武装直升机",
-          value: 2,
-        },
-        {
-          label: "胖东来洗发水",
-          value: 3,
-        },
-      ],
-    },
-  },
+  };
 };
