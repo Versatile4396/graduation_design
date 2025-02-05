@@ -44,7 +44,18 @@
             </div>
             <div class="avatar-node">
               <div class="logined" v-if="isLogined">
-                <el-avatar class="avatar" />
+                <el-dropdown placement="top-start" trigger="click">
+                  <el-avatar class="avatar" />
+
+                  <template #dropdown>
+                    <el-dropdown-menu>
+                      <el-dropdown-item>个人中心</el-dropdown-item>
+                      <el-dropdown-item @click="handleLoginOut"
+                        >退出登录</el-dropdown-item
+                      >
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
               </div>
               <div class="no-logged" v-else>
                 <el-button
@@ -65,11 +76,12 @@
 
 <script lang="ts" setup>
 import router, { routerName } from "@/router";
-import { getUrlQuery } from "@/utils/common";
-import { computed, ref } from "vue";
+import { getUrlQuery, userLocalInfo } from "@/utils/common";
+import { computed, onMounted, ref, watch } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { ElButton, ElInput } from "element-plus";
 import { FormType } from "@/ajax/type/ariticle";
+import { userInfoStore } from "@/store/user";
 
 const navStatus = ref(true);
 var isScrolling = false;
@@ -146,12 +158,17 @@ const createArticle = () => {
 
 // 跳转登录页面
 const isLogined = computed(() => {
-  const { uid } = getUrlQuery();
-  if (uid) return true;
-  return false;
+  return !!userLocalInfo.value.user_id;
 });
+
 const handleLoginClick = () => {
   router.push({ name: routerName.LOGIN });
+};
+
+// 退出登录
+const handleLoginOut = () => {
+  router.replace({ query: {} });
+  userInfoStore().setUserInfo({});
 };
 </script>
 <style scoped lang="scss">
@@ -232,6 +249,13 @@ const handleLoginClick = () => {
         .avatar-node {
           display: flex;
           align-items: center;
+          .avatar-menu {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            background-color: #ccc;
+          }
         }
       }
     }

@@ -16,11 +16,27 @@ export const getUrlQuery = () => {
   }
   return query;
 };
-export const setToken = (aToken: string, rToken: string) => {
+
+export const setUrlQuery = (key: string, value: any) => {
+  const url = new URL(window.location.href);
+  const searchParams = url.searchParams;
+  // 设置指定的参数键值对
+  searchParams.set(key, value);
+  // 更新URL（不刷新页面，仅改变当前历史记录项的URL）
+  window.history.replaceState({}, "", url);
+  return url.href;
+};
+
+export const setToken = (
+  aToken: string | undefined,
+  rToken: string | undefined
+) => {
   acccess_token.value = aToken;
   refresh_token.value = rToken;
 };
 export const setLocalStorageUserInfo = (uinfo: userInfo) => {
+  // 设置query参数
+  setUrlQuery("uid", "");
   userLocalInfo.value = uinfo;
 };
 export const clearLocalInfo = () => {
