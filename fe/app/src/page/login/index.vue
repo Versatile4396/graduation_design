@@ -20,9 +20,15 @@
           <RxForm
             ref="registerForm"
             :schema="registerSchema"
+            :initial-values="{
+              username: 'username',
+              email: 'asd@qq.com',
+              confirm_password: '123456',
+              password: '123456',
+              gender: 1,
+            }"
             submit-text="注册"
             cancel-text="去登录"
-            :initialValues="{ gender: 2 }"
             @submit="(f: any) => submitHandle(f, loginType.Register)"
             @cancel="() => (activeKey = loginType.Login)"
             @onSubmitSuccess="onSubmitSuccess"

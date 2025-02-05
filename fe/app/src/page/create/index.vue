@@ -55,21 +55,24 @@ import markdownModule from "@wangeditor/plugin-md";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { onBeforeUnmount, ref, shallowRef, onMounted } from "vue";
 import { Switch } from "@element-plus/icons-vue";
+import { getUrlQuery } from "@/utils/common";
+import { FormType } from "@/ajax/type/ariticle";
 
 Boot.registerModule(markdownModule);
 // 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef();
 
 // 内容 HTML
-const valueHtml = ref("<p>Loading...</p>");
+const valueHtml = ref("");
 
 const mode = "default";
-
+const formType = Number(getUrlQuery().scene);
 // 模拟 ajax 异步获取内容
 onMounted(() => {
-  setTimeout(() => {
-    valueHtml.value = "<p>模拟 Ajax 异步设置内容</p>";
-  }, 1500);
+  if (formType === FormType.create) {
+  } else if (formType === FormType.editor) {
+    // 拉取文章内容
+  }
 });
 
 const toolbarConfig = {};
@@ -147,7 +150,7 @@ const saveDraft = () => {};
       }
     }
   }
-  .editor-container{
+  .editor-container {
     flex: 1;
     height: 100%;
   }

@@ -42,7 +42,9 @@ func SignUp(fo *models.User) (user models.User, err error) {
 	}
 	// 插入数据库
 	err = global.Db.Create(&fo).Error
-
+	if err != nil {
+		return
+	}
 	return user, nil
 }
 
@@ -52,6 +54,7 @@ func Login(u *models.LoginForm) (user *models.User, error error) {
 		Password: u.Password,
 	}
 	dbuser, err := mysql.Login(user)
+
 	if err != nil {
 		return nil, err
 	}

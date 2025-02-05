@@ -57,14 +57,47 @@ CREATE TABLE
         FOREIGN KEY (parent_id) REFERENCES article_categories (category_id) ON UPDATE CASCADE ON DELETE SET NULL
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+-- 插入三条 article_categories 数据
+INSERT INTO
+    article_categories (category_name, parent_id)
+VALUES
+    ('农学类', NULL);
+
+INSERT INTO
+    article_categories (category_name, parent_id)
+VALUES
+    ('数学信息学类', NULL);
+
+INSERT INTO
+    article_categories (category_name, parent_id)
+VALUES
+    ('水产医学', 1);
+
+INSERT INTO
+    article_categories (category_name, parent_id)
+VALUES
+    ('兽医', 1);
+
+INSERT INTO
+    article_categories (category_name, parent_id)
+VALUES
+    ('计算机科学与技术', 2);
+
+INSERT INTO
+    article_categories (category_name, parent_id)
+VALUES
+    ('软件工程', 2);
+
 -- 创建文章表
 CREATE TABLE
     IF NOT EXISTS articles (
-        article_id INT AUTO_INCREMENT PRIMARY KEY COMMENT '文章ID',
+        article_id VARCHAR(20) COMMENT '文章ID' PRIMARY KEY,
         title VARCHAR(255) NOT NULL COMMENT '文章标题',
         content TEXT NOT NULL COMMENT '文章内容',
-        author_id VARCHAR(20) NOT NULL COMMENT '文章作者',
+        user_id VARCHAR(20) NOT NULL COMMENT '文章作者',
         category_id INT NOT NULL COMMENT '分类id',
+        topic_title VARCHAR(255) NOT NULL COMMENT '话题内容',
+        cover VARCHAR(200) NOT NULL COMMENT '文章封面',
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         view_count INT NOT NULL DEFAULT 0,
@@ -72,7 +105,8 @@ CREATE TABLE
         -- 外键关联文章分类表，设置级联更新和删除
         FOREIGN KEY (category_id) REFERENCES article_categories (category_id) ON UPDATE CASCADE ON DELETE RESTRICT,
         -- 为作者 ID 和创建时间添加索引
-        KEY author_id (author_id),
+        KEY user_id (user_id),
+        UNIQUE KEY article_id (article_id),
         KEY created_at (created_at)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
@@ -88,7 +122,7 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS article_tag_relations (
         relation_id INT AUTO_INCREMENT PRIMARY KEY,
-        article_id INT NOT NULL,
+        article_id VARCHAR(20) NOT NULL,
         tag_id INT NOT NULL,
         -- 外键关联文章表，设置级联更新和删除
         FOREIGN KEY (article_id) REFERENCES articles (article_id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -102,7 +136,7 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS article_comments (
         comment_id INT AUTO_INCREMENT PRIMARY KEY,
-        article_id INT NOT NULL,
+        article_id VARCHAR(20) NOT NULL,
         user_id VARCHAR(20) NOT NULL,
         content TEXT NOT NULL,
         create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -122,7 +156,7 @@ CREATE TABLE
         -- 点赞记录 ID，自增主键
         like_id INT AUTO_INCREMENT PRIMARY KEY,
         -- 关联的文章 ID，外键，引用 articles 表的 article_id
-        article_id INT NOT NULL,
+        article_id VARCHAR(20) NOT NULL,
         -- 点赞用户的 ID，可以根据实际情况修改为合适的数据类型
         user_id VARCHAR(20) NOT NULL,
         -- 点赞时间，默认值为当前时间

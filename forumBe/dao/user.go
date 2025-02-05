@@ -27,7 +27,11 @@ func Login(user *models.User) (u *models.User, error error) {
 	originPassword := user.Password
 	// 根据用户名查询数据库用户 信息
 	var newUser *models.User
-	global.Db.Model(&models.User{}).Where("user_name =?", user.UserName).First(&newUser)
+	err := global.Db.Model(&models.User{}).Where("user_name =?", user.UserName).First(&newUser).Error
+	if err != nil {
+		return nil, err
+	}
+
 	// 密码比对
 	password := EncryptPassword([]byte(originPassword))
 	if newUser.Password != password {

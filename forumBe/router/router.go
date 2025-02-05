@@ -27,6 +27,9 @@ func SetupRouter() *gin.Engine {
 	article := router.Group("/api/article")
 	{
 		article.POST("/create", controller.ArticleCreateController)
+		article.POST("/update", controller.ArticleUpdateController)
+		article.POST("/getById", controller.ArticleGetController)
+
 	}
 
 	return router

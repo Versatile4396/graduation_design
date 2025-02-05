@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"fmt"
 	mysql "forum/dao"
 	"forum/logger"
@@ -10,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 // Ping godoc
@@ -27,7 +29,6 @@ func UserRegisterController(c *gin.Context) {
 		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
 		return
 	}
-	logger.Fmt(user)
 	// 业务处理-注册用户
 	rUser, err := logic.SignUp(user)
 	if err != nil {
@@ -39,7 +40,6 @@ func UserRegisterController(c *gin.Context) {
 		ResponseError(c, CodeServerBusy)
 		return
 	}
-	fmt.Println(rUser)
 	ResponseSuccessWithMsg(c, rUser, "注册成功")
 }
 
@@ -59,8 +59,7 @@ func UserLoginController(c *gin.Context) {
 	// 业务处理 用户登录
 	user, err := logic.Login(u)
 	if err != nil {
-		zap.L().Error("logic.Login failed", zap.String("username", user.UserName), zap.Error(err))
-		if err.Error() == mysql.ErrorUserNotExit {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			ResponseError(c, CodeUserNotExist)
 			return
 		}
