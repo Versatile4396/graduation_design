@@ -42,8 +42,19 @@
                 >
               </div>
             </div>
-            <div class="avator-node">
-              <div class="">瓦达西</div>
+            <div class="avatar-node">
+              <div class="logined" v-if="isLogined">
+                <el-avatar class="avatar" />
+              </div>
+              <div class="no-logged" v-else>
+                <el-button
+                  @click="handleLoginClick"
+                  type="primary"
+                  size="large"
+                  plain
+                  >登录｜注册</el-button
+                >
+              </div>
             </div>
           </div>
         </div>
@@ -55,7 +66,7 @@
 <script lang="ts" setup>
 import router, { routerName } from "@/router";
 import { getUrlQuery } from "@/utils/common";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { ElButton, ElInput } from "element-plus";
 import { FormType } from "@/ajax/type/ariticle";
@@ -132,6 +143,16 @@ const createArticle = () => {
   const query = { ...getUrlQuery(), scene: FormType.create };
   router.push({ name: routerName.CREATE_ARTICLE, query });
 };
+
+// 跳转登录页面
+const isLogined = computed(() => {
+  const { uid } = getUrlQuery();
+  if (uid) return true;
+  return false;
+});
+const handleLoginClick = () => {
+  router.push({ name: routerName.LOGIN });
+};
 </script>
 <style scoped lang="scss">
 /* @import url(); 引入css类 */
@@ -207,6 +228,10 @@ const createArticle = () => {
           .create-node {
             margin-right: 24px;
           }
+        }
+        .avatar-node {
+          display: flex;
+          align-items: center;
         }
       }
     }

@@ -30,18 +30,21 @@
         </span>
       </div>
     </div>
-    <Toolbar
-      style="border-bottom: 0.5px solid #ccc"
-      :editor="editorRef"
-      :defaultConfig="toolbarConfig"
-      :mode="mode"
-    />
-    <Editor
-      v-model="valueHtml"
-      :defaultConfig="editorConfig"
-      :mode="mode"
-      @onCreated="handleCreated"
-    />
+    <div class="editor-container">
+      <Toolbar
+        style="border-bottom: 0.5px solid #ccc; width: 1400px"
+        :editor="editorRef"
+        :defaultConfig="toolbarConfig"
+        :mode="mode"
+      />
+      <Editor
+        v-model="valueHtml"
+        style="min-height: 800px; overflow-y: hidden; width: 1400px"
+        :defaultConfig="editorConfig"
+        :mode="mode"
+        @onCreated="handleCreated"
+      />
+    </div>
   </div>
 </template>
 
@@ -90,11 +93,18 @@ const saveDraft = () => {};
 </script>
 <style lang="scss" scoped>
 .editor-style {
+  margin: auto 0px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
   .editor-nav {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 60px;
+    width: 1400px;
     background-color: #fff;
     .title-input {
       margin: 0;
@@ -136,6 +146,10 @@ const saveDraft = () => {};
         margin-left: 12px;
       }
     }
+  }
+  .editor-container{
+    flex: 1;
+    height: 100%;
   }
 }
 </style>
