@@ -33,20 +33,20 @@ func ArticleUpdate(a *models.Article) (rArticle *models.Article, err error) {
 
 }
 
-func ArticleGet(a *models.Article) (rArticle *models.Article, err error) {
-	err = global.Db.Model(&a).Where("article_id =?", a.ArticleId).First(&rArticle).Error
+func ArticleGet(aid int64) (rArticle *models.Article, err error) {
+	err = global.Db.Model(&rArticle).Where("article_id =?", aid).First(&rArticle).Error
 	if err != nil {
 		return nil, errors.New("获取文章失败")
 	}
 	return rArticle, nil
 }
 
-func ArticleDelete(a *models.Article) (err error) {
-	err = global.Db.Delete(&a).Error
+func ArticleDelete(aid int64) (rArticle *models.Article, err error) {
+	err = global.Db.Where("article_id = ?", aid).Delete(&rArticle).Error
 	if err != nil {
-		return errors.New("删除文章失败")
+		return nil, errors.New("删除文章失败")
 	}
-	return nil
+	return nil, nil
 
 }
 

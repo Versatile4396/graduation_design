@@ -4,6 +4,7 @@ import (
 	"forum/logger"
 	"forum/logic"
 	"forum/models"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -45,36 +46,39 @@ func ArticleUpdateController(c *gin.Context) {
 	ResponseSuccess(c, rArticle)
 }
 func ArticleDeleteController(c *gin.Context) {
-	var article *models.Article
-	if err := c.ShouldBindJSON(&article); err != nil {
+	aid := c.Param("aid")
+	postId, err := strconv.ParseInt(aid, 10, 64)
+	if err != nil {
 		zap.L().Error("article delete with invalid param", zap.Error(err))
 		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
 		return
 	}
-	logger.Fmt(article)
+	logger.Fmt(aid)
 	// 业务处理-文章删除
-	err := logic.ArticleDelete(article)
+	rAticle, err := logic.ArticleDelete(postId)
 	if err != nil {
 		zap.L().Error("logic.ArticleDelete failed", zap.Error(err))
 		ResponseError(c, CodeServerBusy)
 		return
 	}
+	ResponseSuccess(c, rAticle)
 }
 
 func ArticleGetController(c *gin.Context) {
-	var article *models.Article
-	if err := c.BindJSON(&article); err != nil {
+	article_id := c.Param("aid")
+	postId, err := strconv.ParseInt(article_id, 10, 64)
+	if err != nil {
 		zap.L().Error("article get with invalid param", zap.Error(err))
 		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
 		return
 	}
-	logger.Fmt(article)
+	logger.Fmt(article_id)
 	// 业务处理-文章获取
-	rArticle, err := logic.ArticleGet(article)
+	rArticle, err := logic.ArticleGet(postId)
 	if err != nil {
 		zap.L().Error("logic.ArticleGet failed", zap.Error(err))
 		ResponseError(c, CodeServerBusy)
 		return
 	}
-	ResponseSuccess(c, rArticle)
+	ResponseSuccessWithMsg(c, rArticle, "删除文章成功")
 }
