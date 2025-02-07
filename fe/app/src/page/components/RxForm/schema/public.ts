@@ -45,10 +45,7 @@ export const publicSchema = (form: Form) => {
         "x-decorator-props": {
           labelWidth: 70,
         },
-        "x-component": "Input",
-        "x-component-props": {
-          placeholder: "请输入创作话题",
-        },
+        "x-component": "CustomUpload",
       },
       topic_title: {
         title: "创作话题",

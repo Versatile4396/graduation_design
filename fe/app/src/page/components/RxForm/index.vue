@@ -5,20 +5,8 @@
       <slot name="submit_wrapper"></slot>
     </div>
     <div v-else class="default_submit_wrapper">
-      <ElButton
-        class="submit_btn"
-        :block="true"
-        type="primary"
-        @click="onFormSubmit"
-        >{{ submitText }}</ElButton
-      >
-      <ElButton
-        class="cancel_btn"
-        :block="true"
-        type="default"
-        @click="onFormSubmitCancel"
-        >{{ cancelText }}</ElButton
-      >
+      <ElButton class="submit_btn" :block="true" type="primary" @click="onFormSubmit">{{ submitText }}</ElButton>
+      <ElButton class="cancel_btn" :block="true" type="default" @click="onFormSubmitCancel">{{ cancelText }}</ElButton>
     </div>
   </FormProvider>
 </template>
@@ -40,6 +28,7 @@ import {
   Password,
 } from "@formily/element-plus";
 import CustomRadio from "./components/customRadio.vue";
+import CustomUpload from "./components/customUpload.vue";
 import { ElButton } from "element-plus";
 import { computed, provide, ref } from "vue";
 import { formContextKey } from "./context/formcontext";
@@ -128,6 +117,7 @@ const fieldSchema = createSchemaField({
     Password,
     FormItem,
     CustomRadio,
+    CustomUpload,
   },
 }).SchemaField;
 
@@ -140,10 +130,12 @@ defineExpose(form.value);
   margin-top: 16px;
   display: flex;
   justify-content: space-between;
+
   .submit_btn {
     width: 240px;
     margin-right: 40px;
   }
+
   .cancel_btn {
     width: 240px;
   }
