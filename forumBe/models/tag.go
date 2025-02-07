@@ -1,6 +1,7 @@
 package models
 
 type Tag struct {
-	TagName string `json:"tag_name"`
-	TagDesc string `json:"tag_desc"`
+	TagId   int    `json:"tag_id"`
+	TagName string `json:"tag_name" validate:"required"`
+	TagDesc string `json:"tag_desc" validate:"required"`
 }
