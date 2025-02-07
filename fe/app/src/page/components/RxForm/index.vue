@@ -39,6 +39,7 @@ import {
   FormItem,
   Password,
 } from "@formily/element-plus";
+import CustomRadio from "./components/customRadio.vue";
 import { ElButton } from "element-plus";
 import { computed, provide, ref } from "vue";
 import { formContextKey } from "./context/formcontext";
@@ -126,6 +127,7 @@ const fieldSchema = createSchemaField({
     Select,
     Password,
     FormItem,
+    CustomRadio,
   },
 }).SchemaField;
 

@@ -57,37 +57,6 @@ CREATE TABLE
         FOREIGN KEY (parent_id) REFERENCES article_categories (category_id) ON UPDATE CASCADE ON DELETE SET NULL
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
--- 插入三条 article_categories 数据
-INSERT INTO
-    article_categories (category_name, parent_id)
-VALUES
-    ('农学类', NULL);
-
-INSERT INTO
-    article_categories (category_name, parent_id)
-VALUES
-    ('数学信息学类', NULL);
-
-INSERT INTO
-    article_categories (category_name, parent_id)
-VALUES
-    ('水产医学', 1);
-
-INSERT INTO
-    article_categories (category_name, parent_id)
-VALUES
-    ('兽医', 1);
-
-INSERT INTO
-    article_categories (category_name, parent_id)
-VALUES
-    ('计算机科学与技术', 2);
-
-INSERT INTO
-    article_categories (category_name, parent_id)
-VALUES
-    ('软件工程', 2);
-
 -- 创建文章表
 CREATE TABLE
     IF NOT EXISTS articles (
@@ -96,7 +65,6 @@ CREATE TABLE
         content TEXT NOT NULL COMMENT '文章内容',
         user_id VARCHAR(20) NOT NULL COMMENT '文章作者',
         category_id INT NOT NULL COMMENT '分类id',
-        topic_title VARCHAR(255) NOT NULL COMMENT '话题内容',
         cover VARCHAR(200) NOT NULL COMMENT '文章封面',
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -130,6 +98,28 @@ CREATE TABLE
         FOREIGN KEY (tag_id) REFERENCES article_tags (tag_id) ON UPDATE CASCADE ON DELETE CASCADE,
         -- 为文章 ID 和标签 ID 添加联合索引
         UNIQUE KEY article_tag (article_id, tag_id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+-- 创建文章话题表
+CREATE TABLE
+    IF NOT EXISTS article_topics (
+        topic_id INT AUTO_INCREMENT PRIMARY KEY,
+        topic_name VARCHAR(50) NOT NULL,
+        UNIQUE KEY topic_name (topic_name)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+-- 创建文章 - 话题关联表
+CREATE TABLE
+    IF NOT EXISTS article_topic_relations (
+        relation_id INT AUTO_INCREMENT PRIMARY KEY,
+        article_id VARCHAR(20) NOT NULL,
+        topic_id INT NOT NULL,
+        -- 外键关联文章表，设置级联更新和删除
+        FOREIGN KEY (article_id) REFERENCES articles (article_id) ON UPDATE CASCADE ON DELETE CASCADE,
+        -- 外键关联文章标签表，设置级联更新和删除
+        FOREIGN KEY (topic_id) REFERENCES article_topics (topic_id) ON UPDATE CASCADE ON DELETE CASCADE,
+        -- 为文章 ID 和标签 ID 添加联合索引
+        UNIQUE KEY article_topic (article_id, topic_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- 创建文章评论表
@@ -166,3 +156,34 @@ CREATE TABLE
         -- 为文章 ID 和用户 ID 添加联合唯一索引，避免重复点赞
         UNIQUE KEY article_user (article_id, user_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+-- 插入三条 article_categories 数据
+INSERT INTO
+    article_categories (category_name, parent_id)
+VALUES
+    ('农学类', NULL);
+
+INSERT INTO
+    article_categories (category_name, parent_id)
+VALUES
+    ('数学信息学类', NULL);
+
+INSERT INTO
+    article_categories (category_name, parent_id)
+VALUES
+    ('水产医学', 1);
+
+INSERT INTO
+    article_categories (category_name, parent_id)
+VALUES
+    ('兽医', 1);
+
+INSERT INTO
+    article_categories (category_name, parent_id)
+VALUES
+    ('计算机科学与技术', 2);
+
+INSERT INTO
+    article_categories (category_name, parent_id)
+VALUES
+    ('软件工程', 2);

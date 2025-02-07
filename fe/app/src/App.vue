@@ -33,7 +33,7 @@ const initApp = () => {
       },
     });
     const query = getUrlQuery();
-    // router.push({ name: routerName.CREATE_ARTICLE, query });
+    router.push({ name: routerName.CREATE_ARTICLE, query });
   }
 };
 initApp();

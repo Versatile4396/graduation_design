@@ -14,9 +14,17 @@
           >
         </span>
         <span>
-          <el-button style="width: 100px" type="primary" @click="publicArticle"
-            >发布</el-button
+          <el-popover
+            trigger="click"
+            placement="bottom-end"
+            :width="580"
+            popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
           >
+            <template #reference>
+              <el-button style="width: 100px" type="primary">发布</el-button>
+            </template>
+            <PublicForm></PublicForm>
+          </el-popover>
         </span>
         <!-- <span>
           <el-popover :width="200" trigger="hover" content="切换成富文本编辑器">
@@ -54,6 +62,7 @@ import { Boot } from "@wangeditor/editor";
 import markdownModule from "@wangeditor/plugin-md";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import { onBeforeUnmount, ref, shallowRef, onMounted } from "vue";
+import PublicForm from "./public-form.vue";
 import { Switch } from "@element-plus/icons-vue";
 import { getUrlQuery } from "@/utils/common";
 import { FormType } from "@/ajax/type/ariticle";
@@ -89,9 +98,9 @@ const handleCreated = (editor: any) => {
   editorRef.value = editor; // 记录 editor 实例，重要！
 };
 
-const publicArticle = () => {
-  console.log("sads");
-};
+// 发布
+const publicFormStatus = ref(false);
+
 const saveDraft = () => {};
 </script>
 <style lang="scss" scoped>

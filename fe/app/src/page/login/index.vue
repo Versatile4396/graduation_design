@@ -42,8 +42,8 @@
 <script lang="ts" setup>
 import { ElTabPane, ElTabs } from "element-plus";
 import { ref } from "vue";
-import RxForm from "@/RxForm/index.vue";
-import { loginSchema, registerSchema } from "@/RxForm/schema/login";
+import RxForm from "@/page/components/RxForm/index.vue";
+import { loginSchema, registerSchema } from "@/page/components/RxForm/schema/login";
 import Ajax from "@/ajax";
 import { userInfoStore } from "@/store/user";
 import router from "@/router";
