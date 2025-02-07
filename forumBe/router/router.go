@@ -17,13 +17,13 @@ func SetupRouter() *gin.Engine {
 	router.Use(logger.GinLogger(),
 		logger.GinRecovery(true),
 		middleware.RateLimitMiddleware(2*time.Second, 40))
+	router.Static("/images", "./images")
 
 	user := router.Group("/api/user")
 	{
 		user.POST("/register", controller.UserRegisterController)
 		user.POST("/login", controller.UserLoginController)
 	}
-
 	article := router.Group("/api/article")
 	{
 		article.POST("/create", controller.ArticleCreateController)
@@ -46,6 +46,10 @@ func SetupRouter() *gin.Engine {
 		tag.GET("/getById/:tid", controller.TagGetController)
 		tag.DELETE("/delete/:tid", controller.TagDeleteController)
 		tag.POST("/list", controller.TagGetListController)
+	}
+	upload := router.Group("/api/upload")
+	{
+		upload.POST("/image", controller.UploadImageController)
 	}
 	return router
 }

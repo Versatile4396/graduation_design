@@ -1,6 +1,7 @@
 app:
   name: "grdudation_design"
   port: :5555
+  image_dir: "./images/"
 mysql:
   host: "127.0.0.1"
   user: "root"

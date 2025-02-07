@@ -14,6 +14,8 @@ const (
 	CodeNotLogin          MyCode = 1008
 	ErrVoteRepeated       MyCode = 1009
 	ErrorVoteTimeExpire   MyCode = 1010
+	CodeInvalidExt        MyCode = 1011
+	CodeInvalidSize       MyCode = 1012
 )
 
 var msgFlags = map[MyCode]string{
@@ -24,6 +26,8 @@ var msgFlags = map[MyCode]string{
 	CodeInvalidPassword: "用户名或密码错误",
 	CodeServerBusy:      "服务繁忙",
 
+	CodeInvalidExt:        "文件后缀名不合法",
+	CodeInvalidSize:       "文件大小超出限制",
 	CodeInvalidToken:      "无效的Token",
 	CodeInvalidAuthFormat: "认证格式有误",
 	CodeNotLogin:          "未登录",

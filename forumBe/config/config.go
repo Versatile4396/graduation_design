@@ -14,8 +14,9 @@ type AppConfig struct {
 }
 
 type AppBaseConfig struct {
-	Name string `mapstructure:"name"`
-	Port string `mapstructure:"port"`
+	Name     string `mapstructure:"name"`
+	Port     string `mapstructure:"port"`
+	ImageDir string `mapstructure:"image_dir"`
 }
 
 type LogConfig struct {
