@@ -80,7 +80,7 @@ CREATE TABLE
 
 -- 创建文章标签表
 CREATE TABLE
-    IF NOT EXISTS article_tags (
+    IF NOT EXISTS tags (
         tag_id INT AUTO_INCREMENT PRIMARY KEY,
         tag_name VARCHAR(50) NOT NULL,
         UNIQUE KEY tag_name (tag_name)
@@ -95,18 +95,24 @@ CREATE TABLE
         -- 外键关联文章表，设置级联更新和删除
         FOREIGN KEY (article_id) REFERENCES articles (article_id) ON UPDATE CASCADE ON DELETE CASCADE,
         -- 外键关联文章标签表，设置级联更新和删除
-        FOREIGN KEY (tag_id) REFERENCES article_tags (tag_id) ON UPDATE CASCADE ON DELETE CASCADE,
+        FOREIGN KEY (tag_id) REFERENCES tags (tag_id) ON UPDATE CASCADE ON DELETE CASCADE,
         -- 为文章 ID 和标签 ID 添加联合索引
         UNIQUE KEY article_tag (article_id, tag_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- 创建文章话题表
 CREATE TABLE
-    IF NOT EXISTS article_topics (
+    IF NOT EXISTS topics (
         topic_id INT AUTO_INCREMENT PRIMARY KEY,
         topic_name VARCHAR(50) NOT NULL,
         UNIQUE KEY topic_name (topic_name)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+ALTER TABLE topics
+ADD COLUMN `desc` VARCHAR(200);
+
+ALTER TABLE tags
+ADD COLUMN `desc` VARCHAR(200);
 
 -- 创建文章 - 话题关联表
 CREATE TABLE
@@ -117,7 +123,7 @@ CREATE TABLE
         -- 外键关联文章表，设置级联更新和删除
         FOREIGN KEY (article_id) REFERENCES articles (article_id) ON UPDATE CASCADE ON DELETE CASCADE,
         -- 外键关联文章标签表，设置级联更新和删除
-        FOREIGN KEY (topic_id) REFERENCES article_topics (topic_id) ON UPDATE CASCADE ON DELETE CASCADE,
+        FOREIGN KEY (topic_id) REFERENCES topics (topic_id) ON UPDATE CASCADE ON DELETE CASCADE,
         -- 为文章 ID 和标签 ID 添加联合索引
         UNIQUE KEY article_topic (article_id, topic_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
