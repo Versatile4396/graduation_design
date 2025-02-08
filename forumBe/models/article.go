@@ -11,3 +11,13 @@ type Article struct {
 	Cover      string `json:"cover"`
 	Abstract   string `json:"abstract"`
 }
+
+type ArticleFilter struct {
+	ArticleId  uint64 `json:"article_id"`
+	Title      string `json:"title"`
+	UserId     string `json:"user_id"`
+	CategoryId uint64 `json:"category_id"`
+	TopicId    uint64 `json:"topic_id" `
+	TagId      uint64 `json:"tag_id"`
+	Pagination Pagination
+}

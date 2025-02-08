@@ -82,3 +82,22 @@ func ArticleGetController(c *gin.Context) {
 	}
 	ResponseSuccessWithMsg(c, rArticle, "删除文章成功")
 }
+
+func ArticleGetListController(c *gin.Context) {
+	// 获取文章列表 通过uid 通过category_id 通过topic_id 通过tag_id 等等
+	var params *models.ArticleFilter
+	if err := c.ShouldBindJSON(&params); err != nil {
+		zap.L().Error("article get list with invalid param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	logger.Fmt(params)
+	// 业务处理-文章列表获取
+	rArticles, err := logic.ArticleGetList(params)
+	if err != nil {
+		zap.L().Error("logic.ArticleGetList failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, rArticles)
+}

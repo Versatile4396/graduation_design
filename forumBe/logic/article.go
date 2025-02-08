@@ -50,6 +50,25 @@ func ArticleDelete(aid int64) (rArticle *models.Article, err error) {
 
 }
 
-func ArticleCopy(a *models.Article) (rArticle *models.Article, err error) {
-	return
+func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, err error) {
+	query := global.Db.Model(&rArticles)
+	// 处理过滤
+	if filter.CategoryId != 0 {
+		query = query.Where("category_id =?", filter.CategoryId)
+	}
+	if filter.TopicId != 0 {
+		query = query.Where("topic_id =?", filter.TopicId)
+	}
+	if filter.TagId != 0 {
+		query = query.Where("tag_id =?", filter.TagId)
+	}
+	if filter.UserId != "" {
+		query = query.Where("user_id =?", filter.UserId)
+	}
+	err = query.Error
+	query.Find(&rArticles)
+	if err != nil {
+		return nil, errors.New("获取文章列表失败")
+	}
+	return rArticles, nil
 }

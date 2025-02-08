@@ -54,7 +54,6 @@ const onSubmitSuccess = (data: userInfo) => {
   // 登录注册成功之后的回掉 存储token信息 存储userInfo
   setUserInfo(data);
   // 携带uid跳转主页
-  debugger
   router.push({
     name: "home",
     query: {
