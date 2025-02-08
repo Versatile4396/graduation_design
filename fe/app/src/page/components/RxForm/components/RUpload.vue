@@ -6,6 +6,7 @@
             <Plus />
         </el-icon>
     </el-upload>
+    <span v-if="!!props.desc">{{ props.desc }}</span>
 </template>
 
 <script lang="ts" setup>
@@ -15,13 +16,16 @@ import { Plus } from '@element-plus/icons-vue'
 
 import type { UploadProps } from 'element-plus'
 
+const props = defineProps<{
+    desc: string
+}>()
+const emits = defineEmits(['change'])
 const imageUrl = ref('')
-
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
-    _response,
-    uploadFile
+    response,
 ) => {
-    imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+    imageUrl.value = response.data.image_url
+    emits('change', response.data.image_url)
 }
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
@@ -38,8 +42,8 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 
 <style scoped>
 .avatar-uploader .avatar {
-    width: 178px;
-    height: 178px;
+    width: 192px;
+    height: 128px;
     display: block;
 }
 </style>
@@ -58,11 +62,17 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
     border-color: var(--el-color-primary);
 }
 
+.desc-text {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #8c939d;
+}
+
 .el-icon.avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 178px;
-    height: 178px;
+    width: 192px;
+    height: 128px;
     text-align: center;
 }
 </style>

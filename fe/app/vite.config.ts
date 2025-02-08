@@ -26,6 +26,7 @@ export default defineConfig({
     // css预处理器
     preprocessorOptions: {
       scss: {
+        api: "modern",
         additionalData: `
           @use "@/assets/style/global.scss";
         `,

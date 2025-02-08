@@ -23,12 +23,10 @@ import {
   Input,
   Switch,
   Radio,
-  Select,
   FormItem,
   Password,
 } from "@formily/element-plus";
-import CustomRadio from "./components/customRadio.vue";
-import CustomUpload from "./components/customUpload.vue";
+import { RRadio, RUpload, RSelect } from './components/index'
 import { ElButton } from "element-plus";
 import { computed, provide, ref } from "vue";
 import { formContextKey } from "./context/formcontext";
@@ -113,11 +111,9 @@ const fieldSchema = createSchemaField({
     Input,
     Switch,
     Radio,
-    Select,
     Password,
     FormItem,
-    CustomRadio,
-    CustomUpload,
+    RRadio, RUpload, RSelect,
   },
 }).SchemaField;
 
