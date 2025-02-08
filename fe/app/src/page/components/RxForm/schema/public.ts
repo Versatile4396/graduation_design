@@ -41,6 +41,7 @@ export const publicSchema = (form: Form) => {
 
       cover: {
         title: "文章封面",
+        required: true,
         "x-decorator": "FormItem",
         "x-decorator-props": {
           labelWidth: 70,
@@ -52,6 +53,7 @@ export const publicSchema = (form: Form) => {
       },
       topic_id: {
         title: "创作话题",
+        required: true,
         "x-decorator-props": {
           labelWidth: 70,
         },
@@ -99,6 +101,7 @@ export const publicSchema = (form: Form) => {
       },
       abstract: {
         title: "文章摘要",
+        required: true,
         type: "string",
         "x-decorator": "FormItem",
         "x-decorator-props": {

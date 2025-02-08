@@ -63,7 +63,7 @@ const formType = Number(getUrlQuery().scene);
 // 模拟 ajax 异步获取内容
 onMounted(() => {
   // 
-  const editorContainer = document.querySelector(".editor-container");
+  const editorContainer = document.querySelector(".editor-container") as any;
   if (editorContainer) {
     editorContainer.style.height = "calc(100vh - 120px)";
   }

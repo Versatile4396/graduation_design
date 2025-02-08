@@ -39,6 +39,7 @@ func SignUp(fo *models.User) (user models.User, err error) {
 		Email:        fo.Email,
 		Gender:       fo.Gender,
 		UserName:     fo.UserName,
+		UserId:       fo.UserId,
 	}
 	// 插入数据库
 	err = global.Db.Create(&fo).Error

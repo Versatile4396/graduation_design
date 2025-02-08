@@ -3,36 +3,21 @@
     <div class="login-form">
       <el-tabs v-model="activeKey" type="border-card">
         <el-tab-pane label="登录" name="login">
-          <RxForm
-            :schema="loginSchema"
-            submit-text="登录"
-            cancel-text="去注册"
-            :initial-values="{
-              username: 'username',
-              password: '123456',
-            }"
-            :submit="submitHandle"
-            @onSubmitSuccess="onSubmitSuccess"
-            @cancel="() => (activeKey = loginType.Register)"
-          ></RxForm>
+          <RxForm :schema="loginSchema" submit-text="登录" cancel-text="去注册" :initial-values="{
+            username: 'username',
+            password: '123456',
+          }" :submit="submitHandle" @onSubmitSuccess="onSubmitSuccess"
+            @cancel="() => (activeKey = loginType.Register)"></RxForm>
         </el-tab-pane>
         <el-tab-pane label="注册" name="register">
-          <RxForm
-            ref="registerForm"
-            :schema="registerSchema"
-            :initial-values="{
-              username: 'username',
-              email: 'asd@qq.com',
-              confirm_password: '123456',
-              password: '123456',
-              gender: 1,
-            }"
-            submit-text="注册"
-            cancel-text="去登录"
-            @submit="(f: any) => submitHandle(f, loginType.Register)"
-            @cancel="() => (activeKey = loginType.Login)"
-            @onSubmitSuccess="onSubmitSuccess"
-          ></RxForm>
+          <RxForm ref="registerForm" :schema="registerSchema" :initial-values="{
+            username: 'username',
+            email: 'asd@qq.com',
+            confirm_password: '123456',
+            password: '123456',
+            gender: 1,
+          }" submit-text="注册" cancel-text="去登录" :submit="(f: any) => submitHandle(f, loginType.Register)"
+            @cancel="() => (activeKey = loginType.Login)" @onSubmitSuccess="onSubmitSuccess"></RxForm>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -63,12 +48,13 @@ const submitHandle = async (values: any, type = loginType.Login) => {
       const { data } = await Ajax.post("/user/register", values);
       return data;
     }
-  } catch (error) {}
+  } catch (error) { }
 };
 const onSubmitSuccess = (data: userInfo) => {
   // 登录注册成功之后的回掉 存储token信息 存储userInfo
   setUserInfo(data);
   // 携带uid跳转主页
+  debugger
   router.push({
     name: "home",
     query: {

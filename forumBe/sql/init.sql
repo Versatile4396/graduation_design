@@ -1,3 +1,6 @@
+-- 删除数据库（如果存在）
+DROP DATABASE IF EXISTS appDB;
+
 -- 创建数据库，指定字符集和排序规则
 CREATE DATABASE IF NOT EXISTS appDB CHARACTER
 SET
@@ -60,7 +63,8 @@ CREATE TABLE
 -- 创建文章表
 CREATE TABLE
     IF NOT EXISTS articles (
-        article_id VARCHAR(20) COMMENT '文章ID' PRIMARY KEY,
+        article_index INT (11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '文章序号' PRIMARY KEY,
+        article_id VARCHAR(20) COMMENT '文章ID',
         title VARCHAR(255) NOT NULL COMMENT '文章标题',
         content TEXT NOT NULL COMMENT '文章内容',
         user_id VARCHAR(20) NOT NULL COMMENT '文章作者',

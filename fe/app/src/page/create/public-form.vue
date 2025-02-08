@@ -30,8 +30,13 @@ const emits = defineEmits([
 ])
 
 
-const handleSubmit = () => {
-  emits("submit", form.value?.values);
+const handleSubmit = async () => {
+  try {
+    await form.value?.validate();
+    emits("submit",form.value?.values);
+  } catch (error) {
+
+  }
 };
 
 const handleCancel = () => {
