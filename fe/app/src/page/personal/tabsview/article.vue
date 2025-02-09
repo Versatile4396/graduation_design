@@ -6,6 +6,9 @@
         </section>
         <section class="content">
             <ArticlePreview :previewInfo="previewInfo"></ArticlePreview>
+            <ArticlePreview :previewInfo="previewInfo"></ArticlePreview>
+            <ArticlePreview :previewInfo="previewInfo"></ArticlePreview>
+            <ArticlePreview :previewInfo="previewInfo"></ArticlePreview>
         </section>
     </div>
 </template>

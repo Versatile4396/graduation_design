@@ -2,12 +2,10 @@
     <div class="article-container-box">
         <div class="detail-info">
             <div class="title-row">
-                <div v-if="previewInfo?.status">
-                    <el-tag size="small" :type="statusMap?.type">
+                <div class="title-text">
+                    <el-tag class="status" v-if="previewInfo?.status" size="small" :type="statusMap?.type">
                         {{ statusMap?.text }}
                     </el-tag>
-                </div>
-                <div class="title-text">
                     {{ previewInfo?.title }}
                 </div>
             </div>
@@ -119,19 +117,24 @@ const props = defineProps<Partial<Props>>()
         .title-row {
             display: flex;
             margin-bottom: 2px;
+            align-items: center;
             width: 100%;
-
-            gap: 8px;
 
             .title-text {
                 font-weight: 600;
                 font-size: 16px;
                 line-height: 24px;
-                width: calc(100% - 52px );
+                width: 100%;
                 white-space: nowrap;
                 overflow: clip;
                 text-overflow: ellipsis;
                 -webkit-box-orient: vertical;
+
+                .status {
+                    position: relative;
+                    transform: translateY(-8%);
+                    margin-right: 4px;
+                }
             }
         }
 
