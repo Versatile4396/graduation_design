@@ -93,14 +93,6 @@ const editorConfig = {
         insertFn(res.data.image_url, res.data.image_name, "")
       }
     },
-    // async customUpload(file: File, insertFn: InsertFnType) {
-    //   // 上传图片
-    //   console.log(file, 'asdsa')
-    //   const url = ""
-    //   const alt = ""
-    //   const href = ""
-    //   insertFn(url, alt, href)
-    // }
   }
 } as any;
 

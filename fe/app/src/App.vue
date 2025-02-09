@@ -9,7 +9,7 @@
 <script lang="ts" setup>
 import Navigator from "@/page/components/navigator/index.vue";
 import { RouterView } from "vue-router";
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import router, { routerName } from "./router";
 import { getUrlQuery, userLocalInfo } from "@/utils/common";
 import { userInfoStore } from "./store/user";
@@ -33,10 +33,15 @@ const initApp = () => {
         uid: userLocalInfo.value?.user_id,
       },
     });
+  }
+};
+watch(
+  () => router.currentRoute.value.name,
+  () => {
     const query = getUrlQuery();
     router.push({ name: routerName.PERSONAL, query })
   }
-};
+)
 initApp();
 </script>
 <style scoped>

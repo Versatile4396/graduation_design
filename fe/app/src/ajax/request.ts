@@ -34,7 +34,7 @@ const hideLoading = () => {};
 instance.interceptors.request.use(
   (config) => {
     showLoading();
-    logN.success("请求URL", config.url!, "params:", config.params);
+    logN.success("请求URL", config.url!, "data:", config?.data);
     const token = window.localStorage.getItem("token");
     if (token) {
       config.headers.token = token;

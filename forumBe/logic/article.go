@@ -51,6 +51,12 @@ func ArticleDelete(aid int64) (rArticle *models.Article, err error) {
 }
 
 func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, err error) {
+	if filter.Pagination == nil {
+		filter.Pagination = &models.Pagination{
+			Page:     1,
+			PageSize: 10,
+		}
+	}
 	query := global.Db.Model(&rArticles)
 	// 处理过滤
 	if filter.CategoryId != 0 {
@@ -63,9 +69,12 @@ func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, 
 		query = query.Where("tag_id =?", filter.TagId)
 	}
 	if filter.UserId != "" {
+		fmt.Println("userid", filter.UserId)
 		query = query.Where("user_id =?", filter.UserId)
 	}
 	err = query.Error
+	offset := filter.Pagination.PageSize * (filter.Pagination.Page - 1)
+	query = query.Offset(offset).Limit(filter.Pagination.PageSize)
 	query.Find(&rArticles)
 	if err != nil {
 		return nil, errors.New("获取文章列表失败")

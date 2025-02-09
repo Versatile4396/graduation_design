@@ -34,7 +34,6 @@ import Article from "./tabsview/article.vue";
 import { ref } from "vue";
 import type { TabsPaneContext } from 'element-plus'
 const { userInfo } = storeToRefs(userInfoStore());
-console.log(userInfo.value);
 
 const activeName = ref('article')
 
