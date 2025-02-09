@@ -33,9 +33,8 @@ const emits = defineEmits([
 const handleSubmit = async () => {
   try {
     await form.value?.validate();
-    emits("submit",form.value?.values);
+    emits("submit", form.value?.values);
   } catch (error) {
-
   }
 };
 
