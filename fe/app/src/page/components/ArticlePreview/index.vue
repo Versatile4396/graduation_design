@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>
-        <img class="cover" :src="previewInfo?.cover" alt="">
+        <img v-if="previewInfo?.cover" class="cover" :src="previewInfo?.cover" alt="">
     </div>
 </template>
 
@@ -127,7 +127,7 @@ const props = defineProps<Partial<Props>>()
                 font-weight: 600;
                 font-size: 16px;
                 line-height: 24px;
-                width: 476px;
+                width: calc(100% - 52px );
                 white-space: nowrap;
                 overflow: clip;
                 text-overflow: ellipsis;
