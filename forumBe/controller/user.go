@@ -69,6 +69,9 @@ func UserLoginController(c *gin.Context) {
 	ResponseSuccess(c, gin.H{
 		"user_id":       fmt.Sprintf("%d", user.UserId), //js识别的最大值：id值大于1<<53-1  int64: i<<63-1
 		"user_name":     user.UserName,
+		"avatar":        user.Avatar,
+		"gender":        user.Gender,
+		"email":         user.Email,
 		"access_token":  user.AccessToken,
 		"refresh_token": user.RefreshToken,
 	})
