@@ -1,5 +1,6 @@
 import type { Form } from "@formily/core";
 import type { ISchema } from "@formily/vue";
+import { t } from "@wangeditor/editor";
 
 export const loginSchema = {
   type: "object",
@@ -129,14 +130,20 @@ export const registerSchema = (form: Form) => {
             value: 1,
           },
           {
-            label: "武装直升机",
+            label: "未知",
             value: 2,
           },
-          {
-            label: "胖东来洗发水",
-            value: 3,
-          },
         ],
+      },
+      avatar: {
+        type: "string",
+        title: "头像",
+        "x-decorator": "FormItem",
+        "x-component": "RUpload",
+        "x-component-props": {
+          width: "50px",
+          height: "50px",
+        },
       },
     },
   };

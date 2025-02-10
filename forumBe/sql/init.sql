@@ -1,5 +1,5 @@
 -- 删除数据库（如果存在）
-DROP DATABASE IF EXISTS appDB;
+DROP DATABASE IF EXISTS appDB2;
 
 -- 创建数据库，指定字符集和排序规则
 CREATE DATABASE IF NOT EXISTS appDB CHARACTER
@@ -76,7 +76,7 @@ CREATE TABLE
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         view_count INT NOT NULL DEFAULT 0,
-        is_published TINYINT (1) NOT NULL DEFAULT 0,
+        article_status INT NOT NULL DEFAULT 0,
         -- 外键关联文章分类表，设置级联更新和删除
         FOREIGN KEY (category_id) REFERENCES article_categories (category_id) ON UPDATE CASCADE ON DELETE RESTRICT,
         -- 为作者 ID 和创建时间添加索引

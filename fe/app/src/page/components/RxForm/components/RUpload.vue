@@ -1,6 +1,7 @@
 <template>
-    <el-upload class="avatar-uploader" action="http://127.0.0.1:5555/api/upload/image" :show-file-list="false"
-        :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+    <el-upload :style="{ '--custom-width': width, '--custom-height': height, }" class="avatar-uploader"
+        action="http://127.0.0.1:5555/api/upload/image" :show-file-list="false" :on-success="handleAvatarSuccess"
+        :before-upload="beforeAvatarUpload">
         <img v-if="imageUrl" :src="imageUrl" class="avatar" />
         <el-icon v-else class="avatar-uploader-icon">
             <Plus />
@@ -16,9 +17,19 @@ import { Plus } from '@element-plus/icons-vue'
 
 import type { UploadProps } from 'element-plus'
 
-const props = defineProps<{
-    desc: string
-}>()
+
+interface Props {
+    desc?: string
+    value?: string
+    width?: string
+    height?: string
+    borderRadius?: string
+}
+const props = withDefaults(defineProps<Props>(), {
+    width: "192px",
+    height: "128px",
+})
+console.log(props, 'rawFile')
 const emits = defineEmits(['change'])
 const imageUrl = ref('')
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
@@ -42,9 +53,8 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 
 <style scoped>
 .avatar-uploader .avatar {
-    width: 192px;
-    height: 128px;
-    display: block;
+    width: var(--custom-width);
+    height: var(--custom-height);
 }
 </style>
 
@@ -71,8 +81,8 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 .el-icon.avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 192px;
-    height: 128px;
+    width: var(--custom-width);
+    height: var(--custom-height);
     text-align: center;
 }
 </style>
