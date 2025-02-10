@@ -1,11 +1,9 @@
 <template>
   <div class="main-header-box">
-    <div
-      :class="{
-        header: true,
-        visible: navStatus,
-      }"
-    >
+    <div :class="{
+      header: true,
+      visible: navStatus,
+    }">
       <div class="header-content">
         <div class="logo" @click="handleLogoClick">
           <img src="../../../assets/image/study.svg" alt="" class="logo-img" />
@@ -14,13 +12,9 @@
         <div class="nav-content">
           <div class="nav-link">
             <div v-for="(node, index) in naviConfig">
-              <div
-                class="nav-node"
-                :class="{
-                  'active-node': index === activeNodeIndex,
-                }"
-                @click="handleNavClick(node.path)"
-              >
+              <div class="nav-node" :class="{
+                'active-node': index === activeNodeIndex,
+              }" @click="handleNavClick(node.path)">
                 {{ node.label }}
               </div>
             </div>
@@ -28,43 +22,28 @@
           <div class="right-side-nav">
             <div class="search-create-node">
               <div class="search-node">
-                <el-input
-                  v-model="searchValue"
-                  style="width: 240px"
-                  size="large"
-                  placeholder="探索跨知领域"
-                  :suffix-icon="Search"
-                />
+                <el-input v-model="searchValue" style="width: 240px" size="large" placeholder="探索跨知领域"
+                  :suffix-icon="Search" />
               </div>
               <div class="create-node">
-                <el-button size="large" type="primary" @click="createArticle"
-                  >创作者中心</el-button
-                >
+                <el-button size="large" type="primary" @click="createArticle">创作者中心</el-button>
               </div>
             </div>
             <div class="avatar-node">
               <div class="logined" v-if="isLogined">
                 <el-dropdown placement="top-start" trigger="click">
-                  <el-avatar class="avatar" />
+                  <el-avatar class="avatar" :src="avatarUrl" />
 
                   <template #dropdown>
                     <el-dropdown-menu>
                       <el-dropdown-item>个人中心</el-dropdown-item>
-                      <el-dropdown-item @click="handleLoginOut"
-                        >退出登录</el-dropdown-item
-                      >
+                      <el-dropdown-item @click="handleLoginOut">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
                   </template>
                 </el-dropdown>
               </div>
               <div class="no-logged" v-else>
-                <el-button
-                  @click="handleLoginClick"
-                  type="primary"
-                  size="large"
-                  plain
-                  >登录｜注册</el-button
-                >
+                <el-button @click="handleLoginClick" type="primary" size="large" plain>登录｜注册</el-button>
               </div>
             </div>
           </div>
@@ -85,6 +64,7 @@ import { userInfoStore } from "@/store/user";
 
 const navStatus = ref(true);
 var isScrolling = false;
+const avatarUrl = ref("")
 const scrollCallback = () => {
   if (!isScrolling) {
     isScrolling = true;
@@ -170,6 +150,12 @@ const handleLoginOut = () => {
   router.replace({ query: {} });
   userInfoStore().setUserInfo({});
 };
+onMounted(() => {
+  if (isLogined.value) {
+    const { userInfo } = userInfoStore();
+    avatarUrl.value = userInfo.avatar!;
+  }
+})
 </script>
 <style scoped lang="scss">
 /* @import url(); 引入css类 */
@@ -178,6 +164,7 @@ const handleLoginOut = () => {
   height: 60px;
   max-width: 1440px;
   z-index: 1002;
+
   .header {
     height: 60px;
     position: fixed;
@@ -192,63 +179,78 @@ const handleLoginOut = () => {
     color: #909090;
     z-index: 250;
   }
+
   .visible {
     transform: translateZ(0);
   }
+
   .header-content {
     margin: 0 auto;
     max-width: 1440px;
     height: 100%;
     display: flex;
     align-items: center;
+
     .logo {
       display: flex;
       align-items: center;
       font-size: 24px;
       margin-right: 16px;
+
       .logo-img {
         height: 50px;
         width: 50px;
       }
+
       .logo-text {
         font-family: cursive;
         cursor: pointer;
         width: 100px;
       }
     }
+
     .nav-content {
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%;
+
       .nav-link {
         display: flex;
+
         .nav-node {
           color: rgb(82, 87, 102);
           min-width: 52px;
           cursor: pointer;
         }
+
         .active-node {
           color: rgb(63, 126, 247);
         }
       }
+
       .right-side-nav {
         height: 60px;
         display: flex;
         align-items: center;
+
         .search-create-node {
           display: flex;
           align-items: center;
+
           .search-node {
             margin-right: 24px;
           }
+
           .create-node {
             margin-right: 24px;
           }
         }
+
         .avatar-node {
           display: flex;
           align-items: center;
+
           .avatar-menu {
             display: flex;
             align-items: center;

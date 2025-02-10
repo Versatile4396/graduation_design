@@ -67,6 +67,18 @@ export const registerSchema = (form: Form) => {
           maxLength: 16,
         },
       },
+      nickname: {
+        type: "string",
+        required: true,
+        "x-decorator": "FormItem",
+        "x-component": "Input",
+        "x-component-props": {
+          placeholder: "输入昵称",
+        },
+        "x-validator": {
+          maxLength: 16,
+        },
+      },
       email: {
         type: "string",
         "x-decorator": "FormItem",
@@ -141,6 +153,7 @@ export const registerSchema = (form: Form) => {
         "x-decorator": "FormItem",
         "x-component": "RUpload",
         "x-component-props": {
+          url:"http://127.0.0.1:5555/images/WechatIMG.jpg",
           width: "50px",
           height: "50px",
         },

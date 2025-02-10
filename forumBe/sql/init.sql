@@ -174,29 +174,34 @@ CREATE TABLE
 INSERT INTO
     article_categories (category_name, parent_id)
 VALUES
+    ('计算机类', NULL);
+
+INSERT INTO
+    article_categories (category_name, parent_id)
+VALUES
     ('农学类', NULL);
 
 INSERT INTO
     article_categories (category_name, parent_id)
 VALUES
-    ('数学信息学类', NULL);
+    ('机械自动化类', null);
 
 INSERT INTO
     article_categories (category_name, parent_id)
 VALUES
-    ('水产医学', 1);
+    ('电子信息类', null);
 
 INSERT INTO
     article_categories (category_name, parent_id)
 VALUES
-    ('兽医', 1);
+    ('外语学类', null);
 
 INSERT INTO
     article_categories (category_name, parent_id)
 VALUES
-    ('计算机科学与技术', 2);
+    ('管理学类', null);
 
-INSERT INTO
+insert into
     article_categories (category_name, parent_id)
-VALUES
-    ('软件工程', 2);
+values
+    ('校园OKR')

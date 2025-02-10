@@ -70,5 +70,7 @@ func Login(u *models.LoginForm) (user *models.User, error error) {
 	user.UserId = dbuser.UserId
 	user.Email = dbuser.Email
 	user.UserName = dbuser.UserName
+	user.Avatar = dbuser.Avatar
+	user.Gender = dbuser.Gender
 	return
 }

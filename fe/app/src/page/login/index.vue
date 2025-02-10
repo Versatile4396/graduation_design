@@ -16,6 +16,7 @@
             confirm_password: '123456',
             password: '123456',
             gender: 1,
+            nickname: '章三',
           }" submit-text="注册" cancel-text="去登录" :submit="(f: any) => submitHandle(f, loginType.Register)"
             @cancel="() => (activeKey = loginType.Login)" @onSubmitSuccess="onSubmitSuccess"></RxForm>
         </el-tab-pane>

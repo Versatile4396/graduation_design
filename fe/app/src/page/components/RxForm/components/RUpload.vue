@@ -19,6 +19,7 @@ import type { UploadProps } from 'element-plus'
 
 
 interface Props {
+    url?: string
     desc?: string
     value?: string
     width?: string
@@ -29,9 +30,13 @@ const props = withDefaults(defineProps<Props>(), {
     width: "192px",
     height: "128px",
 })
-console.log(props, 'rawFile')
 const emits = defineEmits(['change'])
 const imageUrl = ref('')
+if (props.value) {
+    emits('change', props.url)
+    imageUrl.value = props.url!
+}
+console.log(props)
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
     response,
 ) => {
