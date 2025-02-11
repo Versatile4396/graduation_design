@@ -48,7 +48,7 @@
 import { computed } from 'vue';
 import { ArticleStatus } from './type';
 import { View, Comment } from '@element-plus/icons-vue'
-import Like from '@/assets/icon/like.vue'
+import Like from '@/assets/iconfont/like.vue'
 
 
 interface Props {

@@ -1,9 +1,9 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "@/router/index";
+import "element-plus/dist/index.css";
 import "@/assets/style/global.css";
 import ElementPlus from "element-plus";
-import "element-plus/dist/index.css";
 import { createPinia } from "pinia";
 import "@/assets/iconfont/iconfont.js"
 import SvgIcon from "./assets/iconfont/SvgIcon.vue";
