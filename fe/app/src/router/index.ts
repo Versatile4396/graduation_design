@@ -12,6 +12,7 @@ export enum routerName {
   POPULAR = "popular",
   PERSONAL = "personal",
   CREATE_ARTICLE = "editor",
+  Article = "article",
   TEST = "test",
 }
 
@@ -74,7 +75,7 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: "/article/:id",
-    name: "article",
+    name: routerName.Article,
     meta: {
       title: "文章详情",
     },

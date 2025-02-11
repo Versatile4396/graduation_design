@@ -32,14 +32,7 @@
             <div class="avatar-node">
               <div class="logined" v-if="isLogined">
                 <el-dropdown placement="top-start" trigger="click">
-                  <el-avatar class="avatar" :src="avatarUrl" />
-
-                  <template #dropdown>
-                    <el-dropdown-menu>
-                      <el-dropdown-item>个人中心</el-dropdown-item>
-                      <el-dropdown-item @click="handleLoginOut">退出登录</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template>
+                  <Avatar/>
                 </el-dropdown>
               </div>
               <div class="no-logged" v-else>
@@ -62,11 +55,11 @@ import { ElButton, ElInput } from "element-plus";
 import { FormType } from "@/ajax/type/ariticle";
 import { userInfoStore } from "@/store/user";
 import { useCategorieStore } from "@/store/article"
+import Avatar from "./components/avatar.vue"
 import Ajax from "@/ajax";
 
 const navStatus = ref(true);
 var isScrolling = false;
-const avatarUrl = ref("")
 const scrollCallback = () => {
   if (!isScrolling) {
     isScrolling = true;
@@ -147,11 +140,7 @@ const handleLoginClick = () => {
   router.push({ name: routerName.LOGIN });
 };
 
-// 退出登录
-const handleLoginOut = () => {
-  router.replace({ query: {} });
-  userInfoStore().setUserInfo({});
-};
+
 
 
 const getBaseInfo = async () => {
@@ -170,12 +159,6 @@ const getBaseInfo = async () => {
 // 在这里获取 base信息
 onMounted(async () => {
   await getBaseInfo();
-  if (isLogined.value) {
-    const { userInfo } = userInfoStore();
-    avatarUrl.value = userInfo.avatar!;
-  }
-
-
 })
 </script>
 <style scoped lang="scss">

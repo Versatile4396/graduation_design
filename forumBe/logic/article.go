@@ -6,6 +6,7 @@ import (
 	"forum/global"
 	"forum/models"
 	"forum/pkg/snowflake"
+	"time"
 )
 
 func ArticleCreate(a *models.Article) (rArticle *models.Article, err error) {
@@ -15,7 +16,10 @@ func ArticleCreate(a *models.Article) (rArticle *models.Article, err error) {
 		err = errors.New("创建文章ID失败")
 		return nil, err
 	}
+	now := time.Now()
 	a.ArticleId = aid
+	a.CreateTime = now
+	a.UpdateTime = now
 	err = global.Db.Create(&a).Error
 	if err != nil {
 		return nil, errors.New("创建文章失败")

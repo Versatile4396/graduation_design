@@ -90,6 +90,7 @@ CREATE TABLE
     IF NOT EXISTS tags (
         tag_id INT AUTO_INCREMENT PRIMARY KEY,
         tag_name VARCHAR(50) NOT NULL,
+        tag_desc VARCHAR(200),
         UNIQUE KEY tag_name (tag_name)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
@@ -112,14 +113,9 @@ CREATE TABLE
     IF NOT EXISTS topics (
         topic_id INT AUTO_INCREMENT PRIMARY KEY,
         topic_name VARCHAR(50) NOT NULL,
+        topic_desc VARCHAR(200),
         UNIQUE KEY topic_name (topic_name)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
-
-ALTER TABLE topics
-ADD COLUMN `desc` VARCHAR(200);
-
-ALTER TABLE tags
-ADD COLUMN `desc` VARCHAR(200);
 
 -- 创建文章 - 话题关联表
 CREATE TABLE
@@ -170,7 +166,7 @@ CREATE TABLE
         UNIQUE KEY article_user (article_id, user_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
--- 插入三条 article_categories 数据
+-- 插入 article_categories 数据
 INSERT INTO
     article_categories (category_name, parent_id)
 VALUES
@@ -204,4 +200,4 @@ VALUES
 insert into
     article_categories (category_name, parent_id)
 values
-    ('校园OKR')
+    ('校园OKR', null)
