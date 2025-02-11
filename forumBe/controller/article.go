@@ -101,3 +101,21 @@ func ArticleGetListController(c *gin.Context) {
 	}
 	ResponseSuccess(c, rArticles)
 }
+
+func ArticleCategoryGetListController(c *gin.Context) {
+	// 获取文章分类列表
+	// 业务处理-文章分类列表获取
+	var pagination *models.Pagination
+	if err := c.ShouldBindJSON(&pagination); err != nil {
+		zap.L().Error("article category get list with invalid param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	rArticleCategories, err := logic.ArticleCategoryGetList(pagination)
+	if err != nil {
+		zap.L().Error("logic.ArticleCategoryGetList failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, rArticleCategories)
+}

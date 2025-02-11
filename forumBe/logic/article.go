@@ -81,3 +81,20 @@ func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, 
 	}
 	return rArticles, nil
 }
+
+func ArticleCategoryGetList(p *models.Pagination) (rArticleCategories []*models.ArticleCategory, err error) {
+	fmt.Println(p, "asd")
+	if p.Page == 0 && p.PageSize == 0 {
+		p = &models.Pagination{
+			Page:     1,
+			PageSize: 10,
+		}
+	}
+	offset := p.PageSize * (p.Page - 1)
+	result := global.Db.Limit(p.PageSize).Offset(offset).Find(&rArticleCategories)
+	err = result.Error
+	if err != nil {
+		return nil, errors.New("获取文章分类列表失败")
+	}
+	return
+}

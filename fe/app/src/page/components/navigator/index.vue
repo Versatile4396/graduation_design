@@ -61,6 +61,8 @@ import { Search } from "@element-plus/icons-vue";
 import { ElButton, ElInput } from "element-plus";
 import { FormType } from "@/ajax/type/ariticle";
 import { userInfoStore } from "@/store/user";
+import { useCategorieStore } from "@/store/article"
+import Ajax from "@/ajax";
 
 const navStatus = ref(true);
 var isScrolling = false;
@@ -150,11 +152,30 @@ const handleLoginOut = () => {
   router.replace({ query: {} });
   userInfoStore().setUserInfo({});
 };
-onMounted(() => {
+
+
+const getBaseInfo = async () => {
+  const categoriesInfo = await Ajax.post("article/category/list", {});
+  const categories = categoriesInfo.data.map((item: any) => {
+    return {
+      label: item.category_name,
+      value: item.category_id,
+    };
+  });
+  const { setCategories, Categories } = useCategorieStore()
+  setCategories({ ...Categories, 'article_categories': categories });
+};
+
+
+// 在这里获取 base信息
+onMounted(async () => {
+  await getBaseInfo();
   if (isLogined.value) {
     const { userInfo } = userInfoStore();
     avatarUrl.value = userInfo.avatar!;
   }
+
+
 })
 </script>
 <style scoped lang="scss">

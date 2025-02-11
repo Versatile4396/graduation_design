@@ -28,7 +28,7 @@ export default defineConfig({
       scss: {
         api: "modern",
         additionalData: `
-          @use "@/assets/style/global.scss";
+          @import "@/assets/style/global.scss";
         `,
       },
     },

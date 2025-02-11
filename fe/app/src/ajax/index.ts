@@ -6,7 +6,7 @@ interface IResponse {
   msg: string;
 }
 class AjaxClass {
-  post(url: string, data: any, contentType = ContentType.Application) {
+  post(url: string, data?: any, contentType = ContentType.Application) {
     // 也许code 也会有用到的业务逻辑🤔️？
     // return new Promise(async (res) => {
     //   const { data: responseData } = await instance.post(url, data, {
