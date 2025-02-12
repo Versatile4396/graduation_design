@@ -9,3 +9,9 @@ type ArticleComment struct {
 	CreateTime      int64   `json:"create_time" gorm:"-"`
 	UpdateTime      int64   `json:"update_time" gorm:"-"`
 }
+
+type CommentFilter struct {
+	ArticleId  uint64 `json:"article_id"`
+	UserId     uint64 `json:"user_id"`
+	Pagination *Pagination
+}

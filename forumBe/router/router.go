@@ -59,7 +59,7 @@ func SetupRouter() *gin.Engine {
 	{
 		comment.POST("/create", controller.CommentCreateController)
 		// comment.POST("/update", controller.CommentUpdateController)
-		// comment.GET("/getById/:cid", controller.CommentGetController)
+		comment.POST("/list", controller.CommentGetListController)
 		// comment.DELETE("/delete/:cid", controller.CommentDeleteController)
 	}
 	return router
