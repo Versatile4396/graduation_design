@@ -13,7 +13,7 @@ import (
 func ArticleCreateController(c *gin.Context) {
 	var article *models.Article
 	if err := c.ShouldBindJSON(&article); err != nil {
-		zap.L().Error("article create with invalid param", zap.Error(err))
+		zap.L().Error("article create with invalid Param", zap.Error(err))
 		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
 		return
 	}
@@ -133,4 +133,36 @@ func ArticleCategoryGetListController(c *gin.Context) {
 		return
 	}
 	ResponseSuccess(c, rArticleCategories)
+}
+
+func ArticleLikeController(c *gin.Context) {
+	// 文章点赞
+	var like *models.ArticleLike
+	if err := c.ShouldBindJSON(&like); err != nil {
+		zap.L().Error("article like with invalid param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	logger.Fmt(like)
+	// 业务处理-文章点赞
+	err := logic.ArticleLike(like)
+	if err != nil {
+		zap.L().Error("logic.ArticleLike failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, nil)
+}
+
+func ArticleViewController(c *gin.Context) {
+	// 文章浏览
+	aid := c.Param("aid")
+	// 业务处理-文章浏览
+	err := logic.ArticleView(aid)
+	if err != nil {
+		zap.L().Error("logic.ArticleView failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, nil)
 }

@@ -32,6 +32,8 @@ func SetupRouter() *gin.Engine {
 		article.DELETE("/delete/:aid", controller.ArticleDeleteController)
 		article.POST("/list", controller.ArticleGetListController)
 		article.POST("/category/list", controller.ArticleCategoryGetListController)
+		article.POST("/like", controller.ArticleLikeController)
+		article.POST("/view/:aid", controller.ArticleViewController)
 	}
 	topic := router.Group("/api/topic")
 	{

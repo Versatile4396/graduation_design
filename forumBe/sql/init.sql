@@ -73,9 +73,9 @@ CREATE TABLE
         topic_id INT NOT NULL COMMENT '话题id',
         abstract VARCHAR(200) NOT NULL COMMENT '文章摘要',
         cover VARCHAR(200) NOT NULL COMMENT '文章封面',
+        view_count INT NOT NULL DEFAULT 0,
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-        view_count INT NOT NULL DEFAULT 0,
         article_status INT NOT NULL DEFAULT 0,
         -- 外键关联文章分类表，设置级联更新和删除
         FOREIGN KEY (category_id) REFERENCES article_categories (category_id) ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -151,7 +151,7 @@ CREATE TABLE
 
 -- 创建文章点赞表
 CREATE TABLE
-    IF NOT EXISTS article_like (
+    IF NOT EXISTS article_likes (
         -- 点赞记录 ID，自增主键
         like_id INT AUTO_INCREMENT PRIMARY KEY,
         -- 关联的文章 ID，外键，引用 articles 表的 article_id

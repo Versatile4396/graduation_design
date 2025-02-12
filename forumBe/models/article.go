@@ -25,3 +25,8 @@ type ArticleFilter struct {
 	TagId      uint64 `json:"tag_id"`
 	Pagination *Pagination
 }
+
+type ArticleLike struct {
+	ArticleId uint64 `json:"article_id"`
+	UserId    uint64 `json:"user_id"`
+}

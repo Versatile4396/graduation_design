@@ -106,3 +106,21 @@ func ArticleCategoryGetList(p *models.Pagination) (rArticleCategories []*models.
 	}
 	return
 }
+
+func ArticleLike(l *models.ArticleLike) (err error) {
+	res := global.Db.Create(&l)
+	err = res.Error
+	if err != nil {
+		return errors.New("点赞失败")
+	}
+	return nil
+}
+
+func ArticleView(aid string) (err error) {
+	res := global.Db.Model(&models.Article{}).Where("article_id =?", aid).Update("view_count", global.Db.Raw("view_count + 1"))
+	err = res.Error
+	if err != nil {
+		return errors.New("浏览失败")
+	}
+	return nil
+}
