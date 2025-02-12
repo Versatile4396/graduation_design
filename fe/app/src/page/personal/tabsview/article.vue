@@ -5,8 +5,8 @@
             <el-button>热门</el-button>
         </section>
         <section class="content">
-
-            <ArticlePreview v-for="previewInfo in previewInfos" :previewInfo="previewInfo"></ArticlePreview>
+            <ArticlePreview @click="goToArticle(previewInfo?.aid!)" v-for="previewInfo in previewInfos"
+                :previewInfo="previewInfo"></ArticlePreview>
         </section>
     </div>
 </template>
@@ -15,19 +15,31 @@
 import Ajax from '@/ajax';
 import ArticlePreview from '@/page/components/ArticlePreview/index.vue'
 import { ArticleStatus } from '@/page/components/ArticlePreview/type';
+import router, { routerName } from '@/router';
 import { getUrlQuery } from '@/utils/common';
 import { onMounted, ref } from 'vue';
 
 type PreviewInfo = InstanceType<typeof ArticlePreview>['$props']['previewInfo']
 
 const previewInfos = ref<PreviewInfo[]>([])
+
+const goToArticle = (aid: string) => {
+    const query = getUrlQuery()
+    router.push({
+        name: routerName.Article, query: {
+            ...query,
+            aid,
+        }
+    })
+}
+
 onMounted(async () => {
     const uid = getUrlQuery().uid;
     const res = await Ajax.post("/article/list", { user_id: uid })
     previewInfos.value = res.data.map((item: any) => {
         return {
             title: item.title,
-            articleId: item.article_id,
+            aid: item.article_id,
             status: item.status === 1 ? ArticleStatus.Published : ArticleStatus.Draft,
             cover: item.cover,
             abstract: item.abstract,

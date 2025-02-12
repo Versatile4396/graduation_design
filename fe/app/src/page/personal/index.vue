@@ -33,7 +33,6 @@ import { storeToRefs } from "pinia";
 import Article from "./tabsview/article.vue";
 import { ref } from "vue";
 import type { TabsPaneContext } from 'element-plus'
-const { userInfo } = storeToRefs(userInfoStore());
 
 const activeName = ref('article')
 

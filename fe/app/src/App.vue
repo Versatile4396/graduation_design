@@ -38,8 +38,8 @@ const initApp = () => {
 watch(
   () => router.currentRoute.value.name,
   () => {
-    const query = getUrlQuery();
-    router.push({ name: routerName.Article , query })
+    // const query = getUrlQuery();
+    // router.push({ name: routerName.Article , query })
   }
 )
 initApp();

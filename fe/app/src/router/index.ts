@@ -74,7 +74,7 @@ export const routes: RouteRecordRaw[] = [
     component: () => import("@/page/create/index.vue"),
   },
   {
-    path: "/article/:id",
+    path: "/article",
     name: routerName.Article,
     meta: {
       title: "文章详情",

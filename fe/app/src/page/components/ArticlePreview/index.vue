@@ -53,6 +53,7 @@ import Like from '@/assets/iconfont/like.vue'
 
 interface Props {
     previewInfo: Partial<{
+        aid: string
         status: ArticleStatus;
         title: string;
         abstract: string;
@@ -66,6 +67,8 @@ interface Props {
         collects: number;
     }>
 }
+const props = defineProps<Partial<Props>>()
+
 const statusMap = computed((): any => {
     if (props.previewInfo?.status === ArticleStatus.Published) {
         return {
@@ -97,7 +100,6 @@ const publicText = computed(() => {
     }
 })
 
-const props = defineProps<Partial<Props>>()
 
 
 </script>
