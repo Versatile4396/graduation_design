@@ -58,9 +58,8 @@ func SetupRouter() *gin.Engine {
 	comment := router.Group("/api/comment")
 	{
 		comment.POST("/create", controller.CommentCreateController)
-		// comment.POST("/update", controller.CommentUpdateController)
 		comment.POST("/list", controller.CommentGetListController)
-		// comment.DELETE("/delete/:cid", controller.CommentDeleteController)
+		comment.DELETE("/delete/:cid", controller.CommentDeleteController)
 	}
 	return router
 }

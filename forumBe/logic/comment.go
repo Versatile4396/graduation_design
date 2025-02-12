@@ -22,13 +22,13 @@ func CommentCreate(Comment *models.ArticleComment) (rComment *models.ArticleComm
 	return Comment, nil
 }
 
-func CommentDelete(cid int64) (rComment *models.ArticleComment, err error) {
+func CommentDelete(cid int64) (err error) {
 	res := global.Db.Delete(&models.ArticleComment{}, cid)
 	err = res.Error
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return nil, nil
+	return nil
 }
 
 func CommentGetList(filter *models.CommentFilter) (rComments []*models.ArticleComment, err error) {
