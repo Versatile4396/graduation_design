@@ -29,4 +29,5 @@ type ArticleFilter struct {
 type ArticleLike struct {
 	ArticleId uint64 `json:"article_id"`
 	UserId    uint64 `json:"user_id"`
+	IsLike    bool   `json:"is_like" gorm:"-"`
 }

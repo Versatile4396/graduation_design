@@ -6,4 +6,5 @@ import (
 
 var (
 	Db *gorm.DB
+	// Snowflake *snowflake.Snowflake
 )

@@ -7,6 +7,8 @@ import (
 	"forum/models"
 	"forum/pkg/snowflake"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 func ArticleCreate(a *models.Article) (rArticle *models.Article, err error) {
@@ -108,10 +110,20 @@ func ArticleCategoryGetList(p *models.Pagination) (rArticleCategories []*models.
 }
 
 func ArticleLike(l *models.ArticleLike) (err error) {
-	res := global.Db.Create(&l)
+	var res *gorm.DB
+	if !l.IsLike {
+		res = global.Db.Model(&models.ArticleLike{}).Where("article_id =? and user_id =?", l.ArticleId, l.UserId).Delete(&models.ArticleLike{})
+		err = res.Error
+		if err != nil {
+			return errors.New("取消点赞失败")
+		}
+		return nil
+	} else {
+		res = global.Db.Create(&l)
+	}
 	err = res.Error
 	if err != nil {
-		return errors.New("点赞失败")
+		return errors.New("点赞业务处理失败")
 	}
 	return nil
 }

@@ -55,5 +55,12 @@ func SetupRouter() *gin.Engine {
 	{
 		upload.POST("/image", controller.UploadImageController)
 	}
+	comment := router.Group("/api/comment")
+	{
+		comment.POST("/create", controller.CommentCreateController)
+		// comment.POST("/update", controller.CommentUpdateController)
+		// comment.GET("/getById/:cid", controller.CommentGetController)
+		// comment.DELETE("/delete/:cid", controller.CommentDeleteController)
+	}
 	return router
 }

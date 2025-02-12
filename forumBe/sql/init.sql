@@ -134,12 +134,14 @@ CREATE TABLE
 -- 创建文章评论表
 CREATE TABLE
     IF NOT EXISTS article_comments (
-        comment_id INT AUTO_INCREMENT PRIMARY KEY,
+        comment_index INT AUTO_INCREMENT PRIMARY KEY,
+        comment_id VARCHAR(20) COMMENT '评论ID',
         article_id VARCHAR(20) NOT NULL,
         user_id VARCHAR(20) NOT NULL,
         content TEXT NOT NULL,
         create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        parent_comment_id INT NULL,
+        update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        parent_comment_id VARCHAR(20) NULL,
         -- 外键关联文章表，设置级联更新和删除
         FOREIGN KEY (article_id) REFERENCES articles (article_id) ON UPDATE CASCADE ON DELETE CASCADE,
         -- 外键关联自身，用于多级评论，设置级联更新和删除
@@ -149,21 +151,24 @@ CREATE TABLE
         KEY user_id (user_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
--- 创建文章点赞表
+-- 创建文章评论表
 CREATE TABLE
-    IF NOT EXISTS article_likes (
-        -- 点赞记录 ID，自增主键
-        like_id INT AUTO_INCREMENT PRIMARY KEY,
-        -- 关联的文章 ID，外键，引用 articles 表的 article_id
+    IF NOT EXISTS article_comments (
+        comment_index INT AUTO_INCREMENT PRIMARY KEY,
+        comment_id VARCHAR(20) UNIQUE COMMENT '评论ID',
         article_id VARCHAR(20) NOT NULL,
-        -- 点赞用户的 ID，可以根据实际情况修改为合适的数据类型
         user_id VARCHAR(20) NOT NULL,
-        -- 点赞时间，默认值为当前时间
-        liked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        -- 外键约束，确保 article_id 存在于 articles 表中，设置级联更新和删除
+        content TEXT NOT NULL,
+        create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        parent_comment_id VARCHAR(20) NULL,
+        -- 外键关联文章表，设置级联更新和删除
         FOREIGN KEY (article_id) REFERENCES articles (article_id) ON UPDATE CASCADE ON DELETE CASCADE,
-        -- 为文章 ID 和用户 ID 添加联合唯一索引，避免重复点赞
-        UNIQUE KEY article_user (article_id, user_id)
+        -- 外键关联自身，用于多级评论，设置级联更新和删除
+        FOREIGN KEY (parent_comment_id) REFERENCES article_comments (comment_id) ON UPDATE CASCADE ON DELETE SET NULL,
+        -- 为文章 ID 和用户 ID 添加索引
+        KEY article_id (article_id),
+        KEY user_id (user_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- 插入 article_categories 数据
