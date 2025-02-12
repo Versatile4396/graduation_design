@@ -37,13 +37,13 @@ const iconConfig = [
   "icon-okr",
 ]
 const sideBars = computed(() => {
-  const temp = Categories.value['article_categories'].map((item: { value: number, label: string }, index: number) => {
+  const temp = Categories.value?.['article_categories'].map((item: { value: number, label: string }, index: number) => {
     return {
       ...item,
       iconName: iconConfig[index + 1]
     }
   })
-  temp.unshift({
+  temp?.unshift({
     value: 0,
     label: '综合',
     iconName: iconConfig[0]

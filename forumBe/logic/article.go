@@ -37,12 +37,16 @@ func ArticleUpdate(a *models.Article) (rArticle *models.Article, err error) {
 
 }
 
-func ArticleGet(aid int64) (rArticle *models.Article, err error) {
+func ArticleGet(aid int64) (rArticle *models.Article, userInfo *models.User, err error) {
 	err = global.Db.Model(&rArticle).Where("article_id =?", aid).First(&rArticle).Error
 	if err != nil {
-		return nil, errors.New("获取文章失败")
+		return nil, nil, errors.New("获取文章失败")
 	}
-	return rArticle, nil
+	err = global.Db.Model(&userInfo).Where("user_id =?", rArticle.UserId).First(&userInfo).Error
+	if err != nil {
+		return nil, nil, errors.New("获取文章作者信息失败")
+	}
+	return rArticle, userInfo, nil
 }
 
 func ArticleDelete(aid int64) (rArticle *models.Article, err error) {

@@ -21,8 +21,8 @@ class AjaxClass {
   }
   get(
     url: string,
-    data: any,
-    config: any,
+    data?: any,
+    config?: any,
     contentType = ContentType.Application
   ) {
     return instance.get(url, {

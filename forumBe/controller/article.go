@@ -74,13 +74,28 @@ func ArticleGetController(c *gin.Context) {
 	}
 	logger.Fmt(article_id)
 	// 业务处理-文章获取
-	rArticle, err := logic.ArticleGet(postId)
+	rArticle, rUserInfo, err := logic.ArticleGet(postId)
 	if err != nil {
 		zap.L().Error("logic.ArticleGet failed", zap.Error(err))
 		ResponseError(c, CodeServerBusy)
 		return
 	}
-	ResponseSuccessWithMsg(c, rArticle, "删除文章成功")
+	type ArticleUserInfo struct {
+		ArticleInfo *models.Article  "json:\"article_info\""
+		AuthorInfo  *models.UserInfo "json:\"author_info\""
+	}
+	userInfo := models.UserInfo{
+		UserId:   rArticle.UserId,
+		UserName: rUserInfo.UserName,
+		Avatar:   rUserInfo.Avatar,
+		Email:    rUserInfo.Email,
+		Gender:   rUserInfo.Gender,
+	}
+	resData := ArticleUserInfo{
+		rArticle,
+		&userInfo,
+	}
+	ResponseSuccessWithMsg(c, resData, "")
 }
 
 func ArticleGetListController(c *gin.Context) {
