@@ -1,5 +1,5 @@
 -- 删除数据库（如果存在）
-DROP DATABASE IF EXISTS appDB2;
+DROP DATABASE IF EXISTS appDB;
 
 -- 创建数据库，指定字符集和排序规则
 CREATE DATABASE IF NOT EXISTS appDB CHARACTER
@@ -131,25 +131,6 @@ CREATE TABLE
         UNIQUE KEY article_topic (article_id, topic_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
--- 创建文章评论表
-CREATE TABLE
-    IF NOT EXISTS article_comments (
-        comment_index INT AUTO_INCREMENT PRIMARY KEY,
-        comment_id VARCHAR(20) COMMENT '评论ID',
-        article_id VARCHAR(20) NOT NULL,
-        user_id VARCHAR(20) NOT NULL,
-        content TEXT NOT NULL,
-        create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        parent_comment_id VARCHAR(20) NULL,
-        -- 外键关联文章表，设置级联更新和删除
-        FOREIGN KEY (article_id) REFERENCES articles (article_id) ON UPDATE CASCADE ON DELETE CASCADE,
-        -- 外键关联自身，用于多级评论，设置级联更新和删除
-        FOREIGN KEY (parent_comment_id) REFERENCES article_comments (comment_id) ON UPDATE CASCADE ON DELETE SET NULL,
-        -- 为文章 ID 和用户 ID 添加索引
-        KEY article_id (article_id),
-        KEY user_id (user_id)
-    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 -- 创建文章评论表
 CREATE TABLE

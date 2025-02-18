@@ -4,7 +4,7 @@
 
         <template #dropdown>
             <el-dropdown-menu>
-                <el-dropdown-item>个人中心</el-dropdown-item>
+                <el-dropdown-item @click="handlePersonal">个人中心</el-dropdown-item>
                 <el-dropdown-item @click="handleLoginOut">退出登录</el-dropdown-item>
             </el-dropdown-menu>
         </template>
@@ -22,6 +22,9 @@ const handleLoginOut = () => {
     router.push({ name: routerName.LOGIN });
     router.replace({ query: {} });
     userInfoStore().setUserInfo({});
+};
+const handlePersonal = () => {
+    router.push({ name: routerName.PERSONAL });
 };
 
 </script>

@@ -54,7 +54,7 @@ instance.interceptors.response.use(
     if (response.data.code !== 1000) {
       Message.err(response?.data.msg || "未知错误");
     } else {
-      if (response.data?.msg) {
+      if (response.data?.msg && response.data?.msg !== "success") {
         Message.success(response.data.msg);
       }
     }

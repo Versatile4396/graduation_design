@@ -12,6 +12,14 @@
     </div>
     <div class="right-container">
       <div class="article-content">
+        <div class="filter-bar">
+          <el-tabs v-model="filterKey">
+            <el-tab-pane label="推荐" name="recommend">
+              <ArticlePreview v-for="pf in previewInfos" :previewInfo="pf"></ArticlePreview>
+            </el-tab-pane>
+            <el-tab-pane label="最新" name="lastest"></el-tab-pane>
+          </el-tabs>
+        </div>
       </div>
       <div class="irrelevant-container">
         <div class="irelevant-content">reaasdasd</div>
@@ -21,9 +29,11 @@
 </template>
 
 <script lang="ts" setup>
+import ArticlePreview from '@/page/components/ArticlePreview/index.vue'
 import { useCategorieStore } from '@/store/article';
 import { storeToRefs } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { ElTabPane, ElTabs } from 'element-plus';
 
 const { Categories } = storeToRefs(useCategorieStore());
 const iconConfig = [
@@ -54,6 +64,38 @@ const activeSideItem = ref(0)
 const sidebarItemclick = (v: number) => {
   activeSideItem.value = v
 }
+const filterKey = ref('recommend')
+watch(filterKey, (nv) => {
+  console.log(nv)
+})
+type PreviewInfo = InstanceType<typeof ArticlePreview>['$props']['previewInfo']
+
+const previewInfos = ref<Array<PreviewInfo>>([{
+  aid: '1',
+  title: '123',
+  status: 1,
+  cover: '123',
+  abstract: '123',
+  tags: ['123'],
+  publishTime: '123',
+},{
+  aid: '1',
+  title: '123',
+  status: 1,
+  cover: '123',
+  abstract: '123',
+  tags: ['123'],
+  publishTime: '123',
+},{
+  aid: '1',
+  title: '123',
+  status: 1,
+  cover: '123',
+  abstract: '123',
+  tags: ['123'],
+  publishTime: '123',
+}])
+
 </script>
 <style scoped lang="scss">
 /* @import url(); 引入css类 */
@@ -116,6 +158,10 @@ const sidebarItemclick = (v: number) => {
       min-width: 720px;
       padding: 8px;
       margin-right: 16px;
+
+      .filter-bar {
+        padding: 4px;
+      }
     }
 
     .irrelevant-container {

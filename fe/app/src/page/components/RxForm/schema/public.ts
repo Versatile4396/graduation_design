@@ -1,5 +1,9 @@
 import type { Form } from "@formily/core";
+import { useCategorieStore } from "@/store/article";
 
+const { Categories } = useCategorieStore();
+console.log(Categories, "Categories");
+const articleCategories = Categories?.article_categories || [];
 export const publicSchema = (form: Form) => {
   return {
     type: "object",
@@ -14,28 +18,7 @@ export const publicSchema = (form: Form) => {
         },
         "x-component": "RRadio",
         "x-component-props": {
-          options: [
-            {
-              label: "动物科学",
-              value: 1,
-            },
-            {
-              label: "水产养殖",
-              value: 2,
-            },
-            {
-              label: "动物医学",
-              value: 3,
-            },
-            {
-              label: "计算机科学技术",
-              value: 4,
-            },
-            {
-              label: "软件工程",
-              value: 5,
-            },
-          ],
+          options: articleCategories,
         },
       },
 
