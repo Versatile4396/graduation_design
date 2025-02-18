@@ -15,6 +15,7 @@
 import { userInfoStore } from '@/store/user';
 import { storeToRefs } from 'pinia';
 import router, { routerName } from "@/router";
+import { getUrlQuery } from '@/utils/common';
 
 
 const { userInfo } = storeToRefs(userInfoStore());
@@ -24,7 +25,8 @@ const handleLoginOut = () => {
     userInfoStore().setUserInfo({});
 };
 const handlePersonal = () => {
-    router.push({ name: routerName.PERSONAL });
+    const query = getUrlQuery();
+    router.push({ name: routerName.PERSONAL, query });
 };
 
 </script>

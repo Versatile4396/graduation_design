@@ -19,7 +19,7 @@
                             <el-icon class="icon-style">
                                 <View />
                             </el-icon>
-                            <span>{{ previewInfo?.pageviews }}</span>
+                            <span>{{ previewInfo?.view_count }}</span>
                         </span>
                         <span class="icon-text">
                             <el-icon class="icon-style">
@@ -62,6 +62,7 @@ interface Props {
         tags: string[];
         author: string;
         pageviews: number;
+        view_count: number;
         likes: number;
         comments: number;
         collects: number;
@@ -106,9 +107,10 @@ const publicText = computed(() => {
 <style scoped lang="scss">
 .article-container-box {
     height: 74px;
-    padding: 12px 12px 0;
+    padding: 12px 12px;
     cursor: pointer;
     display: flex;
+    border-bottom: 0.5px solid #e5e6eb;
 
     .detail-info {
         flex: 1 1 auto;

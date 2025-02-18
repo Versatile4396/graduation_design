@@ -128,7 +128,7 @@ const submitHandle = (value: any) => {
     topic_id: 1,
     content: aContent.value,
     title: aTitle.value,
-    user_id: getUrlQuery().uid
+    user_id: Number(getUrlQuery().uid)
   }
   Ajax.post("/article/create", params).then((_) => {
     popoverStatus.value = false;

@@ -45,6 +45,8 @@ func ArticleGet(aid int64) (rArticle *models.Article, userInfo *models.User, err
 		return nil, nil, errors.New("获取文章失败")
 	}
 	err = global.Db.Model(&userInfo).Where("user_id =?", rArticle.UserId).First(&userInfo).Error
+	res := global.Db.Model(&models.Article{}).Where("article_id =?", aid).Update("view_count", global.Db.Raw("view_count + 1"))
+	err = res.Error
 	if err != nil {
 		return nil, nil, errors.New("获取文章作者信息失败")
 	}
@@ -83,8 +85,12 @@ func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, 
 		query = query.Where("user_id =?", filter.UserId)
 	}
 	err = query.Error
+	orderDir := "desc"
+	if filter.OrderByTime {
+		orderDir = "asc"
+	}
 	offset := filter.Pagination.PageSize * (filter.Pagination.Page - 1)
-	query = query.Offset(offset).Limit(filter.Pagination.PageSize)
+	query = query.Order(fmt.Sprintf("created_at %s", orderDir)).Offset(offset).Limit(filter.Pagination.PageSize)
 	query.Find(&rArticles)
 	if err != nil {
 		return nil, errors.New("获取文章列表失败")

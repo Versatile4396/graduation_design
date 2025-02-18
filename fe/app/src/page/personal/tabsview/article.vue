@@ -18,20 +18,11 @@ import { ArticleStatus } from '@/page/components/ArticlePreview/type';
 import router, { routerName } from '@/router';
 import { getUrlQuery } from '@/utils/common';
 import { onMounted, ref } from 'vue';
+import { goToArticle } from '@/utils/goto'
 
 type PreviewInfo = InstanceType<typeof ArticlePreview>['$props']['previewInfo']
 
 const previewInfos = ref<PreviewInfo[]>([])
-
-const goToArticle = (aid: string) => {
-    const query = getUrlQuery()
-    router.push({
-        name: routerName.Article, query: {
-            ...query,
-            aid,
-        }
-    })
-}
 
 onMounted(async () => {
     const uid = getUrlQuery().uid;

@@ -15,9 +15,14 @@
         <div class="filter-bar">
           <el-tabs v-model="filterKey">
             <el-tab-pane label="推荐" name="recommend">
-              <ArticlePreview v-for="pf in previewInfos" :previewInfo="pf"></ArticlePreview>
+              <ArticlePreview @click="goToArticle(pf?.aid!)" v-for="pf in previewInfos" :previewInfo="pf"
+                :key="pf?.aid"></ArticlePreview>
             </el-tab-pane>
-            <el-tab-pane label="最新" name="lastest"></el-tab-pane>
+            <el-tab-pane label="最新" name="lastest">
+              <ArticlePreview @click="goToArticle(pf?.aid!)" v-for="pf in previewInfos" :previewInfo="pf"
+                :key="pf?.aid">
+              </ArticlePreview>
+            </el-tab-pane>
           </el-tabs>
         </div>
       </div>
@@ -32,9 +37,10 @@
 import ArticlePreview from '@/page/components/ArticlePreview/index.vue'
 import { useCategorieStore } from '@/store/article';
 import { storeToRefs } from 'pinia';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { ElTabPane, ElTabs } from 'element-plus';
-
+import Ajax from '@/ajax';
+import { goToArticle } from '@/utils/goto'
 const { Categories } = storeToRefs(useCategorieStore());
 const iconConfig = [
   "icon-zonghechaxun",
@@ -65,36 +71,34 @@ const sidebarItemclick = (v: number) => {
   activeSideItem.value = v
 }
 const filterKey = ref('recommend')
-watch(filterKey, (nv) => {
-  console.log(nv)
+watch(filterKey, async (nv) => {
+  if (nv === 'recommend') {
+    await getPreviewInfos()
+  } else {
+    console.log(nv, 'nv')
+    await getPreviewInfos(false)
+  }
+})
+onMounted(async () => {
+  await getPreviewInfos()
 })
 type PreviewInfo = InstanceType<typeof ArticlePreview>['$props']['previewInfo']
 
-const previewInfos = ref<Array<PreviewInfo>>([{
-  aid: '1',
-  title: '123',
-  status: 1,
-  cover: '123',
-  abstract: '123',
-  tags: ['123'],
-  publishTime: '123',
-},{
-  aid: '1',
-  title: '123',
-  status: 1,
-  cover: '123',
-  abstract: '123',
-  tags: ['123'],
-  publishTime: '123',
-},{
-  aid: '1',
-  title: '123',
-  status: 1,
-  cover: '123',
-  abstract: '123',
-  tags: ['123'],
-  publishTime: '123',
-}])
+const previewInfos = ref<Array<PreviewInfo>>([])
+
+const getPreviewInfos = async (order = true) => {
+  const { data } = await Ajax.post('/article/list', {
+    order_by_time: order
+  })
+  previewInfos.value = data.map((item: any) => {
+    return {
+      aid: item.article_id,
+      ...item,
+    }
+  })
+  console.log(previewInfos.value, 'previewInfos')
+}
+
 
 </script>
 <style scoped lang="scss">
@@ -156,11 +160,11 @@ const previewInfos = ref<Array<PreviewInfo>>([{
       border-radius: 4px;
       background-color: #fff;
       min-width: 720px;
-      padding: 8px;
+      padding: 8px 0;
       margin-right: 16px;
 
       .filter-bar {
-        padding: 4px;
+        // padding: 4px;
       }
     }
 

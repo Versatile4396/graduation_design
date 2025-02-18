@@ -9,7 +9,7 @@
 <script lang="ts" setup>
 import Navigator from "@/page/components/navigator/index.vue";
 import { RouterView } from "vue-router";
-import { computed, watch } from "vue";
+import { computed, onMounted, watch } from "vue";
 import router, { routerName } from "./router";
 import { getUrlQuery, userLocalInfo } from "@/utils/common";
 import { userInfoStore } from "./store/user";
@@ -23,6 +23,12 @@ const navigatorStatus = computed(() => {
 });
 
 const initApp = () => {
+  // 监听路由变化
+  router.beforeEach((to, _, next) => {
+    // 将当前路由信息存储到 sessionStorage 中
+    sessionStorage.setItem('currentRoute', to.fullPath);
+    next();
+  });
   // 判断是否已经登录
   if (userLocalInfo.value?.user_id) {
     setUserInfo(userLocalInfo.value);
@@ -43,6 +49,14 @@ watch(
   }
 )
 initApp();
+onMounted(() => {
+  // 从 sessionStorage 中获取之前保存的路由信息
+  const currentRoute = sessionStorage.getItem('currentRoute');
+  if (currentRoute) {
+    // 导航到之前的路由
+    router.push(currentRoute);
+  }
+})
 </script>
 <style scoped>
 .occpancy {
