@@ -164,7 +164,7 @@ const getPreviewInfos = async (order = true) => {
       margin-right: 16px;
 
       .filter-bar {
-        // padding: 4px;
+        padding: 4px;
       }
     }
 
