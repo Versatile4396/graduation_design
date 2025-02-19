@@ -115,12 +115,15 @@ func ArticleGetListController(c *gin.Context) {
 		return
 	}
 	type ArticleListResponse struct {
-		Articles      []*models.Article      `json:"articles"`
-		ArticleBriefs []*models.ArticleBrief `json:"article_briefs"`
+		Article      *models.Article      `json:"articles"`
+		ArticleBrief *models.ArticleBrief `json:"article_briefs"`
 	}
-	resData := ArticleListResponse{
-		Articles:      rArticles,
-		ArticleBriefs: rArticleBriefs,
+	var resData []*ArticleListResponse
+	for i := 0; i < len(rArticles); i++ {
+		resData = append(resData, &ArticleListResponse{
+			Article:      rArticles[i],
+			ArticleBrief: rArticleBriefs[i],
+		})
 	}
 	ResponseSuccess(c, resData)
 }

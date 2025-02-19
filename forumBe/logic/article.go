@@ -84,6 +84,12 @@ func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, 
 		if err != nil {
 			return nil, nil, err
 		}
+		var u *models.User
+		err = global.Db.Model(&u).Where("user_id =?", article.UserId).First(&u).Error
+		if err != nil {
+			return nil, nil, err
+		}
+		ArticleBrief.UserName = u.UserName
 		rArticleBriefs = append(rArticleBriefs, ArticleBrief)
 	}
 	return

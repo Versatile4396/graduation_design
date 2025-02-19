@@ -90,13 +90,15 @@ const getPreviewInfos = async (order = true) => {
   const { data } = await Ajax.post('/article/list', {
     order_by_time: order
   })
-  previewInfos.value = data.map((item: any) => {
+  previewInfos.value = data?.map((item: any) => {
     return {
-      aid: item.article_id,
-      ...item,
+      aid: item.articles.article_id,
+      likes: item.article_briefs.like_count,
+      comments: item.article_briefs.comment_count,
+      author: item.article_briefs.username,
+      ...item.articles,
     }
   })
-  console.log(previewInfos.value, 'previewInfos')
 }
 
 
