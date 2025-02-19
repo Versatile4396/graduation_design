@@ -108,13 +108,21 @@ func ArticleGetListController(c *gin.Context) {
 	}
 	logger.Fmt(params)
 	// 业务处理-文章列表获取
-	rArticles, err := logic.ArticleGetList(params)
+	rArticles, rArticleBriefs, err := logic.ArticleGetList(params)
 	if err != nil {
 		zap.L().Error("logic.ArticleGetList failed", zap.Error(err))
 		ResponseError(c, CodeServerBusy)
 		return
 	}
-	ResponseSuccess(c, rArticles)
+	type ArticleListResponse struct {
+		Articles      []*models.Article      `json:"articles"`
+		ArticleBriefs []*models.ArticleBrief `json:"article_briefs"`
+	}
+	resData := ArticleListResponse{
+		Articles:      rArticles,
+		ArticleBriefs: rArticleBriefs,
+	}
+	ResponseSuccess(c, resData)
 }
 
 func ArticleCategoryGetListController(c *gin.Context) {

@@ -62,7 +62,7 @@ func ArticleDelete(aid int64) (rArticle *models.Article, err error) {
 
 }
 
-func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, err error) {
+func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, rArticleBriefs []*models.ArticleBrief, err error) {
 	if filter.Pagination == nil {
 		filter.Pagination = &models.Pagination{
 			Page:     1,
@@ -70,6 +70,26 @@ func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, 
 		}
 	}
 	query := global.Db.Model(&rArticles)
+	// 处理过滤
+	if err := HandleFilterInfo(query, filter); err != nil {
+		return nil, nil, err
+	}
+	query.Find(&rArticles)
+	if err != nil {
+		return nil, nil, errors.New("获取文章列表失败")
+	}
+	// 获取文章列表 点赞 评论数量
+	for _, article := range rArticles {
+		ArticleBrief, err := ArticleGetBrief(article.ArticleId)
+		if err != nil {
+			return nil, nil, err
+		}
+		rArticleBriefs = append(rArticleBriefs, ArticleBrief)
+	}
+	return
+}
+
+func HandleFilterInfo(query *gorm.DB, filter *models.ArticleFilter) (err error) {
 	// 处理过滤
 	if filter.CategoryId != 0 {
 		query = query.Where("category_id =?", filter.CategoryId)
@@ -84,18 +104,34 @@ func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, 
 		fmt.Println("userid", filter.UserId)
 		query = query.Where("user_id =?", filter.UserId)
 	}
-	err = query.Error
 	orderDir := "desc"
 	if filter.OrderByTime {
 		orderDir = "asc"
 	}
 	offset := filter.Pagination.PageSize * (filter.Pagination.Page - 1)
 	query = query.Order(fmt.Sprintf("created_at %s", orderDir)).Offset(offset).Limit(filter.Pagination.PageSize)
-	query.Find(&rArticles)
-	if err != nil {
-		return nil, errors.New("获取文章列表失败")
+	return query.Error
+}
+
+func ArticleGetBrief(aid uint64) (rArticleBrief *models.ArticleBrief, err error) {
+	var commentCount int64
+	var likeCount int64
+	err = global.Db.Model(&models.ArticleComment{}).Where("article_id=?", aid).Count(&commentCount).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		fmt.Println("查询数量时出错:", err)
+		return
 	}
-	return rArticles, nil
+	err = global.Db.Model(&models.ArticleLike{}).Where("article_id=?", aid).Count(&likeCount).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		fmt.Println("查询数量时出错:", err)
+		return
+	}
+	rArticleBrief = &models.ArticleBrief{
+		ArticleId:    aid,
+		CommentCount: commentCount,
+		LikeCount:    likeCount,
+	}
+	return rArticleBrief, nil
 }
 
 func ArticleCategoryGetList(p *models.Pagination) (rArticleCategories []*models.ArticleCategory, err error) {

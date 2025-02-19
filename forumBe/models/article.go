@@ -17,6 +17,15 @@ type Article struct {
 	UpdateTime time.Time `json:"update_at" gorm:"column:updated_at"`
 }
 
+type ArticleBrief struct {
+	ArticleId    uint64 `json:"article_id"`
+	Title        string `json:"title"`
+	UserId       uint64 `json:"user_id"`
+	UserName     string `json:"username"`
+	CategoryId   int64  `json:"category_id"`
+	CommentCount int64  `json:"comment_count"`
+	LikeCount    int64  `json:"like_count"`
+}
 type ArticleFilter struct {
 	ArticleId   uint64 `json:"article_id"`
 	Title       string `json:"title"`
