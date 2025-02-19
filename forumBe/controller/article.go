@@ -66,7 +66,7 @@ func ArticleDeleteController(c *gin.Context) {
 
 func ArticleGetController(c *gin.Context) {
 	article_id := c.Param("aid")
-	postId, err := strconv.ParseInt(article_id, 10, 64)
+	postId, err := strconv.ParseUint(article_id, 10, 64)
 	if err != nil {
 		zap.L().Error("article get with invalid param", zap.Error(err))
 		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
@@ -74,15 +74,16 @@ func ArticleGetController(c *gin.Context) {
 	}
 	logger.Fmt(article_id)
 	// 业务处理-文章获取
-	rArticle, rUserInfo, err := logic.ArticleGet(postId)
+	rArticle, rUserInfo, rBrief, err := logic.ArticleGet(postId)
 	if err != nil {
 		zap.L().Error("logic.ArticleGet failed", zap.Error(err))
 		ResponseError(c, CodeServerBusy)
 		return
 	}
 	type ArticleUserInfo struct {
-		ArticleInfo *models.Article  "json:\"article_info\""
-		AuthorInfo  *models.UserInfo "json:\"author_info\""
+		ArticleInfo  *models.Article      "json:\"article_info\""
+		AuthorInfo   *models.UserInfo     "json:\"author_info\""
+		ArticleBrief *models.ArticleBrief "json:\"article_brief\""
 	}
 	userInfo := models.UserInfo{
 		UserId:   rArticle.UserId,
@@ -94,6 +95,7 @@ func ArticleGetController(c *gin.Context) {
 	resData := ArticleUserInfo{
 		rArticle,
 		&userInfo,
+		rBrief,
 	}
 	ResponseSuccessWithMsg(c, resData, "")
 }
@@ -163,6 +165,24 @@ func ArticleLikeController(c *gin.Context) {
 		return
 	}
 	ResponseSuccess(c, nil)
+}
+
+func ArticleIsLikedController(c *gin.Context) {
+	// 文章是否点赞
+	var like *models.ArticleLike
+	if err := c.ShouldBindJSON(&like); err != nil {
+		zap.L().Error("article is liked with invalid param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	// 业务处理-文章是否点赞
+	isLiked, err := logic.ArticleIsLiked(like)
+	if err != nil {
+		zap.L().Error("logic.ArticleIsLiked failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, isLiked)
 }
 
 func ArticleViewController(c *gin.Context) {

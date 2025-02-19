@@ -39,18 +39,21 @@ func ArticleUpdate(a *models.Article) (rArticle *models.Article, err error) {
 
 }
 
-func ArticleGet(aid int64) (rArticle *models.Article, userInfo *models.User, err error) {
+func ArticleGet(aid uint64) (rArticle *models.Article, userInfo *models.User, aBreif *models.ArticleBrief, err error) {
 	err = global.Db.Model(&rArticle).Where("article_id =?", aid).First(&rArticle).Error
 	if err != nil {
-		return nil, nil, errors.New("获取文章失败")
+		err = errors.New("获取文章失败")
+		return
 	}
 	err = global.Db.Model(&userInfo).Where("user_id =?", rArticle.UserId).First(&userInfo).Error
 	res := global.Db.Model(&models.Article{}).Where("article_id =?", aid).Update("view_count", global.Db.Raw("view_count + 1"))
 	err = res.Error
 	if err != nil {
-		return nil, nil, errors.New("获取文章作者信息失败")
+		err = errors.New("获取文章作者信息失败")
+		return
 	}
-	return rArticle, userInfo, nil
+	ArticleBrief, err := ArticleGetBrief(aid)
+	return rArticle, userInfo, ArticleBrief, nil
 }
 
 func ArticleDelete(aid int64) (rArticle *models.Article, err error) {
@@ -173,6 +176,19 @@ func ArticleLike(l *models.ArticleLike) (err error) {
 		return errors.New("点赞业务处理失败")
 	}
 	return nil
+}
+
+func ArticleIsLiked(l *models.ArticleLike) (isLiked bool, err error) {
+	var res *gorm.DB
+	res = global.Db.Model(&models.ArticleLike{}).Where("article_id =? and user_id =?", l.ArticleId, l.UserId).First(&models.ArticleLike{})
+	err = res.Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return false, errors.New("查询点赞状态失败")
+	}
+	if err == gorm.ErrRecordNotFound {
+		return false, nil
+	}
+	return true, nil
 }
 
 func ArticleView(aid string) (err error) {
