@@ -99,7 +99,6 @@ func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, 
 }
 
 func ArticleCategoryGetList(p *models.Pagination) (rArticleCategories []*models.ArticleCategory, err error) {
-	fmt.Println(p, "asd")
 	if p.Page == 0 && p.PageSize == 0 {
 		p = &models.Pagination{
 			Page:     1,
