@@ -50,9 +50,31 @@ func CommentGetList(filter *models.CommentFilter) (rComments []*models.ArticleCo
 	offset := filter.Pagination.PageSize * (filter.Pagination.Page - 1)
 	query = query.Offset(offset).Limit(filter.Pagination.PageSize)
 	query.Find(&rComments)
+	for _, c := range rComments {
+		rUserBrief, err := getBreifUserInfo(c.UserId)
+		if err != nil {
+			return nil, err
+		}
+		c.UserInfo = rUserBrief
+	}
 	if err != nil {
 		return nil, err
 	}
 	return rComments, nil
 
+}
+
+// 拿取用户信息
+func getBreifUserInfo(uid int64) (rUserBrief *models.UserInfo, err error) {
+	var u *models.User
+	err = global.Db.Model(&u).Where("user_id =?", uid).First(&u).Error
+	if err != nil {
+		return nil, err
+	}
+	rUserBrief = &models.UserInfo{
+		UserId:   u.UserId,
+		UserName: u.UserName,
+		Avatar:   u.Avatar,
+	}
+	return rUserBrief, nil
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="container-box">
-        <div class="aritcle-detail-container-box">
+        <div class="aritcle-detail-container-box" v-if="false">
             <div class="operator-box">
                 <div class="operator-icon" v-for="icon in operatorIconConfig" :key="icon.iconName"
                     @click="icon.handleClick">
@@ -39,20 +39,21 @@
                     <el-avatar class="avatar" :src="userInfo.avatar" />
                 </div>
                 <div class="input-box">
-                    <el-input v-model="commentText" resize="none" :rows="4" type="textarea" placeholder="友善评论，平等表达">
-                    </el-input>
+                    <CommentInput :is-show="true" @comment="commentArticle"></CommentInput>
                 </div>
             </div>
-            <div class="submit-btn">
-                <el-button width="120px" type="primary" @click="commentArticle">发送</el-button>
+
+            <div class="comments-list">
+                <Comment v-for="comment of commentList" :key="comment.comment_id" :commentInfo="comment"
+                    @secondary-review="secondaryReview(comment)" @send-comment="commentArticle" />
             </div>
-            <div class="comments-list"></div>
         </div>
         <div class="right-box"></div>
     </div>
 </template>
 
 <script lang='ts' setup>
+import Comment from "./component/comment.vue"
 import Ajax from '@/ajax';
 import { getUrlQuery } from '@/utils/common';
 import { computed, onMounted, ref } from 'vue';
@@ -60,29 +61,12 @@ import { Editor } from "@wangeditor/editor-for-vue";
 import SvgIcon from '@/assets/iconfont/SvgIcon.vue';
 import { Message } from '@/utils/message';
 import { userInfoStore } from "@/store/user";
+import { type IArticle, type IAuthor, type IComment } from './component/types';
+import CommentInput from "./component/comment-input.vue"
+
 const { userInfo } = userInfoStore();
 
-interface IArticle {
-    article_id: number;
-    content: string;
-    title: string;
-    user_id: string;
-    category_id: number;
-    topic_id: number;
-    tag_id: number;
-    cover: string;
-    abstract: string;
-    create_at: string;
-    update_at: string;
-    view_count: number;
-}
-interface IAuthor {
-    avatar: string;
-    email: string;
-    gender: number;
-    user_id: number;
-    username: string;
-}
+
 const editorConfig = {
     readOnly: true,
 } as any;
@@ -113,8 +97,7 @@ const operatorIconConfig = computed(() => [
     }
 ])
 const isLiked = ref(false)
-const commentText = ref('')
-const commentList = ref([])
+const commentList = ref<IComment[]>([])
 
 const articleLike = () => {
     const { uid, aid } = getUrlQuery();
@@ -160,17 +143,30 @@ const getLikeStatus = async () => {
     }
 }
 // 发送评论
-const commentArticle = async () => {
+const commentArticle = async (commentText: string, commentId: number | string) => {
     const { uid, aid } = getUrlQuery();
     await Ajax.post('/comment/create', {
         user_id: Number(uid),
         article_id: Number(aid),
-        content: commentText.value
+        content: commentText,
+        parent_comment_id: commentId ?? null
+
     })
-    commentText.value = ''
     // 重新拉取评论
     await getCommentList()
 }
+
+// 二级评论
+const secondaryReview = async (comment: IComment) => {
+    console.log(comment, 'comment')
+    commentList.value.forEach((item) => {
+        item.second_comments_status = false
+        if (item.comment_id === comment.comment_id) {
+            item.second_comments_status = true
+        }
+    })
+}
+
 const getCommentList = async () => {
     const { aid } = getUrlQuery();
     const res = await Ajax.post('/comment/list', {
@@ -230,7 +226,6 @@ onMounted(async () => {
         padding: 2.667rem 2.667rem 0 2.667rem;
         background-color: #fff;
         border-radius: 4px;
-        display: none;
 
         .article-title {
             margin: 0 0 1.3rem;
@@ -281,6 +276,7 @@ onMounted(async () => {
         background-color: #fff;
         margin-top: 20px;
         padding: 20px 32px;
+        border-radius: 4px;
 
         .title {
             font-size: 18px;
