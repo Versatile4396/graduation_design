@@ -30,6 +30,23 @@
             <div class="content">
                 <Editor v-model="aInfo.content" :defaultConfig="editorConfig" :mode="mode" />
             </div>
+
+        </div>
+        <div class="comments-container">
+            <div class="title">评论（{{ commentList.length }}）</div>
+            <div class="comments-input">
+                <div class="avatar-box">
+                    <el-avatar class="avatar" :src="userInfo.avatar" />
+                </div>
+                <div class="input-box">
+                    <el-input v-model="commentText" resize="none" :rows="4" type="textarea" placeholder="友善评论，平等表达">
+                    </el-input>
+                </div>
+            </div>
+            <div class="submit-btn">
+                <el-button width="120px" type="primary" @click="commentArticle">发送</el-button>
+            </div>
+            <div class="comments-display"></div>
         </div>
         <div class="right-box"></div>
     </div>
@@ -43,6 +60,8 @@ import { computed, onMounted, ref } from 'vue';
 import { Editor } from "@wangeditor/editor-for-vue";
 import SvgIcon from '@/assets/iconfont/SvgIcon.vue';
 import { Message } from '@/utils/message';
+import { userInfoStore } from "@/store/user";
+const { userInfo } = userInfoStore();
 
 interface IArticle {
     article_id: number;
@@ -95,6 +114,8 @@ const operatorIconConfig = computed(() => [
     }
 ])
 const isLiked = ref(false)
+const commentText = ref('')
+const commentList = ref([])
 
 const articleLike = () => {
     const { uid, aid } = getUrlQuery();
@@ -104,7 +125,7 @@ const articleLike = () => {
         article_id: Number(aid),
         is_like: isLiked.value
     }).then((res) => {
-        if (res.code === 0) {
+        if (res.code === 0 && isLiked.value) {
             Message.info('点赞成功')
         }
     })
@@ -123,6 +144,7 @@ const getAContent = async () => {
     authorInfo.value = res.data.author_info;
     aInfo.value.create_at = aInfo.value.create_at?.split('T')[0];
     aBrief.value = res.data.article_brief;
+    console.log(aBrief.value, 'aBrief')
 }
 // 查询是否点赞过
 const getLikeStatus = async () => {
@@ -138,13 +160,36 @@ const getLikeStatus = async () => {
         console.log(operatorIconConfig, 'operatorIconConfig')
     }
 }
+// 发送评论
+const commentArticle = async () => {
+    const { uid, aid } = getUrlQuery();
+    await Ajax.post('/comment/create', {
+        user_id: Number(uid),
+        article_id: Number(aid),
+        content: commentText.value
+    })
+    commentText.value = ''
+    // 重新拉取评论
+    await getCommentList()
+}
+const getCommentList = async () => {
+    const { aid } = getUrlQuery();
+    const res = await Ajax.post('/comment/list', {
+        article_id: Number(aid)
+    })
+    commentList.value = res.data
+}
 onMounted(async () => {
     await getAContent()
     await getLikeStatus()
+    await getCommentList()
 })
 </script>
 <style scoped lang="scss">
 .container-box {
+    margin: 0 auto;
+    width: 820px;
+
     .operator-box {
         display: flex;
         align-items: center;
@@ -178,25 +223,15 @@ onMounted(async () => {
             .icon:hover {
                 background-color: #f2f3f5;
             }
-
-            // width: 4rem;
-            // height: 4rem;
-            // background-position: 50%;
-            // background-repeat: no-repeat;
-            // border-radius: 50%;
-            // box-shadow: 0 2px 4px 0 rgba(50, 50, 50, .04);
-            // cursor: pointer;
-            // text-align: center;
-            // font-size: 1.67rem;
         }
     }
 
     .aritcle-detail-container-box {
-        margin: 0 auto;
-        width: 820px;
         border-radius: 4px 4px 0 0;
         padding: 2.667rem 2.667rem 0 2.667rem;
         background-color: #fff;
+        border-radius: 4px;
+        display: none;
 
         .article-title {
             margin: 0 0 1.3rem;
@@ -240,6 +275,45 @@ onMounted(async () => {
                     align-items: center;
                 }
             }
+        }
+    }
+
+    .comments-container {
+        background-color: #fff;
+        margin-top: 20px;
+        padding: 20px 32px;
+
+        .title {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 30px;
+        }
+
+        .comments-input {
+            display: flex;
+            margin-top: 20px;
+            gap: 12px;
+
+            .avatar-box {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: #f2f3f5;
+            }
+
+            .input-box {
+                width: 100%;
+                height: 40px;
+                background-color: #f2f3f5;
+                border-radius: 4px;
+                height: 92px;
+            }
+        }
+
+        .submit-btn {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: row-reverse;
         }
     }
 }

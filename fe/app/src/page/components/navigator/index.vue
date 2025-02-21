@@ -144,7 +144,7 @@ const handleLoginClick = () => {
 
 
 const getBaseInfo = async () => {
-  const categoriesInfo = await Ajax.post("article/category/list", {});
+  const categoriesInfo = await Ajax.post("article/category/list", {})
   const categories = categoriesInfo.data.map((item: any) => {
     return {
       label: item.category_name,
