@@ -46,11 +46,10 @@
             <div class="submit-btn">
                 <el-button width="120px" type="primary" @click="commentArticle">发送</el-button>
             </div>
-            <div class="comments-display"></div>
+            <div class="comments-list"></div>
         </div>
         <div class="right-box"></div>
     </div>
-
 </template>
 
 <script lang='ts' setup>
@@ -177,7 +176,7 @@ const getCommentList = async () => {
     const res = await Ajax.post('/comment/list', {
         article_id: Number(aid)
     })
-    commentList.value = res.data
+    commentList.value = res.data || []
 }
 onMounted(async () => {
     await getAContent()
