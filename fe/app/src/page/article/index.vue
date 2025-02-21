@@ -39,7 +39,7 @@
 <script lang='ts' setup>
 import Ajax from '@/ajax';
 import { getUrlQuery } from '@/utils/common';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { Editor } from "@wangeditor/editor-for-vue";
 import SvgIcon from '@/assets/iconfont/SvgIcon.vue';
 import { Message } from '@/utils/message';
@@ -72,14 +72,14 @@ const mode = "default";
 const aInfo = ref<Partial<IArticle>>({});
 const authorInfo = ref<Partial<IAuthor>>({});
 const aBrief = ref()
-const operatorIconConfig = ref([
+const operatorIconConfig = computed(() => [
     {
         iconName: "icon-icon",
         size: "34px",
         handleClick: () => {
             articleLike();
         },
-        color: '#3f7ef7'
+        color: isLiked.value ? '#3f7ef7' : ""
     }, {
         iconName: "icon-pinglun",
         handleClick: () => {
@@ -94,13 +94,15 @@ const operatorIconConfig = ref([
         }
     }
 ])
+const isLiked = ref(false)
 
 const articleLike = () => {
     const { uid, aid } = getUrlQuery();
-    // 判断是否已经点赞
+    isLiked.value = !isLiked.value
     Ajax.post('/article/like', {
         user_id: Number(uid),
-        article_id: Number(aid)
+        article_id: Number(aid),
+        is_like: isLiked.value
     }).then((res) => {
         if (res.code === 0) {
             Message.info('点赞成功')
@@ -122,8 +124,23 @@ const getAContent = async () => {
     aInfo.value.create_at = aInfo.value.create_at?.split('T')[0];
     aBrief.value = res.data.article_brief;
 }
+// 查询是否点赞过
+const getLikeStatus = async () => {
+    const { uid, aid } = getUrlQuery();
+    const res = await Ajax.post('/article/isLiked', {
+        user_id: Number(uid),
+        article_id: Number(aid),
+    })
+
+    if (res?.data) {
+        operatorIconConfig.value[0].color = '#3f7ef7'
+        isLiked.value = res?.data
+        console.log(operatorIconConfig, 'operatorIconConfig')
+    }
+}
 onMounted(async () => {
     await getAContent()
+    await getLikeStatus()
 })
 </script>
 <style scoped lang="scss">

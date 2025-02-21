@@ -169,7 +169,22 @@ func ArticleLike(l *models.ArticleLike) (err error) {
 		}
 		return nil
 	} else {
-		res = global.Db.Create(&l)
+		// 查询是否已经点赞
+		var like *models.ArticleLike
+		res = global.Db.Model(&models.ArticleLike{}).Where("article_id =? and user_id = ?", l.ArticleId, l.UserId).First(&like)
+		err = res.Error
+		if err == gorm.ErrRecordNotFound {
+			// 没有点赞过，创建点赞记录
+			res = global.Db.Create(l)
+			err = res.Error
+			if err != nil {
+				return errors.New("点赞失败")
+			}
+		} else if err != nil {
+			// 其他查询错误
+			return errors.New("查询点赞记录失败")
+		}
+		return nil
 	}
 	err = res.Error
 	if err != nil {
