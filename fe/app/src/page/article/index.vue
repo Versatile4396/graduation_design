@@ -236,8 +236,7 @@ const getLikeAndCollectStatus = async () => {
 
     if (collectRes?.data) {
         operatorIconConfig.value[0].color = '#3f7ef7'
-        isLiked.value = collectRes?.data
-        console.log(operatorIconConfig, 'operatorIconConfig')
+        isCollect.value = collectRes?.data
     }
 }
 // 发送评论
