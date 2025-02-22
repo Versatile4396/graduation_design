@@ -11,32 +11,6 @@
                     </div>
                 </div>
             </div>
-            <div class="author-info-box">
-                <div class="author-title">
-                    <el-avatar :src="authorInfo.avatar"></el-avatar>
-                    <div class="name">{{ authorInfo.username }}</div>
-                </div>
-                <div class="author-create-info">
-                    <div class="count-info">
-                        <span>{{ authorInfo.article_count ?? 0 }}</span>
-                        <span>文章</span>
-                    </div>
-                    <div class="count-info">
-                        <span>{{ authorInfo.like_count ?? 0 }}</span>
-
-                        <span>点赞</span>
-                    </div>
-                    <div class="count-info">
-                        <span>{{ authorInfo.view_count ?? 0 }}</span>
-                        <span>浏览</span>
-                    </div>
-                </div>
-                <div class="chat-author">
-                    <el-button type="primary">
-                        <template #default><span class="chat-btn">私聊</span></template>
-                    </el-button>
-                </div>
-            </div>
             <div class="article-title">
                 {{ aInfo?.title }}
             </div>
@@ -59,7 +33,7 @@
                 <Editor v-model="aInfo.content" :defaultConfig="editorConfig" :mode="mode" />
             </div>
         </div>
-        <div class="comments-container">
+        <div class="comments-container" id="comments-container">
             <div class="title">评论（{{ commentListCmp.length }}）</div>
             <div class="comments-input">
                 <div class="avatar-box">
@@ -75,7 +49,32 @@
                     @secondary-review="secondaryReview(comment)" @send-comment="commentArticle" />
             </div>
         </div>
-        <div class="right-box"></div>
+        <div class="author-info-box">
+            <div class="author-title">
+                <el-avatar :src="authorInfo.avatar"></el-avatar>
+                <div class="name">{{ authorInfo.username }}</div>
+            </div>
+            <div class="author-create-info">
+                <div class="count-info">
+                    <span>{{ authorInfo.article_count ?? 0 }}</span>
+                    <span>文章</span>
+                </div>
+                <div class="count-info">
+                    <span>{{ authorInfo.like_count ?? 0 }}</span>
+
+                    <span>点赞</span>
+                </div>
+                <div class="count-info">
+                    <span>{{ authorInfo.view_count ?? 0 }}</span>
+                    <span>浏览</span>
+                </div>
+            </div>
+            <div class="chat-author">
+                <el-button type="primary">
+                    <template #default><span class="chat-btn">私聊</span></template>
+                </el-button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -86,10 +85,10 @@ import { getUrlQuery } from '@/utils/common';
 import { computed, onMounted, ref } from 'vue';
 import { Editor } from "@wangeditor/editor-for-vue";
 import SvgIcon from '@/assets/iconfont/SvgIcon.vue';
-import { Message } from '@/utils/message';
 import { userInfoStore } from "@/store/user";
 import { type IArticle, type IAuthor, type IComment, type IArticleBrief } from './component/types';
 import CommentInput from "./component/comment-input.vue"
+import { scrollToAnchor } from "@/utils/utils";
 
 const { userInfo } = userInfoStore();
 
@@ -114,6 +113,7 @@ const operatorIconConfig = computed(() => [
     }, {
         iconName: "icon-pinglun",
         handleClick: () => {
+            scrollToAnchor('comments-container')
         },
         content: Number(commentList.value?.length || 0),
         color: "rgb(195, 200, 208)",

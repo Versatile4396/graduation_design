@@ -168,6 +168,23 @@ CREATE TABLE
         UNIQUE KEY article_user (article_id, user_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+-- 创建文章收藏表
+CREATE TABLE
+    IF NOT EXISTS article_collections (
+        -- 收藏记录 ID，自增主键
+        collection_id INT AUTO_INCREMENT PRIMARY KEY,
+        -- 关联的文章 ID，外键，引用 articles 表的 article_id
+        article_id VARCHAR(20) NOT NULL,
+        -- 收藏用户的 ID，可以根据实际情况修改为合适的数据类型
+        user_id VARCHAR(20) NOT NULL,
+        -- 收藏时间，默认值为当前时间
+        collected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        -- 外键约束，确保 article_id 存在于 articles 表中，设置级联更新和删除
+        FOREIGN KEY (article_id) REFERENCES articles (article_id) ON UPDATE CASCADE ON DELETE CASCADE,
+        -- 为文章 ID 和用户 ID 添加联合唯一索引，避免重复收藏
+        UNIQUE KEY article_user (article_id, user_id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
 -- 插入 article_categories 数据
 INSERT INTO
     article_categories (category_name, parent_id)
