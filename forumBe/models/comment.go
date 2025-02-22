@@ -14,7 +14,7 @@ type ArticleComment struct {
 }
 
 type CommentFilter struct {
-	ArticleId  uint64 `json:"article_id"`
-	UserId     uint64 `json:"user_id"`
-	Pagination *Pagination
+	ArticleId  uint64      `json:"article_id"`
+	UserId     uint64      `json:"user_id"`
+	Pagination *Pagination `json:"pagination"`
 }

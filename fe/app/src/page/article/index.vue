@@ -1,10 +1,12 @@
 <template>
     <div class="container-box">
-        <div class="aritcle-detail-container-box" v-if="false">
+        <div class="aritcle-detail-container-box">
             <div class="operator-box">
                 <div class="operator-icon" v-for="icon in operatorIconConfig" :key="icon.iconName"
                     @click="icon.handleClick">
                     <div class="icon">
+                        <span v-if="icon?.content" class="icon-right-top" :style="{ '--color': icon.color }">{{
+                            icon?.content }}</span>
                         <svg-icon :iconName="icon.iconName" size="30px" :color="icon.color ?? ''"></svg-icon>
                     </div>
                 </div>
@@ -33,7 +35,7 @@
 
         </div>
         <div class="comments-container">
-            <div class="title">评论（{{ commentList.length }}）</div>
+            <div class="title">评论（{{ commentListCmp.length }}）</div>
             <div class="comments-input">
                 <div class="avatar-box">
                     <el-avatar class="avatar" :src="userInfo.avatar" />
@@ -44,7 +46,7 @@
             </div>
 
             <div class="comments-list">
-                <Comment v-for="comment of commentList" :key="comment.comment_id" :commentInfo="comment"
+                <Comment v-for="comment of commentListCmp" :key="comment.comment_id" :commentInfo="comment"
                     @secondary-review="secondaryReview(comment)" @send-comment="commentArticle" />
             </div>
         </div>
@@ -61,7 +63,7 @@ import { Editor } from "@wangeditor/editor-for-vue";
 import SvgIcon from '@/assets/iconfont/SvgIcon.vue';
 import { Message } from '@/utils/message';
 import { userInfoStore } from "@/store/user";
-import { type IArticle, type IAuthor, type IComment } from './component/types';
+import { type IArticle, type IAuthor, type IComment, type IArticleBrief } from './component/types';
 import CommentInput from "./component/comment-input.vue"
 
 const { userInfo } = userInfoStore();
@@ -73,7 +75,8 @@ const editorConfig = {
 const mode = "default";
 const aInfo = ref<Partial<IArticle>>({});
 const authorInfo = ref<Partial<IAuthor>>({});
-const aBrief = ref()
+const aBrief = ref<IArticleBrief>()
+
 const operatorIconConfig = computed(() => [
     {
         iconName: "icon-icon",
@@ -81,23 +84,48 @@ const operatorIconConfig = computed(() => [
         handleClick: () => {
             articleLike();
         },
-        color: isLiked.value ? '#3f7ef7' : ""
+        color: isLiked.value ? 'rgb(79, 125, 239)' : "rgb(195, 200, 208)",
+        content: Number(aBrief.value?.like_count)
     }, {
         iconName: "icon-pinglun",
         handleClick: () => {
-        }
+        },
+        content: Number(aBrief.value?.comment_count),
+        color: "rgb(195, 200, 208)",
+
     }, {
         iconName: "icon-zhuanfa",
         handleClick: () => {
-        }
+        },
+        color: "rgb(195, 200, 208)",
     }, {
         iconName: "icon-Frame-5",
         handleClick: () => {
-        }
+        },
+        color: "rgb(195, 200, 208)",
     }
 ])
 const isLiked = ref(false)
 const commentList = ref<IComment[]>([])
+// 处理二级评论内容
+const commentListCmp = computed(() => {
+    const firstComments = commentList.value.filter((item) => {
+        return !item.parent_comment_id
+    })
+    const secondComments = commentList.value.filter((item) => {
+        return item.parent_comment_id
+    })
+    const result = firstComments.map((item) => {
+        const secondComment = secondComments.filter((second) => {
+            return second.parent_comment_id === item.comment_id
+        })
+        return {
+            ...item,
+            second_comments: secondComment
+        }
+    })
+    return result
+})
 
 const articleLike = () => {
     const { uid, aid } = getUrlQuery();
@@ -158,7 +186,6 @@ const commentArticle = async (commentText: string, commentId: number | string) =
 
 // 二级评论
 const secondaryReview = async (comment: IComment) => {
-    console.log(comment, 'comment')
     commentList.value.forEach((item) => {
         item.second_comments_status = false
         if (item.comment_id === comment.comment_id) {
@@ -170,7 +197,11 @@ const secondaryReview = async (comment: IComment) => {
 const getCommentList = async () => {
     const { aid } = getUrlQuery();
     const res = await Ajax.post('/comment/list', {
-        article_id: Number(aid)
+        article_id: Number(aid),
+        pagination: {
+            page: 1,
+            pagesize: 100
+        }
     })
     commentList.value = res.data || []
 }
@@ -209,10 +240,21 @@ onMounted(async () => {
                 border-radius: 50%;
                 background-color: #fff;
                 margin-bottom: 1.667rem;
-            }
+                position: relative;
 
-            .icon:first-of-type::before {
-                content: "";
+                .icon-right-top {
+                    top: -2px;
+                    font-size: 12px;
+                    height: 16px;
+                    width: 20px;
+                    line-height: 18px;
+                    right: -5px;
+                    border-radius: 12px;
+                    text-align: center;
+                    position: absolute;
+                    color: #fff;
+                    background-color: var(--color);
+                }
             }
 
             .icon:hover {

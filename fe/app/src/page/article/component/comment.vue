@@ -1,7 +1,7 @@
 <template>
     <div class="comment-container-box">
         <div class="first-comment-box">
-            <el-avatar class="avatar" :src="userInfo.avatar" />
+            <el-avatar  :size="avatarSize" class="avatar" :src="userInfo.avatar" />
             <div class="comment-content">
                 <div class="username">
                     {{ userInfo.username }}
@@ -13,7 +13,7 @@
                     <span class="create-time">
                         {{ timeFormat(commentInfo.create_time) }}
                     </span>
-                    <span class="reply" @click="secondaryReview">
+                    <span v-if="replyShow" class="reply" @click="secondaryReview">
                         <svg-icon iconName="icon-pinglun" size="20px" top="1.5px"></svg-icon>
                         回复
                     </span>
@@ -23,19 +23,26 @@
         <div class="secondary-comment-box">
             <CommentInput :isShow="commentInfo.second_comments_status!" @comment="handleComment"></CommentInput>
         </div>
+        <div class="secondary-comment-list">
+            <Comment v-for="comment of commentInfo.second_comments" :key="comment.comment_id" :commentInfo="comment" :avatar-size="35" :replyShow="false" />
+        </div>
     </div>
 </template>
 
 <script lang='ts' setup>
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { type IComment } from "./types"
 import CommentInput from "./comment-input.vue";
 
 interface Props {
+    avatarSize?:number,
     commentInfo:
     IComment
+    replyShow?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
+    avatarSize: 40,
+    replyShow: true
 });
 
 const emits = defineEmits([
@@ -54,7 +61,7 @@ const userInfo = computed(() => {
 const timeFormat = (time: string) => {
     // 2025-02-19T10:33:20+08:00
     const timeStr = time.split("T")[0]
-    return timeStr.slice(2)
+    return timeStr
 }
 
 
@@ -69,8 +76,6 @@ const timeFormat = (time: string) => {
         display: flex;
 
         .avatar {
-            width: 40px;
-            height: 40px;
             border-radius: 50%;
             margin-right: 12px;
         }
@@ -120,5 +125,8 @@ const timeFormat = (time: string) => {
 
 .secondary-comment-box {
     margin: 8px 0 0 52px;
+}
+.secondary-comment-list{
+    margin-left: 40px;
 }
 </style>

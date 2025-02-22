@@ -20,6 +20,16 @@ export interface IAuthor {
   username: string;
 }
 
+export interface IArticleBrief {
+  article_id: number;
+  category_id: number;
+  comment_count: number;
+  like_count: number;
+  title: string;
+  user_id: number;
+  username: string;
+}
+
 export interface IComment {
   article_id: number;
   comment_id: number;
