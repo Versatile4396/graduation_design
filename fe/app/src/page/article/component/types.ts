@@ -28,6 +28,7 @@ export interface IArticleBrief {
   category_id: number;
   comment_count: number;
   like_count: number;
+  collect_count: number;
   title: string;
   user_id: number;
   username: string;

@@ -25,6 +25,7 @@ type ArticleBrief struct {
 	CategoryId   int64  `json:"category_id"`
 	CommentCount int64  `json:"comment_count"`
 	LikeCount    int64  `json:"like_count"`
+	CollectCount int64  `json:"collect_count"`
 }
 type ArticleFilter struct {
 	ArticleId   uint64 `json:"article_id"`

@@ -125,6 +125,7 @@ func HandleFilterInfo(query *gorm.DB, filter *models.ArticleFilter) (err error) 
 func ArticleGetBrief(aid uint64) (rArticleBrief *models.ArticleBrief, err error) {
 	var commentCount int64
 	var likeCount int64
+	var collectionCount int64
 	err = global.Db.Model(&models.ArticleComment{}).Where("article_id=?", aid).Count(&commentCount).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		fmt.Println("查询数量时出错:", err)
@@ -135,10 +136,16 @@ func ArticleGetBrief(aid uint64) (rArticleBrief *models.ArticleBrief, err error)
 		fmt.Println("查询数量时出错:", err)
 		return
 	}
+	err = global.Db.Model(&models.ArticleCollection{}).Where("article_id=?", aid).Count(&collectionCount).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		fmt.Println("查询数量时出错:", err)
+		return
+	}
 	rArticleBrief = &models.ArticleBrief{
 		ArticleId:    aid,
 		CommentCount: commentCount,
 		LikeCount:    likeCount,
+		CollectCount: collectionCount,
 	}
 	return rArticleBrief, nil
 }

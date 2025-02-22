@@ -105,8 +105,8 @@ const operatorIconConfig = computed(() => [
     {
         iconName: "icon-icon",
         size: "34px",
-        handleClick: () => {
-            articleLike();
+        handleClick: async () => {
+            await articleLike();
         },
         color: isLiked.value ? 'rgb(79, 125, 239)' : "rgb(195, 200, 208)",
         content: LikeCount.value,
@@ -118,7 +118,16 @@ const operatorIconConfig = computed(() => [
         content: Number(commentList.value?.length || 0),
         color: "rgb(195, 200, 208)",
 
-    }, {
+    },
+    {
+        iconName: "icon-htmal5icon24",
+        handleClick: async () => {
+            await articleCollect()
+        },
+        content: collectCount.value,
+        color: isCollect.value ? 'rgb(79, 125, 239)' : "rgb(195, 200, 208)",
+    },
+    {
         iconName: "icon-zhuanfa",
         handleClick: () => {
         },
@@ -134,9 +143,13 @@ const operatorIconConfig = computed(() => [
 const LikeCount = computed(() => {
     return Number(aBrief.value?.like_count)
 })
+const collectCount = computed(() => {
+    return Number(aBrief.value?.collect_count)
+})
 
 
 const isLiked = ref(false)
+const isCollect = ref(false)
 const commentList = ref<IComment[]>([])
 // 处理二级评论内容
 const commentListCmp = computed(() => {
@@ -170,9 +183,22 @@ const articleLike = async () => {
     await getArticleBrief()
 }
 
+const articleCollect = async () => {
+    const { uid, aid } = getUrlQuery();
+    isCollect.value = !isCollect.value
+    await Ajax.post('/article/collect', {
+        user_id: Number(uid),
+        article_id: Number(aid),
+        is_collection: isCollect.value
+    })
+    // 获取文章brief 内容
+    await getArticleBrief()
+}
+
 const getArticleBrief = async () => {
     const { aid } = getUrlQuery();
     const res = await Ajax.get("/article/getById/" + String(aid));
+    console.log(res, "resres")
     aBrief.value = res.data.article_brief;
 }
 
@@ -191,16 +217,26 @@ const getAContent = async () => {
     aBrief.value = res.data.article_brief;
 }
 // 查询是否点赞过
-const getLikeStatus = async () => {
+const getLikeAndCollectStatus = async () => {
     const { uid, aid } = getUrlQuery();
-    const res = await Ajax.post('/article/isLiked', {
+    const likeRes = await Ajax.post('/article/isLiked', {
         user_id: Number(uid),
         article_id: Number(aid),
     })
 
-    if (res?.data) {
+    if (likeRes?.data) {
         operatorIconConfig.value[0].color = '#3f7ef7'
-        isLiked.value = res?.data
+        isLiked.value = likeRes?.data
+        console.log(operatorIconConfig, 'operatorIconConfig')
+    }
+    const collectRes = await Ajax.post('/article/isCollected', {
+        user_id: Number(uid),
+        article_id: Number(aid),
+    })
+
+    if (collectRes?.data) {
+        operatorIconConfig.value[0].color = '#3f7ef7'
+        isLiked.value = collectRes?.data
         console.log(operatorIconConfig, 'operatorIconConfig')
     }
 }
@@ -248,7 +284,7 @@ const getAuthorCount = async () => {
 }
 onMounted(async () => {
     await getAContent()
-    await getLikeStatus()
+    await getLikeAndCollectStatus()
     await getCommentList()
     await getAuthorCount()
 })
