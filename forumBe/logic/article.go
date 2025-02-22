@@ -214,3 +214,45 @@ func ArticleView(aid string) (err error) {
 	}
 	return nil
 }
+
+func ArticleCollection(c *models.ArticleCollection) (err error) {
+	var res *gorm.DB
+	if !c.IsCollection {
+		res = global.Db.Model(&models.ArticleCollection{}).Where("article_id =? and user_id =?", c.ArticleId, c.UserId).Delete(&models.ArticleCollection{})
+		err = res.Error
+		if err != nil {
+			return errors.New("取消收藏失败")
+		}
+		return nil
+	} else {
+		// 查询是否已经收藏
+		var collection *models.ArticleCollection
+		res = global.Db.Model(&models.ArticleCollection{}).Where("article_id =? and user_id =?", c.ArticleId, c.UserId).First(&collection)
+		err = res.Error
+		if err == gorm.ErrRecordNotFound {
+			// 没有收藏过，创建收藏记录
+			res = global.Db.Create(c)
+			err = res.Error
+			if err != nil {
+				return errors.New("收藏失败")
+			}
+		} else if err != nil {
+			// 其他查询错误
+			return errors.New("查询收藏记录失败")
+		}
+		return nil
+	}
+}
+
+func ArticleIsCollection(c *models.ArticleCollection) (isCollection bool, err error) {
+	var res *gorm.DB
+	res = global.Db.Model(&models.ArticleCollection{}).Where("article_id =? and user_id =?", c.ArticleId, c.UserId).First(&models.ArticleCollection{})
+	err = res.Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return false, errors.New("查询收藏状态失败")
+	}
+	if err == gorm.ErrRecordNotFound {
+		return false, nil
+	}
+	return true, nil
+}

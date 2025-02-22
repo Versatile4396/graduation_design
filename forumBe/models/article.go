@@ -42,3 +42,9 @@ type ArticleLike struct {
 	UserId    uint64 `json:"user_id"`
 	IsLike    bool   `json:"is_like" gorm:"-"`
 }
+
+type ArticleCollection struct {
+	ArticleId    uint64 `json:"article_id"`
+	UserId       uint64 `json:"user_id"`
+	IsCollection bool   `json:"is_collection" gorm:"-"`
+}

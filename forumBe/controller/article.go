@@ -185,6 +185,42 @@ func ArticleIsLikedController(c *gin.Context) {
 	ResponseSuccess(c, isLiked)
 }
 
+func ArticleCollectionController(c *gin.Context) {
+	// 文章收藏
+	var collection *models.ArticleCollection
+	if err := c.ShouldBindJSON(&collection); err != nil {
+		zap.L().Error("article collection with invalid param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	logger.Fmt(collection)
+	// 业务处理-文章收藏
+	err := logic.ArticleCollection(collection)
+	if err != nil {
+		zap.L().Error("logic.ArticleCollection failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, nil)
+}
+func ArticleIsCollectionController(c *gin.Context) {
+	// 文章是否收藏
+	var collection *models.ArticleCollection
+	if err := c.ShouldBindJSON(&collection); err != nil {
+		zap.L().Error("article is collection with invalid param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	// 业务处理-文章是否收藏
+	isCollection, err := logic.ArticleIsCollection(collection)
+	if err != nil {
+		zap.L().Error("logic.ArticleIsCollection failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, isCollection)
+}
+
 func ArticleViewController(c *gin.Context) {
 	// 文章浏览
 	aid := c.Param("aid")
