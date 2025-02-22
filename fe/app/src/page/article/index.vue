@@ -227,7 +227,6 @@ const getLikeAndCollectStatus = async () => {
     if (likeRes?.data) {
         operatorIconConfig.value[0].color = '#3f7ef7'
         isLiked.value = likeRes?.data
-        console.log(operatorIconConfig, 'operatorIconConfig')
     }
     const collectRes = await Ajax.post('/article/isCollected', {
         user_id: Number(uid),

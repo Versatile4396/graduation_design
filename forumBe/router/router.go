@@ -16,7 +16,7 @@ func SetupRouter() *gin.Engine {
 	// 设置中间件 recovery 中间件会recovery项目中kennel会出现的panic
 	router.Use(logger.GinLogger(),
 		logger.GinRecovery(true),
-		middleware.RateLimitMiddleware(2*time.Second, 40))
+		middleware.RateLimitMiddleware(2*time.Second, 4000))
 	router.Static("/images", "./images")
 
 	user := router.Group("/api/user")
