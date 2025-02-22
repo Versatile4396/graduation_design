@@ -23,3 +23,10 @@ type LoginForm struct {
 	UserName string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
+
+type UserCountInfo struct {
+	ViewCount    int64 `json:"view_count"`
+	LikeCount    int64 `json:"like_count"`
+	AritcleCount int64 `json:"article_count"`
+	CommentCount int64 `json:"comment_cnt"`
+}

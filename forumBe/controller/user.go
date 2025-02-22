@@ -7,6 +7,7 @@ import (
 	"forum/logger"
 	"forum/logic"
 	"forum/models"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -75,4 +76,17 @@ func UserLoginController(c *gin.Context) {
 		"access_token":  user.AccessToken,
 		"refresh_token": user.RefreshToken,
 	})
+}
+
+func UserGetCountController(c *gin.Context) {
+	// 获取用户信息
+	// 业务处理-获取用户信息
+	uid, err := strconv.ParseUint(c.Param("uid"), 10, 64)
+	countInfo, err := logic.GetCountController(uid)
+	if err != nil {
+		zap.L().Error("logic.GetUserInfo failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, countInfo)
 }

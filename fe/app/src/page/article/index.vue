@@ -11,6 +11,32 @@
                     </div>
                 </div>
             </div>
+            <div class="author-info-box">
+                <div class="author-title">
+                    <el-avatar :src="authorInfo.avatar"></el-avatar>
+                    <div class="name">{{ authorInfo.username }}</div>
+                </div>
+                <div class="author-create-info">
+                    <div class="count-info">
+                        <span>{{ authorInfo.article_count ?? 0 }}</span>
+                        <span>文章</span>
+                    </div>
+                    <div class="count-info">
+                        <span>{{ authorInfo.like_count ?? 0 }}</span>
+
+                        <span>点赞</span>
+                    </div>
+                    <div class="count-info">
+                        <span>{{ authorInfo.view_count ?? 0 }}</span>
+                        <span>浏览</span>
+                    </div>
+                </div>
+                <div class="chat-author">
+                    <el-button type="primary">
+                        <template #default><span class="chat-btn">私聊</span></template>
+                    </el-button>
+                </div>
+            </div>
             <div class="article-title">
                 {{ aInfo?.title }}
             </div>
@@ -32,7 +58,6 @@
             <div class="content">
                 <Editor v-model="aInfo.content" :defaultConfig="editorConfig" :mode="mode" />
             </div>
-
         </div>
         <div class="comments-container">
             <div class="title">评论（{{ commentListCmp.length }}）</div>
@@ -85,12 +110,12 @@ const operatorIconConfig = computed(() => [
             articleLike();
         },
         color: isLiked.value ? 'rgb(79, 125, 239)' : "rgb(195, 200, 208)",
-        content: Number(aBrief.value?.like_count)
+        content: LikeCount.value,
     }, {
         iconName: "icon-pinglun",
         handleClick: () => {
         },
-        content: Number(aBrief.value?.comment_count),
+        content: Number(commentList.value?.length || 0),
         color: "rgb(195, 200, 208)",
 
     }, {
@@ -105,6 +130,12 @@ const operatorIconConfig = computed(() => [
         color: "rgb(195, 200, 208)",
     }
 ])
+
+const LikeCount = computed(() => {
+    return Number(aBrief.value?.like_count)
+})
+
+
 const isLiked = ref(false)
 const commentList = ref<IComment[]>([])
 // 处理二级评论内容
@@ -127,18 +158,22 @@ const commentListCmp = computed(() => {
     return result
 })
 
-const articleLike = () => {
+const articleLike = async () => {
     const { uid, aid } = getUrlQuery();
     isLiked.value = !isLiked.value
-    Ajax.post('/article/like', {
+    await Ajax.post('/article/like', {
         user_id: Number(uid),
         article_id: Number(aid),
         is_like: isLiked.value
-    }).then((res) => {
-        if (res.code === 0 && isLiked.value) {
-            Message.info('点赞成功')
-        }
     })
+    // 获取文章brief 内容
+    await getArticleBrief()
+}
+
+const getArticleBrief = async () => {
+    const { aid } = getUrlQuery();
+    const res = await Ajax.get("/article/getById/" + String(aid));
+    aBrief.value = res.data.article_brief;
 }
 
 const estimateReadTime = (content: string) => {
@@ -154,7 +189,6 @@ const getAContent = async () => {
     authorInfo.value = res.data.author_info;
     aInfo.value.create_at = aInfo.value.create_at?.split('T')[0];
     aBrief.value = res.data.article_brief;
-    console.log(aBrief.value, 'aBrief')
 }
 // 查询是否点赞过
 const getLikeStatus = async () => {
@@ -205,10 +239,18 @@ const getCommentList = async () => {
     })
     commentList.value = res.data || []
 }
+const getAuthorCount = async () => {
+    const { data } = await Ajax.post('/user/count/info/' + authorInfo.value.user_id, {
+    })
+    authorInfo.value.view_count = data?.view_count
+    authorInfo.value.like_count = data?.like_count
+    authorInfo.value.article_count = data?.article_count
+}
 onMounted(async () => {
     await getAContent()
     await getLikeStatus()
     await getCommentList()
+    await getAuthorCount()
 })
 </script>
 <style scoped lang="scss">
@@ -217,16 +259,14 @@ onMounted(async () => {
     width: 820px;
 
     .operator-box {
-        display: flex;
-        align-items: center;
-        justify-self: center;
-        flex-direction: column;
-        width: 60px;
         position: fixed;
         margin-left: -7rem;
         top: 140px;
         z-index: 2;
-        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-self: center;
+        flex-direction: column;
 
         .operator-icon {
             .icon {
@@ -260,6 +300,66 @@ onMounted(async () => {
             .icon:hover {
                 background-color: #f2f3f5;
             }
+        }
+    }
+
+    .author-info-box {
+        background-color: #fff;
+        position: fixed;
+        margin-right: -7rem;
+        top: 76px;
+        width: 300px;
+        padding: 16px;
+        z-index: 2;
+        right: 12%;
+        border-radius: 4px;
+
+        .author-title {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+
+            .name {
+                font-size: 16px;
+                font-weight: 600;
+                height: 2rem;
+                line-height: 2rem;
+                text-align: center;
+            }
+        }
+
+        .author-create-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+
+            .count-info {
+                color: #8b919e;
+                font-size: 12px;
+                font-weight: 400;
+                line-height: 22px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+
+            }
+
+            .count-info span:first-of-type {
+                font-size: 16px;
+                font-weight: 600;
+                line-height: 22px;
+                color: #262932;
+            }
+
+
+        }
+
+        .chat-author {
+            display: grid;
+            margin-top: 16px;
+            width: 100%;
         }
     }
 
@@ -317,6 +417,7 @@ onMounted(async () => {
     .comments-container {
         background-color: #fff;
         margin-top: 20px;
+        min-height: 200px;
         padding: 20px 32px;
         border-radius: 4px;
 

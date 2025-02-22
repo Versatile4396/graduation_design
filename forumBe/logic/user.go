@@ -74,3 +74,31 @@ func Login(u *models.LoginForm) (user *models.User, error error) {
 	user.Gender = dbuser.Gender
 	return
 }
+
+/**
+ * @description: 获取用户信息
+ * @param c
+ * @return {*}
+ */
+func GetCountController(uid uint64) (countInfo *models.UserCountInfo, err error) {
+
+	countInfo = &models.UserCountInfo{}
+	// 获取文章数量 和总浏览量
+	rArticle := global.Db.Model(&models.Article{}).Where("user_id =?", uid)
+	err = rArticle.Error
+	if err != nil {
+		return
+	}
+	rArticle.Count(&countInfo.AritcleCount)
+	rArticle.Select("sum(view_count)").Row().Scan(&countInfo.ViewCount)
+	// 获取点赞数量
+	err = global.Db.Model(&models.ArticleLike{}).
+		Joins("JOIN articles ON article_likes.article_id = articles.article_id").
+		Where("articles.user_id =?", uid).
+		Count(&countInfo.LikeCount).Error
+	if err != nil {
+		return
+	}
+	// comments.Count(&countInfo.CommentCount)
+	return countInfo, nil
+}

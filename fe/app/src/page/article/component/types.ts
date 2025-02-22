@@ -15,9 +15,12 @@ export interface IArticle {
 export interface IAuthor {
   avatar: string;
   email: string;
-  gender: number;
   user_id: number;
   username: string;
+  gender: number;
+  like_count: number;
+  view_count: number;
+  article_count: number;
 }
 
 export interface IArticleBrief {
