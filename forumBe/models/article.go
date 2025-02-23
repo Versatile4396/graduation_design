@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type Article struct {
 	ArticleId  uint64    `json:"article_id"`
@@ -48,4 +50,11 @@ type ArticleCollection struct {
 	ArticleId    uint64 `json:"article_id"`
 	UserId       uint64 `json:"user_id"`
 	IsCollection bool   `json:"is_collection" gorm:"-"`
+}
+
+type ArticleSearch struct {
+	Keyword    string      `json:"keyword"`
+	Title      string      `json:"title"`
+	Content    string      `json:"content"`
+	Pagination *Pagination `json:"pagination"`
 }

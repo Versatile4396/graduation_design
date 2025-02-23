@@ -5,7 +5,7 @@
         'active-sidebar-item': activeSideItem === item.value
       }" @click="sidebarItemclick(item.value)">
         <div class="icon">
-          <svg-icon :iconName="item.iconName"></svg-icon>
+          <svg-icon :iconName="item.iconName" :color="activeSideItem === item.value ? '#4f7def' : ''"></svg-icon>
         </div>
         <div class="text">{{ item.label }}</div>
       </div>
@@ -27,7 +27,15 @@
         </div>
       </div>
       <div class="irrelevant-container">
-        <div class="irelevant-content">reaasdasd</div>
+        <div class="irelevant-content">
+          <div class="hello-box">
+            <div class="title">{{ timePeriod }}</div>
+            <div class="desc">点亮在社区的每一天~</div>
+          </div>
+        </div>
+        <div class="hot-article">
+          热门文章
+        </div>
       </div>
     </div>
   </div>
@@ -41,6 +49,9 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { ElTabPane, ElTabs } from 'element-plus';
 import Ajax from '@/ajax';
 import { goToArticle } from '@/utils/goto'
+import { getUrlQuery } from '@/utils/common'
+
+
 const { Categories } = storeToRefs(useCategorieStore());
 const iconConfig = [
   "icon-zonghechaxun",
@@ -67,19 +78,38 @@ const sideBars = computed(() => {
   return temp
 })
 const activeSideItem = ref(0)
-const sidebarItemclick = (v: number) => {
+const sidebarItemclick = async (v: number) => {
   activeSideItem.value = v
+  // 重新请求
+  await getPreviewInfos()
 }
+const timePeriod = computed(() => {
+  const now = new Date()
+  const hour = now.getHours()
+  if (hour >= 0 && hour < 6) {
+    return '凌晨好！'
+  } else if (hour >= 6 && hour < 12) {
+    return '上午好！'
+  } else if (hour >= 12 && hour < 18) {
+    return '下午好！'
+  } else {
+    return '晚上好！'
+  }
+})
 const filterKey = ref('recommend')
 watch(filterKey, async (nv) => {
   if (nv === 'recommend') {
     await getPreviewInfos()
   } else {
-    console.log(nv, 'nv')
     await getPreviewInfos(false)
   }
 })
 onMounted(async () => {
+  const query = getUrlQuery()
+  if (query.keyword) {
+    // 删除keyword
+    delete query.keyword
+  }
   await getPreviewInfos()
 })
 type PreviewInfo = InstanceType<typeof ArticlePreview>['$props']['previewInfo']
@@ -88,7 +118,8 @@ const previewInfos = ref<Array<PreviewInfo>>([])
 
 const getPreviewInfos = async (order = true) => {
   const { data } = await Ajax.post('/article/list', {
-    order_by_time: order
+    order_by_time: order,
+    category_id: activeSideItem.value === 0 ? null : activeSideItem.value,
   })
   previewInfos.value = data?.map((item: any) => {
     return {
@@ -171,13 +202,36 @@ const getPreviewInfos = async (order = true) => {
     }
 
     .irrelevant-container {
+      display: flex;
+      flex-direction: column;
+      row-gap: 12px;
+      border-radius: 4px;
+      min-width: 260px;
+
       .irelevant-content {
-        border-radius: 4px;
-        background-color: #fff;
-        padding: 8px;
+
+
+        .hello-box {
+          font-weight: 600;
+
+          .desc {
+            color: $normal-font;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 24px;
+            margin-top: 2px;
+          }
+        }
       }
 
-      min-width: 260px;
+      .hot-article {}
+
+    }
+
+    .irrelevant-container>div {
+      border-radius: 4px;
+      background-color: #fff;
+      padding: 12px;
     }
   }
 }

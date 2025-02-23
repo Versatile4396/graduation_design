@@ -233,3 +233,33 @@ func ArticleViewController(c *gin.Context) {
 	}
 	ResponseSuccess(c, nil)
 }
+
+func ArticleSearchLikeController(c *gin.Context) {
+	// 文章搜索
+	var search *models.ArticleSearch
+	if err := c.ShouldBindJSON(&search); err != nil {
+		zap.L().Error("article search with invalid param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	logger.Fmt(search)
+	// 业务处理-文章搜索
+	rArticles, rArticleBriefs, err := logic.ArticleSearchLike(search)
+	if err != nil {
+		zap.L().Error("logic.ArticleSearchLike failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	type ArticleListResponse struct {
+		Article      *models.Article      `json:"articles"`
+		ArticleBrief *models.ArticleBrief `json:"article_briefs"`
+	}
+	var resData []*ArticleListResponse
+	for i := 0; i < len(rArticles); i++ {
+		resData = append(resData, &ArticleListResponse{
+			Article:      rArticles[i],
+			ArticleBrief: rArticleBriefs[i],
+		})
+	}
+	ResponseSuccess(c, resData)
+}

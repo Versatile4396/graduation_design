@@ -23,7 +23,13 @@
             <div class="search-create-node">
               <div class="search-node">
                 <el-input v-model="searchValue" style="width: 240px" size="large" placeholder="探索跨知领域"
-                  :suffix-icon="Search" />
+                  @keyup.enter="handleSearch">
+                  <template #suffix>
+                    <span class="search-icon" @click="handleSearch">
+                      <svg-icon iconName="icon-search"></svg-icon>
+                    </span>
+                  </template>
+                </el-input>
               </div>
               <div class="create-node">
                 <el-button size="large" type="primary" @click="createArticle">创作者中心</el-button>
@@ -32,7 +38,7 @@
             <div class="avatar-node">
               <div class="logined" v-if="isLogined">
                 <el-dropdown placement="top-start" trigger="click">
-                  <Avatar/>
+                  <Avatar />
                 </el-dropdown>
               </div>
               <div class="no-logged" v-else>
@@ -49,17 +55,24 @@
 <script lang="ts" setup>
 import router, { routerName } from "@/router";
 import { getUrlQuery, userLocalInfo } from "@/utils/common";
-import { computed, onMounted, ref } from "vue";
-import { Search } from "@element-plus/icons-vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { ElButton, ElInput } from "element-plus";
 import { FormType } from "@/ajax/type/ariticle";
-import { userInfoStore } from "@/store/user";
 import { useCategorieStore } from "@/store/article"
 import Avatar from "./components/avatar.vue"
 import Ajax from "@/ajax";
 
 const navStatus = ref(true);
 var isScrolling = false;
+
+const handleSearch = () => {
+  if (!searchValue.value) {
+    return;
+  }
+  const query = getUrlQuery();
+  router.push({ path: "/search", query: { ...query, keyword: searchValue.value } });
+};
+
 const scrollCallback = () => {
   if (!isScrolling) {
     isScrolling = true;
@@ -75,15 +88,19 @@ const scrollCallback = () => {
     });
   }
 };
+
 window.addEventListener("scroll", scrollCallback);
+
 const handleLogoClick = () => {
   const query = getUrlQuery();
   router.push({ path: "/", query });
 };
+
 const handleNavClick = (path: string) => {
   const query = getUrlQuery();
   router.push({ path, query });
 };
+
 interface naviNode {
   path: string;
   name?: string;
@@ -118,12 +135,19 @@ const naviConfig: naviNode[] = [
 ];
 const activeNodeIndex = ref(0);
 //
-router.afterEach((to) => {
+router.afterEach((to,) => {
   activeNodeIndex.value = naviConfig.findIndex((item) => item.path === to.path);
+  const { keyword } = getUrlQuery();
+  if (keyword && to.path === '/search') {
+    searchValue.value = keyword || "";
+  } else {
+    delete to.query.keyword;
+    to.query = { ...to.query };
+  }
 });
-
 // 搜索逻辑
-const searchValue = ref("");
+const searchValue = ref();
+
 
 // 跳转创建文章界面
 const createArticle = () => {
@@ -139,9 +163,6 @@ const isLogined = computed(() => {
 const handleLoginClick = () => {
   router.push({ name: routerName.LOGIN });
 };
-
-
-
 
 const getBaseInfo = async () => {
   const categoriesInfo = await Ajax.post("article/category/list", {})
@@ -244,6 +265,12 @@ onMounted(async () => {
 
           .search-node {
             margin-right: 24px;
+
+            .search-icon {
+              display: flex;
+              align-items: center;
+              cursor: pointer;
+            }
           }
 
           .create-node {

@@ -39,7 +39,7 @@ func ArticleUpdate(a *models.Article) (rArticle *models.Article, err error) {
 
 }
 
-func ArticleGet(aid uint64) (rArticle *models.Article, userInfo *models.User, aBreif *models.ArticleBrief, err error) {
+func ArticleGet(aid uint64) (rArticle *models.Article, userInfo *models.User, rABrief *models.ArticleBrief, err error) {
 	err = global.Db.Model(&rArticle).Where("article_id =?", aid).First(&rArticle).Error
 	if err != nil {
 		err = errors.New("获取文章失败")
@@ -52,7 +52,7 @@ func ArticleGet(aid uint64) (rArticle *models.Article, userInfo *models.User, aB
 		err = errors.New("获取文章作者信息失败")
 		return
 	}
-	ArticleBrief, err := ArticleGetBrief(aid)
+	ArticleBrief, err := ArticleGetBrief(aid, rArticle.UserId)
 	return rArticle, userInfo, ArticleBrief, nil
 }
 
@@ -83,16 +83,10 @@ func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, 
 	}
 	// 获取文章列表 点赞 评论数量
 	for _, article := range rArticles {
-		ArticleBrief, err := ArticleGetBrief(article.ArticleId)
+		ArticleBrief, err := ArticleGetBrief(article.ArticleId, article.UserId)
 		if err != nil {
 			return nil, nil, err
 		}
-		var u *models.User
-		err = global.Db.Model(&u).Where("user_id =?", article.UserId).First(&u).Error
-		if err != nil {
-			return nil, nil, err
-		}
-		ArticleBrief.UserName = u.UserName
 		rArticleBriefs = append(rArticleBriefs, ArticleBrief)
 	}
 	return
@@ -122,7 +116,7 @@ func HandleFilterInfo(query *gorm.DB, filter *models.ArticleFilter) (err error) 
 	return query.Error
 }
 
-func ArticleGetBrief(aid uint64) (rArticleBrief *models.ArticleBrief, err error) {
+func ArticleGetBrief(aid uint64, uid uint64) (rArticleBrief *models.ArticleBrief, err error) {
 	var commentCount int64
 	var likeCount int64
 	var collectionCount int64
@@ -141,11 +135,17 @@ func ArticleGetBrief(aid uint64) (rArticleBrief *models.ArticleBrief, err error)
 		fmt.Println("查询数量时出错:", err)
 		return
 	}
+	var u *models.User
+	err = global.Db.Model(&u).Where("user_id =?", uid).First(&u).Error
+	if err != nil {
+		return nil, err
+	}
 	rArticleBrief = &models.ArticleBrief{
 		ArticleId:    aid,
 		CommentCount: commentCount,
 		LikeCount:    likeCount,
 		CollectCount: collectionCount,
+		UserName:     u.UserName,
 	}
 	return rArticleBrief, nil
 }
@@ -262,4 +262,32 @@ func ArticleIsCollection(c *models.ArticleCollection) (isCollection bool, err er
 		return false, nil
 	}
 	return true, nil
+}
+
+func ArticleSearchLike(s *models.ArticleSearch) (rArticles []*models.Article, rABrief []*models.ArticleBrief, err error) {
+	if s.Pagination == nil {
+		s.Pagination = &models.Pagination{
+			Page:     1,
+			PageSize: 10,
+		}
+	}
+	offset := s.Pagination.PageSize * (s.Pagination.Page - 1)
+	err = global.Db.Model(&rArticles).Where("title LIKE ? OR content LIKE ?", "%"+s.Keyword+"%", "%"+s.Keyword+"%").Offset(offset).Limit(s.Pagination.PageSize).Find(&rArticles).Error
+	if s.Title != "" {
+		err = global.Db.Model(&rArticles).Where("title like ?", "%"+s.Title+"%").Offset(offset).Limit(s.Pagination.PageSize).Find(&rArticles).Error
+	}
+	if s.Content != "" {
+		err = global.Db.Model(&rArticles).Where("content like?", "%"+s.Content+"%").Offset(offset).Limit(s.Pagination.PageSize).Find(&rArticles).Error
+	}
+	if err != nil {
+		return nil, nil, errors.New("搜索文章失败")
+	}
+	for _, article := range rArticles {
+		ArticleBrief, err := ArticleGetBrief(article.ArticleId, article.UserId)
+		if err != nil {
+			return nil, nil, err
+		}
+		rABrief = append(rABrief, ArticleBrief)
+	}
+	return
 }

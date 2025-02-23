@@ -39,6 +39,7 @@ func SetupRouter() *gin.Engine {
 		article.POST("/view/:aid", controller.ArticleViewController)
 		article.POST("/collect", controller.ArticleCollectionController)
 		article.POST("/isCollected", controller.ArticleIsCollectionController)
+		article.POST("/searchLike", controller.ArticleSearchLikeController)
 	}
 	topic := router.Group("/api/topic")
 	{

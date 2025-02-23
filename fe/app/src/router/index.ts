@@ -13,6 +13,7 @@ export enum routerName {
   PERSONAL = "personal",
   CREATE_ARTICLE = "editor",
   Article = "article",
+  SEARCH = "search",
   TEST = "test",
 }
 
@@ -80,6 +81,14 @@ export const routes: RouteRecordRaw[] = [
       title: "文章详情",
     },
     component: () => import("@/page/article/index.vue"),
+  },
+  {
+    path: "/search",
+    name: routerName.SEARCH,
+    meta: {
+      title: "文章详情",
+    },
+    component: () => import("@/page/search/index.vue"),
   },
   {
     path: "/test",
