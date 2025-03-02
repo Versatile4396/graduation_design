@@ -1,8 +1,6 @@
 <template>
     <div class="tab-content-article">
         <section class="header">
-            <el-button>最新</el-button>
-            <el-button>热门</el-button>
         </section>
         <section class="content">
             <ArticlePreview @click="goToArticle(previewInfo?.aid!)" v-for="previewInfo in previewInfos"
@@ -12,38 +10,32 @@
 </template>
 
 <script lang='ts' setup>
-import Ajax from '@/ajax';
 import ArticlePreview from '@/page/components/ArticlePreview/index.vue'
-import { ArticleStatus } from '@/page/components/ArticlePreview/type';
-import router, { routerName } from '@/router';
-import { getUrlQuery } from '@/utils/common';
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { goToArticle } from '@/utils/goto'
 
-type PreviewInfo = InstanceType<typeof ArticlePreview>['$props']['previewInfo']
+interface ArticleList {
+    articles: any;
+    article_briefs: any;
+}
+
+interface Props {
+    articleList: ArticleList[];
+}
+const props = defineProps<Partial<Props>>()
 
 const previewInfos = ref<PreviewInfo[]>([])
+type PreviewInfo = InstanceType<typeof ArticlePreview>['$props']['previewInfo']
 
-onMounted(async () => {
-    const uid = getUrlQuery().uid;
-    const res = await Ajax.post("/article/list", { user_id: uid })
-    previewInfos.value = res.data.map((item: any) => {
-        return {
-            title: item.title,
-            aid: item.article_id,
-            status: item.status === 1 ? ArticleStatus.Published : ArticleStatus.Draft,
-            cover: item.cover,
-            abstract: item.abstract,
-            tags: item.tag_id == 1 ? ['标签1'] : [],
-            publishTime: "string",
-            author: "作者",
-            pageviews: 100,
-            likes: 100,
-            comments: 100,
-            collects: 100,
-        }
-    })
-})
+previewInfos.value = props.articleList?.map((item: any) => {
+    return {
+        aid: item.articles.article_id,
+        likes: item.article_briefs.like_count,
+        comments: item.article_briefs.comment_count,
+        author: item.article_briefs.username,
+        ...item.articles,
+    }
+}) as PreviewInfo[]
 
 </script>
 <style scoped lang="scss">

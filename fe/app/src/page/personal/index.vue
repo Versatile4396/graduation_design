@@ -2,23 +2,28 @@
   <div class="main-personal-box">
     <div class="left-box">
       <div class="header-box">
-        <div class="avatar"></div>
+        <div class="avatar">
+          <el-avatar :src="userInfo.avatar" :size="90"></el-avatar>
+        </div>
         <div class="right-box">
-          <div class="briefly"></div>
-          <div class="editor-content"></div>
+          <div class="briefly">{{ userInfo.username }}</div>
+          <div class="editor-content">
+            <el-button type="primary" @click="setUserInfo">设置</el-button>
+          </div>
         </div>
       </div>
       <div class="content-box">
         <div class="content-header">
           <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="动态" name="dynamic"></el-tab-pane>
-            <el-tab-pane label="文章" name="article">
-              <Article></Article>
+            <el-tab-pane label="个人文章" name="article">
+              <Article :article-list="articleList" :key="articleList.join('')"></Article>
             </el-tab-pane>
-            <el-tab-pane label="沸点" name="popular"></el-tab-pane>
-            <el-tab-pane label="收藏" name="collection"></el-tab-pane>
-            <el-tab-pane label="关注" name="follow"></el-tab-pane>
-            <el-tab-pane label="赞1" name="like"></el-tab-pane>
+            <el-tab-pane label="收藏" name="collection">
+              <Article :article-list="articleList" :key="articleList.join('')"></Article>
+            </el-tab-pane>
+            <el-tab-pane label="赞" name="like">
+              <Article :article-list="articleList" :key="articleList.join('')"></Article>
+            </el-tab-pane>
           </el-tabs>
         </div>
       </div>
@@ -31,14 +36,49 @@
 import { userInfoStore } from "@/store/user";
 import { storeToRefs } from "pinia";
 import Article from "./tabsview/article.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import type { TabsPaneContext } from 'element-plus'
+import { getUrlQuery } from "@/utils/common";
+import Ajax from "@/ajax";
+
+const { userInfo } = userInfoStore();
 
 const activeName = ref('article')
+const articleList = ref([])
 
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
+const handleClick = async (tab: TabsPaneContext, event: Event) => {
+  switch (tab.index) {
+    case '0':
+      await getArticlePersonalList();
+      break;
+    case '1':
+      await getCollectionList();
+      break;
+    case '2':
+      break;
+    default:
+      break;
+  }
 }
+const getArticlePersonalList = async () => {
+  const uid = getUrlQuery().uid;
+  const res = await Ajax.post("/article/list", { user_id: uid })
+  articleList.value = res.data
+}
+
+const getCollectionList = async () => {
+  const uid = getUrlQuery().uid;
+  const res = await Ajax.post("/article/list", { user_id: uid })
+  articleList.value = res.data
+}
+
+const setUserInfo = () => {
+
+}
+onMounted(async () => {
+  await getArticlePersonalList();
+})
+
 </script>
 <style scoped lang="scss">
 .main-personal-box {
@@ -61,7 +101,6 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
         width: 90px;
         height: 90px;
         border-radius: 50%;
-        background-color: #ccc;
         margin-right: 24px;
       }
 
@@ -98,7 +137,6 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   .right-box {
     width: 240px;
     height: 100px;
-    background-color: #ccc;
   }
 
 }
