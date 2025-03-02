@@ -15,14 +15,8 @@
       <div class="content-box">
         <div class="content-header">
           <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="个人文章" name="article">
-              <Article :article-list="articleList" :key="articleList.join('')"></Article>
-            </el-tab-pane>
-            <el-tab-pane label="收藏" name="collection">
-              <Article :article-list="articleList" :key="articleList.join('')"></Article>
-            </el-tab-pane>
-            <el-tab-pane label="赞" name="like">
-              <Article :article-list="articleList" :key="articleList.join('')"></Article>
+            <el-tab-pane v-for="pane in paneConfig" :label="pane.label" :name="pane.name">
+              <Article v-if="!loading" :article-list="articleList" :key="activeName"></Article>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -34,7 +28,6 @@
 
 <script lang="ts" setup>
 import { userInfoStore } from "@/store/user";
-import { storeToRefs } from "pinia";
 import Article from "./tabsview/article.vue";
 import { onMounted, ref } from "vue";
 import type { TabsPaneContext } from 'element-plus'
@@ -43,18 +36,42 @@ import Ajax from "@/ajax";
 
 const { userInfo } = userInfoStore();
 
+const paneConfig = [
+  {
+    label: '个人文章',
+    name: 'article',
+  },
+  {
+    label: '收藏',
+    name: 'collection',
+  },
+  {
+    label: '赞',
+    name: 'like',
+  },
+]
+
+const loading = ref(false)
+
 const activeName = ref('article')
 const articleList = ref([])
 
-const handleClick = async (tab: TabsPaneContext, event: Event) => {
+const handleClick = async (tab: TabsPaneContext, _event: Event) => {
   switch (tab.index) {
     case '0':
+      loading.value = true;
       await getArticlePersonalList();
+      loading.value = false;
       break;
     case '1':
+      loading.value = true;
       await getCollectionList();
+      loading.value = false;
       break;
     case '2':
+      loading.value = true;
+      await getLikeList();
+      loading.value = false;
       break;
     default:
       break;
@@ -66,9 +83,14 @@ const getArticlePersonalList = async () => {
   articleList.value = res.data
 }
 
+const getLikeList = async () => {
+  const uid = getUrlQuery().uid;
+  const res = await Ajax.post("/article/getLikeList/" + uid)
+  articleList.value = res.data
+}
 const getCollectionList = async () => {
   const uid = getUrlQuery().uid;
-  const res = await Ajax.post("/article/list", { user_id: uid })
+  const res = await Ajax.post("/article/getCollectionList/" + uid)
   articleList.value = res.data
 }
 
@@ -76,7 +98,9 @@ const setUserInfo = () => {
 
 }
 onMounted(async () => {
+  loading.value = true;
   await getArticlePersonalList();
+  loading.value = false;
 })
 
 </script>

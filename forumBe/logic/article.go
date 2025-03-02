@@ -291,3 +291,47 @@ func ArticleSearchLike(s *models.ArticleSearch) (rArticles []*models.Article, rA
 	}
 	return
 }
+
+func GetLikeList(uid uint64) (rArticles []*models.Article, rABrief []*models.ArticleBrief, err error) {
+	var rLikeList []*models.ArticleLike
+	err = global.Db.Model(&rLikeList).Where("user_id =?", uid).Find(&rLikeList).Error
+	if err != nil {
+		return nil, nil, errors.New("获取点赞列表失败")
+	}
+	for _, like := range rLikeList {
+		var article *models.Article
+		err = global.Db.Model(&article).Where("article_id =?", like.ArticleId).First(&article).Error
+		if err != nil {
+			return nil, nil, errors.New("获取文章失败")
+		}
+		rArticles = append(rArticles, article)
+		ArticleBrief, err := ArticleGetBrief(article.ArticleId, article.UserId)
+		if err != nil {
+			return nil, nil, err
+		}
+		rABrief = append(rABrief, ArticleBrief)
+	}
+	return
+}
+
+func GetCollectionList(uid uint64) (rArticles []*models.Article, rABrief []*models.ArticleBrief, err error) {
+	var rCollectionList []*models.ArticleCollection
+	err = global.Db.Model(&rCollectionList).Where("user_id =?", uid).Find(&rCollectionList).Error
+	if err != nil {
+		return nil, nil, errors.New("获取收藏列表失败")
+	}
+	for _, collection := range rCollectionList {
+		var article *models.Article
+		err = global.Db.Model(&article).Where("article_id =?", collection.ArticleId).First(&article).Error
+		if err != nil {
+			return nil, nil, errors.New("获取文章失败")
+		}
+		rArticles = append(rArticles, article)
+		ArticleBrief, err := ArticleGetBrief(article.ArticleId, article.UserId)
+		if err != nil {
+			return nil, nil, err
+		}
+		rABrief = append(rABrief, ArticleBrief)
+	}
+	return
+}

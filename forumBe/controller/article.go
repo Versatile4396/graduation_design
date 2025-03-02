@@ -263,3 +263,51 @@ func ArticleSearchLikeController(c *gin.Context) {
 	}
 	ResponseSuccess(c, resData)
 }
+
+func GetLikeListController(c *gin.Context) {
+	// 获取点赞列表
+	uid, _ := strconv.ParseUint(c.Param("uid"), 10, 64)
+	// 业务处理-获取点赞列表
+	rArticles, rArticleBriefs, err := logic.GetLikeList(uid)
+	if err != nil {
+		zap.L().Error("logic.GetLikeList failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	type ArticleListResponse struct {
+		Article      *models.Article      `json:"articles"`
+		ArticleBrief *models.ArticleBrief `json:"article_briefs"`
+	}
+	var resData []*ArticleListResponse
+	for i := 0; i < len(rArticles); i++ {
+		resData = append(resData, &ArticleListResponse{
+			Article:      rArticles[i],
+			ArticleBrief: rArticleBriefs[i],
+		})
+	}
+	ResponseSuccess(c, resData)
+}
+
+func GetCollectionListController(c *gin.Context) {
+	// 获取收藏列表
+	uid, _ := strconv.ParseUint(c.Param("uid"), 10, 64)
+	// 业务处理-获取收藏列表
+	rArticles, rArticleBriefs, err := logic.GetCollectionList(uid)
+	if err != nil {
+		zap.L().Error("logic.GetCollectionList failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	type ArticleListResponse struct {
+		Article      *models.Article      `json:"articles"`
+		ArticleBrief *models.ArticleBrief `json:"article_briefs"`
+	}
+	var resData []*ArticleListResponse
+	for i := 0; i < len(rArticles); i++ {
+		resData = append(resData, &ArticleListResponse{
+			Article:      rArticles[i],
+			ArticleBrief: rArticleBriefs[i],
+		})
+	}
+	ResponseSuccess(c, resData)
+}
