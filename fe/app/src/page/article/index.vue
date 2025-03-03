@@ -29,7 +29,13 @@
                     <span class="other-info"></span>
                 </div>
             </div>
-            <div class="content">
+            <div class="editor-content">
+                <div class="gpt-wrapper">
+                    <div class="gpt-title">智能总结</div>
+                    <div class="gpt-summarize">
+                        {{ aInfo.GptSummarize }}
+                    </div>
+                </div>
                 <Editor v-model="aInfo.content" :defaultConfig="editorConfig" :mode="mode" />
             </div>
         </div>
@@ -340,12 +346,11 @@ onMounted(async () => {
     .author-info-box {
         background-color: #fff;
         position: fixed;
-        margin-right: -7rem;
+        margin-left: 53rem;
         top: 76px;
         width: 300px;
         padding: 16px;
         z-index: 2;
-        right: 12%;
         border-radius: 4px;
 
         .author-title {
@@ -402,6 +407,45 @@ onMounted(async () => {
         padding: 2.667rem 2.667rem 0 2.667rem;
         background-color: #fff;
         border-radius: 4px;
+
+        .editor-content {
+            .gpt-wrapper {
+                background-color: #f7f8fa;
+                padding: 12px;
+                border-radius: 12px;
+
+                .gpt-title {
+                    padding: 8px;
+                    line-height: 24px;
+                    border-bottom: 1px solid #e5e6eb;
+                    color: #b0b0b0;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: 16px;
+                    background: radial-gradient(495.98% 195.09% at 144.79%, at 10.71%, #ff8a01 0, #b051b9 22.37%, #672bff 45.54%, #06f 99.99%);
+                    background: radial-gradient(495.98% 195.09% at 144.79% 10.71%, #ff8a01 0, #b051b9 22.37%, #672bff 45.54%, #06f 99.99%);
+                    background-clip: text;
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    margin-left: 4px;
+                    margin-right: 8px;
+                }
+
+                .gpt-summarize {
+                    padding: 8px 0;
+                    text-indent: 2em;
+                    font-family: "PingFang SC";
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 24px;
+                    text-align: left;
+                    color: #252933;
+                    max-height: 200px;
+                }
+            }
+
+        }
 
         .article-title {
             margin: 0 0 1.3rem;

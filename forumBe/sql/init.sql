@@ -73,6 +73,7 @@ CREATE TABLE
         topic_id INT NOT NULL COMMENT '话题id',
         abstract VARCHAR(200) NOT NULL COMMENT '文章摘要',
         cover VARCHAR(200) NOT NULL COMMENT '文章封面',
+        gpt_summarize VARCHAR(200) COMMENT 'gpt生成的文章摘要',
         view_count INT NOT NULL DEFAULT 0,
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',

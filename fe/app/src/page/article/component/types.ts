@@ -11,6 +11,7 @@ export interface IArticle {
   create_at: string;
   update_at: string;
   view_count: number;
+  GptSummarize:string;
 }
 export interface IAuthor {
   avatar: string;

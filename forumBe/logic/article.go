@@ -49,7 +49,7 @@ func ArticleSummary(a *models.Article) {
 			{
 				Role: model.ChatMessageRoleUser,
 				Content: &model.ChatCompletionMessageContent{
-					StringValue: volcengine.String("请总结一下下面这段内容：" + a.Content),
+					StringValue: volcengine.String("请总结一下下面这段内容，150字左右：" + a.Content),
 				},
 			},
 		},
