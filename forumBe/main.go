@@ -7,6 +7,7 @@ import (
 	mysql "forum/dao"
 	_ "forum/docs"
 	"forum/logger"
+	"forum/pkg/gpt"
 	"forum/pkg/snowflake"
 	"forum/router"
 
@@ -30,7 +31,8 @@ func main() {
 		fmt.Printf("Db init failed, err:%v\n", err)
 		return
 	}
-
+	// 大模型初始化
+	gpt.Init()
 	// 雪花算法 生成分布式ID
 	if err := snowflake.Init(1); err != nil {
 		logger.Error("init snowflake failed err:\n")
