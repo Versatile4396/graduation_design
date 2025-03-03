@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"forum/global"
@@ -8,6 +9,8 @@ import (
 	"forum/pkg/snowflake"
 	"time"
 
+	"github.com/volcengine/volcengine-go-sdk/service/arkruntime/model"
+	"github.com/volcengine/volcengine-go-sdk/volcengine"
 	"gorm.io/gorm"
 )
 
@@ -26,7 +29,42 @@ func ArticleCreate(a *models.Article) (rArticle *models.Article, err error) {
 	if err != nil {
 		return nil, errors.New("创建文章失败")
 	}
+	// 创建协程 总结获取文章摘要
+	go ArticleSummary(a)
 	return a, nil
+}
+
+func ArticleSummary(a *models.Article) {
+	ctx := context.Background()
+	// 调用大模型 生成文章摘要
+	req := model.CreateChatCompletionRequest{
+		Model: "doubao-1-5-vision-pro-32k-250115",
+		Messages: []*model.ChatCompletionMessage{
+			{
+				Role: model.ChatMessageRoleSystem,
+				Content: &model.ChatCompletionMessageContent{
+					StringValue: volcengine.String("你是豆包，是由字节跳动开发的 AI 人工智能助手"),
+				},
+			},
+			{
+				Role: model.ChatMessageRoleUser,
+				Content: &model.ChatCompletionMessageContent{
+					StringValue: volcengine.String("请总结一下下面这段内容：" + a.Content),
+				},
+			},
+		},
+	}
+	resp, err := global.Gpt.CreateChatCompletion(ctx, req)
+	if err != nil {
+		fmt.Printf("standard chat error: %v\n", err)
+		return
+	}
+	// 插入文章摘要
+	err = global.Db.Model(&models.Article{}).Where("article_id =?", a.ArticleId).Update("gpt_summarize", *resp.Choices[0].Message.Content.StringValue).Error
+	if err != nil {
+		fmt.Printf("standard chat error: %v\n", err)
+		return
+	}
 }
 
 func ArticleUpdate(a *models.Article) (rArticle *models.Article, err error) {
