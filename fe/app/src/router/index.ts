@@ -14,6 +14,7 @@ export enum routerName {
   CREATE_ARTICLE = "editor",
   Article = "article",
   SEARCH = "search",
+  CHAT = "chat",
   TEST = "test",
 }
 
@@ -89,6 +90,14 @@ export const routes: RouteRecordRaw[] = [
       title: "文章详情",
     },
     component: () => import("@/page/search/index.vue"),
+  },
+  {
+    path: "/chat",
+    name: routerName.CHAT,
+    meta: {
+      title: "私聊界面",
+    },
+    component: () => import("@/page/chat/index.vue"),
   },
   {
     path: "/test",

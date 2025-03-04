@@ -76,7 +76,7 @@
                 </div>
             </div>
             <div class="chat-author">
-                <el-button type="primary">
+                <el-button type="primary" @click="goToChat">
                     <template #default><span class="chat-btn">私聊</span></template>
                 </el-button>
             </div>
@@ -95,6 +95,7 @@ import { userInfoStore } from "@/store/user";
 import { type IArticle, type IAuthor, type IComment, type IArticleBrief } from './component/types';
 import CommentInput from "./component/comment-input.vue"
 import { scrollToAnchor } from "@/utils/utils";
+import router, { routerName } from "@/router";
 
 const { userInfo } = userInfoStore();
 
@@ -176,6 +177,11 @@ const commentListCmp = computed(() => {
     })
     return result
 })
+// 跳转私聊界面
+const goToChat = () => {
+    const { uid } = getUrlQuery();
+    router.push({ name: routerName.CHAT, query: { uid } })
+}
 
 const articleLike = async () => {
     const { uid, aid } = getUrlQuery();
