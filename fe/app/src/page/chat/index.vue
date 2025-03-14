@@ -7,12 +7,42 @@
         <div class="chat-container">
             <div class="chat-header"></div>
             <div class="chat-content"></div>
-            <div class="chat-send-wrapper"></div>
+            <div class="chat-send-wrapper">
+                <inputChat @send-msg="handleSendMsg"></inputChat>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang='ts' setup>
+import { getUrlQuery } from '@/utils/common';
+import { objectEntries } from '@vueuse/core';
+import { onBeforeMount } from 'vue';
+import inputChat from './component/input-chat.vue';
+
+// 获取聊天列表用户信息？
+const { uid, toUid } = getUrlQuery();
+const query = {
+    uid,
+    toUid
+}
+//@ts-ignore
+const queryStr = objectEntries(query).map(([key, value]) => encodeURIComponent(key) + '=' + encodeURIComponent(value)).join('&')
+// 建立ws链接 发起聊天
+const socket = new WebSocket('ws://localhost:5555/api/chat/ws?' + queryStr);
+
+const handleSendMsg = (msg: string) => {
+    // 判断socket是否在链接中
+    if (socket.readyState === WebSocket.OPEN) {
+        const formatMsg = {
+            type: 1,
+            content: msg,
+        }
+        socket.send(JSON.stringify(formatMsg));
+    }
+}
+
+
 </script>
 <style scoped lang="scss">
 .chat-container-box {

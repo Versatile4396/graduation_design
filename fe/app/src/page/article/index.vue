@@ -96,6 +96,7 @@ import { type IArticle, type IAuthor, type IComment, type IArticleBrief } from '
 import CommentInput from "./component/comment-input.vue"
 import { scrollToAnchor } from "@/utils/utils";
 import router, { routerName } from "@/router";
+import { Message } from "@/utils/message";
 
 const { userInfo } = userInfoStore();
 
@@ -180,7 +181,16 @@ const commentListCmp = computed(() => {
 // 跳转私聊界面
 const goToChat = () => {
     const { uid } = getUrlQuery();
-    router.push({ name: routerName.CHAT, query: { uid } })
+    const toUid = authorInfo.value?.user_id;
+    if (!uid) {
+        Message.info('请先登录')
+        return;
+    }
+    if (String(uid) === String(toUid)) {
+        Message.info('不能和自己私聊')
+        return;
+    }
+    router.push({ name: routerName.CHAT, query: { uid, toUid } })
 }
 
 const articleLike = async () => {
