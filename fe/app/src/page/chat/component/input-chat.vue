@@ -22,11 +22,12 @@
                         </svg>
                     </div>
                 </template>
-                <Emoji />
+                <Emoji @selectEmoji="handleSelectEmoji"></Emoji>
             </el-popover>
         </div>
         <!-- 自定义输入框 -->
-        <textarea ref="messageInput" id="message-input" v-model="msgValue" placeholder="请输入聊天内容" />
+        <div id="message-input" contenteditable="true" spellcheck="false" autofocus ref="messageInputDom"
+            class="message-input" placeholder="请输入聊天内容" />
         <div class="msg-footer">按 Enter 发送消息</div>
     </div>
 </template>
@@ -37,25 +38,42 @@ import { onMounted, ref } from 'vue';
 
 const emits = defineEmits(['sendMsg'])
 
-const msgValue = ref('');
-const messageInput = ref<HTMLElement>()
+const messageInputDom = ref<HTMLInputElement>()
+
+const handleSendMessage = () => {
+    const message = messageInputDom.value?.innerHTML || ''
+    if (message.trim() !== '') {
+        console.log(message, "message")
+        emits('sendMsg', message);
+        if (document.activeElement != messageInputDom.value) {
+            messageInputDom.value?.focus()
+        }
+        messageInputDom.value!.innerHTML = ''
+    }
+}
+const handleSelectEmoji = (index: number) => {
+    if (document.activeElement != messageInputDom.value) {
+        messageInputDom.value?.focus()
+        // 将光标移动到输入框的末尾
+        const range = document.createRange();
+        range.selectNodeContents(messageInputDom.value!);
+        range.collapse(false);
+        const selection = window.getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+    }
+    // 构建emoji的HTML字符串
+    const emojiImg = `<img src="/src/assets/gif/${index}.gif" width="25" height="25" style="vertical-align: middle; margin:2px;">`;
+    document.execCommand('insertHTML', false, emojiImg)
+}
 onMounted(() => {
-    messageInput.value?.addEventListener('keydown', (event) => {
+    messageInputDom.value?.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             handleSendMessage();
         }
     });
 });
-
-const handleSendMessage = () => {
-    const message = msgValue.value;
-    if (message.trim() !== '') {
-        emits('sendMsg', message);
-        msgValue.value = '';
-    }
-}
-
 </script>
 
 <style scoped lang="scss">
@@ -78,8 +96,10 @@ const handleSendMessage = () => {
         }
     }
 
-    #message-input {
+    .message-input {
+        padding-top: 8px;
         font-size: 14px;
+        overflow-y: auto;
         color: #262932;
         flex: 1;
         width: 100%;

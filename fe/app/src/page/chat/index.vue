@@ -17,7 +17,6 @@
 <script lang='ts' setup>
 import { getUrlQuery } from '@/utils/common';
 import { objectEntries } from '@vueuse/core';
-import { onBeforeMount } from 'vue';
 import inputChat from './component/input-chat.vue';
 
 // 获取聊天列表用户信息？
