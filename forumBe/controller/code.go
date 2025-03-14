@@ -16,6 +16,8 @@ const (
 	ErrorVoteTimeExpire   MyCode = 1010
 	CodeInvalidExt        MyCode = 1011
 	CodeInvalidSize       MyCode = 1012
+	CodeLimiteTimes       MyCode = 1013
+	CodeConnectionSuccess MyCode = 1014
 )
 
 var msgFlags = map[MyCode]string{

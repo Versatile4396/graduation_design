@@ -69,5 +69,9 @@ func SetupRouter() *gin.Engine {
 		comment.POST("/list", controller.CommentGetListController)
 		comment.DELETE("/delete/:cid", controller.CommentDeleteController)
 	}
+	chat := router.Group("/api/chat")
+	{
+		chat.GET("/ws", controller.WSHandler)
+	}
 	return router
 }

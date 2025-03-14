@@ -7,7 +7,9 @@ import (
 	mysql "forum/dao"
 	_ "forum/docs"
 	"forum/logger"
+	"forum/pkg/cache"
 	"forum/pkg/gpt"
+	"forum/pkg/mongodb"
 	"forum/pkg/snowflake"
 	"forum/router"
 
@@ -31,6 +33,12 @@ func main() {
 		fmt.Printf("Db init failed, err:%v\n", err)
 		return
 	}
+	// mongo初始化
+	mongodb.Init()
+	// redis 初始化
+	cache.Init()
+	//  websocket 管道监听
+	go controller.Manager.Start()
 	// 大模型初始化
 	gpt.Init()
 	// 雪花算法 生成分布式ID
