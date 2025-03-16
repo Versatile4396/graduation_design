@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="editor-content">
-                <div class="gpt-wrapper">
+                <div class="gpt-wrapper" v-if="aInfo?.GptSummarize">
                     <div class="gpt-title">智能总结</div>
                     <div class="gpt-summarize">
                         {{ aInfo.GptSummarize }}
