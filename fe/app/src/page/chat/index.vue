@@ -30,6 +30,11 @@ const queryStr = objectEntries(query).map(([key, value]) => encodeURIComponent(k
 // 建立ws链接 发起聊天
 const socket = new WebSocket('ws://localhost:5555/api/chat/ws?' + queryStr);
 
+// 连接成功 获取历史消息
+socket.onopen = ()=>{
+    getHistoryMsg();
+}
+
 const handleSendMsg = (msg: string) => {
     // 判断socket是否在链接中
     if (socket.readyState === WebSocket.OPEN) {
@@ -40,6 +45,18 @@ const handleSendMsg = (msg: string) => {
         socket.send(JSON.stringify(formatMsg));
     }
 }
+
+const getHistoryMsg =  ()=>{
+    // 获取历史消息
+    if (socket.readyState === WebSocket.OPEN) {
+        const formatMsg = {
+            type: 2,
+            content: '',
+        }
+        socket.send(JSON.stringify(formatMsg));
+    }
+}
+
 
 
 </script>

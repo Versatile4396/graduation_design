@@ -122,6 +122,7 @@ func FirsFindtMsg(database string, sendId string, id string) (results []models.R
 
 func InsertMsg(database string, id string, content string, read uint, expire int64) (err error) {
 	collection := mongodb.MongoDBClient.Database(database).Collection(id)
+	fmt.Println("id", id)
 	comment := models.Trainer{
 		Content:   content,
 		StartTime: time.Now().Unix(),

@@ -19,7 +19,7 @@ var (
 	DbPassWord    string
 	DbName        string
 
-	MongoDBName string = ""
+	MongoDBName string = "chat_db"
 	MongoDBAddr string = ""
 	MongoDBPwd  string = ""
 	MongoDBPort string = "27017"
