@@ -74,9 +74,9 @@ func FirsFindtMsg(database string, sendId string, id string) (results []models.R
 	var resultsMe []models.Trainer
 	var resultsYou []models.Trainer
 	sendIdCollection := mongodb.MongoDBClient.Database(database).Collection(sendId)
-	idCollection := mongodb.MongoDBClient.Database(database).Collection(sendId)
+	idCollection := mongodb.MongoDBClient.Database(database).Collection(id)
 	filter := bson.M{"read": bson.M{
-		"&all": []uint{0},
+		"$all": []uint{0},
 	}}
 	sendIdCursor, err := sendIdCollection.Find(context.TODO(), filter, options.Find().SetSort(bson.D{{
 		"startTime", 1}}), options.Find().SetLimit(1))
@@ -104,7 +104,7 @@ func FirsFindtMsg(database string, sendId string, id string) (results []models.R
 	}
 	overTimeFilter := bson.D{
 		{"$and", bson.A{
-			bson.D{{"endTime", bson.M{"&lt": time.Now().Unix()}}},
+			bson.D{{"endTime", bson.M{"$lt": time.Now().Unix()}}},
 			bson.D{{"read", bson.M{"$eq": 1}}},
 		}},
 	}

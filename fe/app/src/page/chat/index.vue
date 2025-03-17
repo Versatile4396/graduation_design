@@ -18,6 +18,7 @@
 import { getUrlQuery } from '@/utils/common';
 import { objectEntries } from '@vueuse/core';
 import inputChat from './component/input-chat.vue';
+import { onUnmounted } from 'vue';
 
 // 获取聊天列表用户信息？
 const { uid, toUid } = getUrlQuery();
@@ -31,7 +32,7 @@ const queryStr = objectEntries(query).map(([key, value]) => encodeURIComponent(k
 const socket = new WebSocket('ws://localhost:5555/api/chat/ws?' + queryStr);
 
 // 连接成功 获取历史消息
-socket.onopen = ()=>{
+socket.onopen = () => {
     getHistoryMsg();
 }
 
@@ -46,17 +47,20 @@ const handleSendMsg = (msg: string) => {
     }
 }
 
-const getHistoryMsg =  ()=>{
+const getHistoryMsg = () => {
     // 获取历史消息
     if (socket.readyState === WebSocket.OPEN) {
         const formatMsg = {
-            type: 2,
+            type: 3,
             content: '',
         }
         socket.send(JSON.stringify(formatMsg));
     }
 }
 
+onUnmounted(() => {
+    socket.close();
+})
 
 
 </script>
