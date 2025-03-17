@@ -34,5 +34,10 @@ func GetID() (id uint64, err error) {
 		err = fmt.Errorf("sony flake not inited")
 	}
 	id, err = sonyFlake.NextID()
+	id = LimitId(id, 900719925474000)
 	return
+}
+
+func LimitId(id uint64, maxId uint64) (rid uint64) {
+	return id % maxId
 }
