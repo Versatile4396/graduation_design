@@ -33,6 +33,7 @@ const socket = new WebSocket('ws://localhost:5555/api/chat/ws?' + queryStr);
 
 // 连接成功 获取历史消息
 socket.onopen = () => {
+    // 获取历史消息
     getHistoryMsg();
 }
 
@@ -47,6 +48,16 @@ const handleSendMsg = (msg: string) => {
     }
 }
 
+const getHistoryUnreadMsg = () => {
+    // 获取历史未读消息
+    if (socket.readyState === WebSocket.OPEN) {
+        const formatMsg = {
+            type: 3,
+            content: '',
+        }
+        socket.send(JSON.stringify(formatMsg));
+    }
+}
 const getHistoryMsg = () => {
     // 获取历史消息
     if (socket.readyState === WebSocket.OPEN) {
@@ -55,7 +66,7 @@ const getHistoryMsg = () => {
             content: '',
         }
         socket.send(JSON.stringify(formatMsg));
-    }
+    } 
 }
 
 onUnmounted(() => {

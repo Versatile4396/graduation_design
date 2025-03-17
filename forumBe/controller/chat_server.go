@@ -34,7 +34,6 @@ func FindMany(database string, sendId string, id string, time int64, pageSize in
 	err = sendIdTimeCursor.All(context.TODO(), &resultsYou) // sendId 对面发过来的
 	err = idTimeCursor.All(context.TODO(), &resultsMe)      // Id 发给对面的
 	results, _ = AppendAndSort(resultsMe, resultsYou)
-
 	return
 }
 func AppendAndSort(resultsMe, resultsYou []models.Trainer) (results []models.Result, err error) {
