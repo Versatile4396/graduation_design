@@ -25,15 +25,17 @@ import { nextTick, onUnmounted, ref } from 'vue'
 import Ajax from '@/ajax'
 import type { ChatInstance, ChatMessage } from './type'
 import { MsgFrom } from './type'
+import { userInfoStore } from '@/store/user'
 // 获取聊天列表用户信息？
 const { uid, toUid } = getUrlQuery()
 const query = {
   uid,
   toUid
 }
+const { userInfo } = userInfoStore()
 const chatWrapperDom = ref<HTMLElement>()
 const avatarYou = ref('http://127.0.0.1:5555/images/1.jpg')
-const avatarMe = ref('http://127.0.0.1:5555/images/WechatIMG.jpg')
+const avatarMe = ref(userInfo.avatar)
 const queryStr = objectEntries(query)
   //@ts-ignore
   .map(([key, value]) => encodeURIComponent(key) + '=' + encodeURIComponent(value))
@@ -47,7 +49,7 @@ const chatInfo = ref<ChatInstance[]>([])
 // 连接成功 获取历史消息
 socket.onopen = () => {
   // 获取历史消息
-  getHistoryMsg()
+  initChat()
 }
 socket.onmessage = (event) => {
   if (event.data) {
@@ -57,7 +59,7 @@ socket.onmessage = (event) => {
       chatInfo.value.push(msg)
       nextTick(() => {
         chatWrapperDom.value?.scrollTo({
-          top: chatWrapperDom.value?.scrollHeight,
+          top: chatWrapperDom.value?.scrollHeight
         })
       })
     } else if (msg.code === 50001) {
@@ -91,7 +93,7 @@ const handleSendMsg = (msg: string) => {
   }
 }
 
-const getHistoryMsg = () => {
+const initChat = () => {
   socket.send(
     JSON.stringify({
       type: 2
