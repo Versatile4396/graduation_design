@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"forum/logic"
 	"forum/pkg/cache"
 	"forum/pkg/e"
 	"forum/pkg/mongodb"
@@ -203,4 +204,15 @@ func (c *Client) Write() {
 
 func createId(uid, toUid string) string {
 	return uid + "->" + toUid
+}
+
+func ChatHistoryController(c *gin.Context) {
+	// 获取历史消息 聊天列表
+	postId, _ := strconv.ParseUint(c.Query("uid"), 10, 64)
+	if postId == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing uid parameter"})
+		return
+	}
+	results, _ := logic.GetHistoryChatMsg(postId)
+	ResponseSuccess(c, results)
 }

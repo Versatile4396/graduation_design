@@ -72,6 +72,7 @@ func SetupRouter() *gin.Engine {
 	chat := router.Group("/api/chat")
 	{
 		chat.GET("/ws", controller.WSHandler)
+		chat.GET("/history", controller.ChatHistoryController)
 	}
 	return router
 }
