@@ -25,9 +25,10 @@ type SendMsg struct {
 
 // 回复的消息
 type ReplyMsg struct {
-	From    string `json:"from"`
-	Code    int    `json:"code"`
-	Content string `json:"content"`
+	From    string      `json:"from"`
+	Code    int         `json:"code"`
+	Content interface{} `json:"content"`
+	Time    int64       `json:"time"`
 }
 
 // 用户类
@@ -143,9 +144,9 @@ func (c *Client) Read() {
 			if err != nil {
 				timeT = 999999999
 			}
-			results, _ := FindMany(mongodb.MongoDBName, c.SendID, c.ID, int64(timeT), 10)
-			if len(results) > 10 {
-				results = results[:10]
+			results, _ := FindMany(mongodb.MongoDBName, c.SendID, c.ID, int64(timeT), 20)
+			if len(results) > 20 {
+				results = results[:20]
 			} else if len(results) == 0 {
 				replyMsg := ReplyMsg{
 					Code:    e.WebsocketEnd,
@@ -157,8 +158,10 @@ func (c *Client) Read() {
 			}
 			for _, result := range results {
 				replyMsg := ReplyMsg{
+					Code:    2,
 					From:    result.From,
-					Content: fmt.Sprintf("%s", result.Msg),
+					Content: result.Content,
+					Time:    result.StartTime,
 				}
 				msg, _ := json.Marshal(replyMsg)
 				_ = c.Socket.WriteMessage(websocket.TextMessage, msg)
@@ -195,6 +198,8 @@ func (c *Client) Write() {
 			replyMsg := ReplyMsg{
 				Code:    e.WebsocketSuccessMessage,
 				Content: fmt.Sprintf("%s", string(message)),
+				Time:    time.Now().Unix(),
+				From:    "you",
 			}
 			msg, _ := json.Marshal(replyMsg)
 			_ = c.Socket.WriteMessage(websocket.TextMessage, msg)

@@ -6,6 +6,7 @@ import (
 	"forum/pkg/e"
 	"forum/pkg/mongodb"
 	"log"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -58,6 +59,7 @@ func (manager *ClientManager) Start() {
 				replyMsg := &ReplyMsg{
 					Code:    e.WebsocketOnlineReply,
 					Content: "对方在线应答",
+					Time:    time.Now().Unix(),
 				}
 				msg, err := json.Marshal(replyMsg)
 				_ = broadcast.Client.Socket.WriteMessage(websocket.TextMessage, msg)
@@ -70,6 +72,7 @@ func (manager *ClientManager) Start() {
 				replyMsg := ReplyMsg{
 					Code:    e.WebsocketOfflineReply,
 					Content: "对方不在线应答",
+					Time:    time.Now().Unix(),
 				}
 				msg, err := json.Marshal(replyMsg)
 				_ = broadcast.Client.Socket.WriteMessage(websocket.TextMessage, msg)

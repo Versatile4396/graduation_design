@@ -57,6 +57,7 @@ func AppendAndSort(resultsMe, resultsYou []models.Trainer) (results []models.Res
 		result := models.Result{
 			StartTime: r.StartTime,
 			Msg:       fmt.Sprintf("%v", sendSort),
+			Content:   r.Content,
 			From:      "me",
 		}
 		results = append(results, result)
@@ -70,6 +71,7 @@ func AppendAndSort(resultsMe, resultsYou []models.Trainer) (results []models.Res
 		result := models.Result{
 			StartTime: r.StartTime,
 			Msg:       fmt.Sprintf("%v", sendSort),
+			Content:   r.Content,
 			From:      "you",
 		}
 		results = append(results, result)
