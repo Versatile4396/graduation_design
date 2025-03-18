@@ -218,6 +218,7 @@ func ChatHistoryController(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Missing uid parameter"})
 		return
 	}
-	results, _ := logic.GetHistoryChatMsg(postId)
-	ResponseSuccess(c, results)
+	resTmp, _ := logic.GetHistoryChatMsg(postId)
+	result, _ := logic.GetUserInfoChatMsg(resTmp)
+	ResponseSuccess(c, result)
 }

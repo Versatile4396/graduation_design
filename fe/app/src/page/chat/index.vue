@@ -46,6 +46,7 @@ const socket = new WebSocket('ws://localhost:5555/api/chat/ws?' + queryStr)
 const chatMsg = ref<Record<string, ChatMessage[]>>({})
 
 const chatInfo = ref<ChatInstance[]>([])
+const chatObjects = ref();
 // 连接成功 获取历史消息
 socket.onopen = () => {
   // 获取历史消息
@@ -59,7 +60,8 @@ socket.onmessage = (event) => {
       chatInfo.value.push(msg)
       nextTick(() => {
         chatWrapperDom.value?.scrollTo({
-          top: chatWrapperDom.value?.scrollHeight
+          top: chatWrapperDom.value?.scrollHeight,
+          behavior: 'smooth'
         })
       })
     } else if (msg.code === 50001) {
@@ -93,21 +95,21 @@ const handleSendMsg = (msg: string) => {
   }
 }
 
-const initChat = () => {
+const initChat = async () => {
   socket.send(
     JSON.stringify({
       type: 2
     })
   )
+  await getChatHistory()
 }
 
 const getChatHistory = async () => {
   // 获取历史消息
   const { data } = await Ajax.get(`/chat/history?uid=${uid}`)
   chatMsg.value = data
-  objectEntries(chatMsg.value).forEach(([key, value]) => {
-    const [send, rec] = key.split('->')
-  })
+  console.log(data,"asdasdhkghj")
+  chatObjects.value;
 }
 
 onUnmounted(() => {
