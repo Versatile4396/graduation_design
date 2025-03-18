@@ -27,13 +27,8 @@ require (
 )
 
 require (
-	dario.cat/mergo v1.0.1 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
-	github.com/air-verse/air v1.61.7 // indirect
-	github.com/bep/godartsass v1.2.0 // indirect
-	github.com/bep/godartsass/v2 v2.4.0 // indirect
-	github.com/bep/golibsass v1.2.0 // indirect
 	github.com/bytedance/sonic v1.12.7 // indirect
 	github.com/bytedance/sonic/loader v0.2.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
@@ -46,7 +41,6 @@ require (
 	github.com/go-openapi/spec v0.21.0 // indirect
 	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
-	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/goccy/go-json v0.10.4 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -61,7 +55,6 @@ require (
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/magiconair/properties v1.8.9 // indirect
 	github.com/mailru/easyjson v0.9.0 // indirect
-	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/mapstructure v1.5.1-0.20231216201459-8508981c8b6c // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
@@ -76,7 +69,6 @@ require (
 	github.com/spf13/cast v1.7.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
-	github.com/tdewolff/parse/v2 v2.7.20 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	github.com/volcengine/volc-sdk-golang v1.0.23 // indirect

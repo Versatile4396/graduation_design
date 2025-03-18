@@ -26,13 +26,24 @@ func FindMany(database string, sendId string, id string, time int64, pageSize in
 	var resultsYou []models.Trainer
 	sendIdCollection := mongodb.MongoDBClient.Database(database).Collection(sendId)
 	idCollection := mongodb.MongoDBClient.Database(database).Collection(id)
+	fmt.Println(sendId, id, pageSize, "pageSize")
 	// 如果不知道该使用什么context，可以通过context.TODO() 产生context
-	sendIdTimeCursor, err := sendIdCollection.Find(context.TODO(),
-		options.Find().SetSort(bson.D{{"startTime", -1}}), options.Find().SetLimit(int64(pageSize)))
-	idTimeCursor, err := idCollection.Find(context.TODO(),
-		options.Find().SetSort(bson.D{{"startTime", -1}}), options.Find().SetLimit(int64(pageSize)))
+	sendIdTimeCursor, err := sendIdCollection.Find(context.TODO(), bson.D{{}})
+	if err != nil {
+		panic(err)
+	}
+	idTimeCursor, err := idCollection.Find(context.TODO(), bson.D{{}})
+	if err != nil {
+		panic(err)
+	}
 	err = sendIdTimeCursor.All(context.TODO(), &resultsYou) // sendId 对面发过来的
-	err = idTimeCursor.All(context.TODO(), &resultsMe)      // Id 发给对面的
+	if err != nil {
+		panic(err)
+	}
+	err = idTimeCursor.All(context.TODO(), &resultsMe) // Id 发给对面的
+	if err != nil {
+		panic(err)
+	}
 	results, _ = AppendAndSort(resultsMe, resultsYou)
 	return
 }

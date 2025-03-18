@@ -62,7 +62,7 @@ const getHistoryMsg = () => {
     // 获取历史消息
     if (socket.readyState === WebSocket.OPEN) {
         const formatMsg = {
-            type: 3,
+            type: 2,
             content: '',
         }
         socket.send(JSON.stringify(formatMsg));
