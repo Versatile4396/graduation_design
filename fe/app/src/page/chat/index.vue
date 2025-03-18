@@ -15,63 +15,60 @@
 </template>
 
 <script lang="ts" setup>
-import { getUrlQuery } from "@/utils/common";
-import { objectEntries } from "@vueuse/core";
-import inputChat from "./component/input-chat.vue";
-import { onUnmounted } from "vue";
-import Ajax from "@/ajax";
+import { getUrlQuery } from '@/utils/common'
+import { objectEntries } from '@vueuse/core'
+import inputChat from './component/input-chat.vue'
+import { onUnmounted } from 'vue'
+import Ajax from '@/ajax'
 
 // 获取聊天列表用户信息？
-const { uid, toUid } = getUrlQuery();
+const { uid, toUid } = getUrlQuery()
 const query = {
   uid,
-  toUid,
-};
+  toUid
+}
 //@ts-ignore
 const queryStr = objectEntries(query)
-  .map(
-    ([key, value]) => encodeURIComponent(key) + "=" + encodeURIComponent(value)
-  )
-  .join("&");
+  .map(([key, value]) => encodeURIComponent(key) + '=' + encodeURIComponent(value))
+  .join('&')
 // 建立ws链接 发起聊天
-const socket = new WebSocket("ws://localhost:5555/api/chat/ws?" + queryStr);
+const socket = new WebSocket('ws://localhost:5555/api/chat/ws?' + queryStr)
 
 // 连接成功 获取历史消息
 socket.onopen = () => {
   // 获取历史消息
-  getHistoryMsg();
-};
+  getHistoryMsg()
+}
 
 const handleSendMsg = (msg: string) => {
   // 判断socket是否在链接中
   if (socket.readyState === WebSocket.OPEN) {
     const formatMsg = {
       type: 1,
-      content: msg,
-    };
-    socket.send(JSON.stringify(formatMsg));
+      content: msg
+    }
+    socket.send(JSON.stringify(formatMsg))
   }
-};
+}
 
 const getHistoryUnreadMsg = () => {
   // 获取历史未读消息
   if (socket.readyState === WebSocket.OPEN) {
     const formatMsg = {
       type: 3,
-      content: "",
-    };
-    socket.send(JSON.stringify(formatMsg));
+      content: ''
+    }
+    socket.send(JSON.stringify(formatMsg))
   }
-};
+}
 const getHistoryMsg = () => {
   // 获取历史消息
-  Ajax.get(`/chat/history?uid=${uid}`).then((res) => {
-  });
-};
+  Ajax.get(`/chat/history?uid=${uid}`).then((res) => {})
+}
 
 onUnmounted(() => {
-  socket.close();
-});
+  socket.close()
+})
 </script>
 <style scoped lang="scss">
 .chat-container-box {

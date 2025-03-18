@@ -11,9 +11,9 @@
           {
             placeholder: '请输入',
             style: {
-              width: 100,
-            },
-          },
+              width: 100
+            }
+          }
         ]"
       />
       <FormItem>×</FormItem>
@@ -27,16 +27,14 @@
           {
             placeholder: '请输入',
             style: {
-              width: 100,
-            },
-          },
+              width: 100
+            }
+          }
         ]"
       />
       <FormConsumer>
         <template #default="{ form }">
-          <FormItem>
-            = {{ `${form.values.price * form.values.count} 元` }}</FormItem
-          >
+          <FormItem> = {{ `${form.values.price * form.values.count} 元` }}</FormItem>
         </template>
       </FormConsumer>
     </Space>
@@ -44,11 +42,11 @@
 </template>
 
 <script lang="ts">
-import { createForm } from "@formily/core";
-import { InputNumber, FormItem, Space } from "@formily/element-plus";
-import { FormProvider, FormConsumer, Field } from "@formily/vue";
+import { createForm } from '@formily/core'
+import { InputNumber, FormItem, Space } from '@formily/element-plus'
+import { FormProvider, FormConsumer, Field } from '@formily/vue'
 
-const formInstance = createForm();
+const formInstance = createForm()
 
 export default {
   components: { FormProvider, FormConsumer, Field, FormItem, Space },
@@ -56,8 +54,8 @@ export default {
     return {
       formInstance,
       InputNumber,
-      FormItem,
-    };
-  },
-};
+      FormItem
+    }
+  }
+}
 </script>

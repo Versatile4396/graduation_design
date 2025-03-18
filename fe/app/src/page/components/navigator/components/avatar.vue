@@ -1,33 +1,31 @@
 <template>
-    <el-dropdown placement="top-start" trigger="click">
-        <el-avatar class="avatar" :src="userInfo.avatar" />
+  <el-dropdown placement="top-start" trigger="click">
+    <el-avatar class="avatar" :src="userInfo.avatar" />
 
-        <template #dropdown>
-            <el-dropdown-menu>
-                <el-dropdown-item @click="handlePersonal">个人中心</el-dropdown-item>
-                <el-dropdown-item @click="handleLoginOut">退出登录</el-dropdown-item>
-            </el-dropdown-menu>
-        </template>
-    </el-dropdown>
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item @click="handlePersonal">个人中心</el-dropdown-item>
+        <el-dropdown-item @click="handleLoginOut">退出登录</el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
+  </el-dropdown>
 </template>
 
-<script lang='ts' setup>
-import { userInfoStore } from '@/store/user';
-import { storeToRefs } from 'pinia';
-import router, { routerName } from "@/router";
-import { getUrlQuery } from '@/utils/common';
+<script lang="ts" setup>
+import { userInfoStore } from '@/store/user'
+import { storeToRefs } from 'pinia'
+import router, { routerName } from '@/router'
+import { getUrlQuery } from '@/utils/common'
 
-
-const { userInfo } = storeToRefs(userInfoStore());
+const { userInfo } = storeToRefs(userInfoStore())
 const handleLoginOut = () => {
-    router.push({ name: routerName.LOGIN });
-    router.replace({ query: {} });
-    userInfoStore().setUserInfo({});
-};
+  router.push({ name: routerName.LOGIN })
+  router.replace({ query: {} })
+  userInfoStore().setUserInfo({})
+}
 const handlePersonal = () => {
-    const query = getUrlQuery();
-    router.push({ name: routerName.PERSONAL, query });
-};
-
+  const query = getUrlQuery()
+  router.push({ name: routerName.PERSONAL, query })
+}
 </script>
 <style scoped lang="scss"></style>

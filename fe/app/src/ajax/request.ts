@@ -1,64 +1,64 @@
-import axios from "axios";
+import axios from 'axios'
 // import { tokenExpire } from "./helper";
-import { logB, logN } from "@/utils/log";
-import { Message } from "@/utils/message";
+import { logB, logN } from '@/utils/log'
+import { Message } from '@/utils/message'
 
 // 处理  类型“AxiosResponse<any, any>”上不存在属性“...”。ts(2339) 脑壳疼！关键一步。
-declare module "axios" {
+declare module 'axios' {
   interface AxiosResponse<T = any> {
-    code: Number;
-    data: T;
+    code: Number
+    data: T
     // 这里追加你的参数
   }
-  export function create(config?: AxiosRequestConfig): AxiosInstance;
+  export function create(config?: AxiosRequestConfig): AxiosInstance
 }
 
 var instance = axios.create({
-  baseURL: "http://localhost:5555/api",
+  baseURL: 'http://localhost:5555/api',
   timeout: 50000, //超时时间
   headers: {
-    "Content-Type": "application/json;charset=UTF-8",
-  },
-});
+    'Content-Type': 'application/json;charset=UTF-8'
+  }
+})
 
-let loading = false;
-let requestCount = 0;
+let loading = false
+let requestCount = 0
 // loading效果
 const showLoading = () => {
   if (requestCount === 0 && !loading) {
   }
-};
+}
 // 隐藏loading效果
-const hideLoading = () => {};
+const hideLoading = () => {}
 // 请求拦截器
 instance.interceptors.request.use(
   (config) => {
-    showLoading();
-    logN.success("请求URL", config.url!, "data:", config?.data);
-    const token = window.localStorage.getItem("token");
+    showLoading()
+    logN.success('请求URL', config.url!, 'data:', config?.data)
+    const token = window.localStorage.getItem('token')
     if (token) {
-      config.headers.token = token;
+      config.headers.token = token
     }
-    if (config.method === "POST") {
-      config.data = JSON.stringify(config.data);
+    if (config.method === 'POST') {
+      config.data = JSON.stringify(config.data)
     }
-    return config;
+    return config
   },
   (error) => Promise.reject(error)
-);
+)
 // 响应拦截器
 instance.interceptors.response.use(
   (response) => {
-    logB.success("响应数据：", response.data);
-    hideLoading();
+    logB.success('响应数据：', response.data)
+    hideLoading()
     if (response.data.code !== 1000) {
-      Message.err(response?.data.msg || "未知错误");
+      Message.err(response?.data.msg || '未知错误')
     } else {
-      if (response.data?.msg && response.data?.msg !== "success") {
-        Message.success(response.data.msg);
+      if (response.data?.msg && response.data?.msg !== 'success') {
+        Message.success(response.data.msg)
       }
     }
-    return response.data;
+    return response.data
   },
   (error) => {
     // 返回401 token权限没有通过
@@ -66,5 +66,5 @@ instance.interceptors.response.use(
       // tokenExpire();
     }
   }
-);
-export default instance;
+)
+export default instance

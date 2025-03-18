@@ -1,9 +1,9 @@
-import instance from "./request";
-import { ContentType } from "./type";
+import instance from './request'
+import { ContentType } from './type'
 interface IResponse {
-  code: number;
-  data: any;
-  msg: string;
+  code: number
+  data: any
+  msg: string
 }
 class AjaxClass {
   post(url: string, data?: any, contentType = ContentType.Application) {
@@ -16,45 +16,30 @@ class AjaxClass {
     // });
 
     return instance.post(url, data, {
-      headers: { "Content-Type": contentType },
-    });
+      headers: { 'Content-Type': contentType }
+    })
   }
-  get(
-    url: string,
-    data?: any,
-    config?: any,
-    contentType = ContentType.Application
-  ) {
+  get(url: string, data?: any, config?: any, contentType = ContentType.Application) {
     return instance.get(url, {
       params: data,
       ...config,
-      headers: { "Content-Type": contentType },
-    });
+      headers: { 'Content-Type': contentType }
+    })
   }
-  put(
-    url: string,
-    data: any,
-    config: any,
-    contentType = ContentType.Application
-  ) {
-    return instance.put(url, data, { ...config, contentType });
+  put(url: string, data: any, config: any, contentType = ContentType.Application) {
+    return instance.put(url, data, { ...config, contentType })
   }
-  delete(
-    url: string,
-    data: any,
-    config: any,
-    contentType = ContentType.Application
-  ) {
+  delete(url: string, data: any, config: any, contentType = ContentType.Application) {
     return instance.delete(url, {
       params: data,
       ...config,
-      headers: { "Content-Type": contentType },
-    });
+      headers: { 'Content-Type': contentType }
+    })
   }
 }
 
-const Ajax = new AjaxClass();
+const Ajax = new AjaxClass()
 export const getReponseData = function (res: IResponse) {
-  return res.msg;
-};
-export default Ajax;
+  return res.msg
+}
+export default Ajax

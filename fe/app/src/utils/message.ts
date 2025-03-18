@@ -1,32 +1,32 @@
-import { ElMessage } from "element-plus";
+import { ElMessage } from 'element-plus'
 
 class MessageClass {
   info(message: string) {
     ElMessage({
       message,
-      type: "info",
-    });
+      type: 'info'
+    })
   }
   success(message: string) {
     ElMessage({
       message,
-      type: "success",
-    });
+      type: 'success'
+    })
   }
   err(message: string) {
     ElMessage({
       message,
-      type: "error",
-    });
+      type: 'error'
+    })
   }
   warn(message: string) {
     ElMessage({
       message,
-      type: "warning",
-    });
+      type: 'warning'
+    })
   }
 }
 
-const Message = new MessageClass();
+const Message = new MessageClass()
 
-export { Message };
+export { Message }

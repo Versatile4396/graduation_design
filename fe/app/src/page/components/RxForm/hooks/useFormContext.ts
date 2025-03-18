@@ -1,12 +1,10 @@
-import { inject } from "vue";
-import { formContextKey } from "../context/formcontext";
+import { inject } from 'vue'
+import { formContextKey } from '../context/formcontext'
 
 export const useFormContext = () => {
-  const context = inject(formContextKey) as any;
+  const context = inject(formContextKey) as any
   if (!context) {
-    throw new Error(
-      "Please Call The Controller Component Component Under RxForm"
-    );
+    throw new Error('Please Call The Controller Component Component Under RxForm')
   }
-  return context;
-};
+  return context
+}

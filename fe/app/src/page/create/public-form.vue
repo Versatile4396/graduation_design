@@ -7,7 +7,7 @@
       <RxForm :schema="publicSchema" :initial-values="{ category_id: 1 }" ref="form">
         <template #submit_wrapper>
           <div class="submit-wrapper">
-            <el-button style="width: 88px;" @click="handleCancel">取消</el-button>
+            <el-button style="width: 88px" @click="handleCancel">取消</el-button>
             <el-button type="primary" @click="handleSubmit">确定发布</el-button>
           </div>
         </template>
@@ -17,31 +17,25 @@
 </template>
 
 <script lang="ts" setup>
-import RxForm from "@/page/components/RxForm/index.vue";
-import { publicSchema } from "@/page/components/RxForm/schema/public";
-import type { Form } from "@formily/core";
-import { ref } from "vue";
+import RxForm from '@/page/components/RxForm/index.vue'
+import { publicSchema } from '@/page/components/RxForm/schema/public'
+import type { Form } from '@formily/core'
+import { ref } from 'vue'
 
-const form = ref<Form>();
+const form = ref<Form>()
 
-const emits = defineEmits([
-  "submit",
-  "cancel",
-])
-
+const emits = defineEmits(['submit', 'cancel'])
 
 const handleSubmit = async () => {
   try {
-    await form.value?.validate();
-    emits("submit", form.value?.values);
-  } catch (error) {
-  }
-};
+    await form.value?.validate()
+    emits('submit', form.value?.values)
+  } catch (error) {}
+}
 
 const handleCancel = () => {
-  emits("cancel");
-};
-
+  emits('cancel')
+}
 </script>
 <style lang="scss" scoped>
 .public-container {

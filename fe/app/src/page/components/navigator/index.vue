@@ -1,9 +1,11 @@
 <template>
   <div class="main-header-box">
-    <div :class="{
-      header: true,
-      visible: navStatus,
-    }">
+    <div
+      :class="{
+        header: true,
+        visible: navStatus
+      }"
+    >
       <div class="header-content">
         <div class="logo" @click="handleLogoClick">
           <img src="../../../assets/image/study.svg" alt="" class="logo-img" />
@@ -12,9 +14,13 @@
         <div class="nav-content">
           <div class="nav-link">
             <div v-for="(node, index) in naviConfig">
-              <div class="nav-node" :class="{
-                'active-node': index === activeNodeIndex,
-              }" @click="handleNavClick(node.path)">
+              <div
+                class="nav-node"
+                :class="{
+                  'active-node': index === activeNodeIndex
+                }"
+                @click="handleNavClick(node.path)"
+              >
                 {{ node.label }}
               </div>
             </div>
@@ -22,8 +28,13 @@
           <div class="right-side-nav">
             <div class="search-create-node">
               <div class="search-node">
-                <el-input v-model="searchValue" style="width: 240px" size="large" placeholder="探索跨知领域"
-                  @keyup.enter="handleSearch">
+                <el-input
+                  v-model="searchValue"
+                  style="width: 240px"
+                  size="large"
+                  placeholder="探索跨知领域"
+                  @keyup.enter="handleSearch"
+                >
                   <template #suffix>
                     <span class="search-icon" @click="handleSearch">
                       <svg-icon iconName="icon-search"></svg-icon>
@@ -42,7 +53,9 @@
                 </el-dropdown>
               </div>
               <div class="no-logged" v-else>
-                <el-button @click="handleLoginClick" type="primary" size="large" plain>登录｜注册</el-button>
+                <el-button @click="handleLoginClick" type="primary" size="large" plain
+                  >登录｜注册</el-button
+                >
               </div>
             </div>
           </div>
@@ -53,133 +66,130 @@
 </template>
 
 <script lang="ts" setup>
-import router, { routerName } from "@/router";
-import { getUrlQuery, userLocalInfo } from "@/utils/common";
-import { computed, onMounted, ref, watch } from "vue";
-import { ElButton, ElInput } from "element-plus";
-import { FormType } from "@/ajax/type/ariticle";
-import { useCategorieStore } from "@/store/article"
-import Avatar from "./components/avatar.vue"
-import Ajax from "@/ajax";
+import router, { routerName } from '@/router'
+import { getUrlQuery, userLocalInfo } from '@/utils/common'
+import { computed, onMounted, ref, watch } from 'vue'
+import { ElButton, ElInput } from 'element-plus'
+import { FormType } from '@/ajax/type/ariticle'
+import { useCategorieStore } from '@/store/article'
+import Avatar from './components/avatar.vue'
+import Ajax from '@/ajax'
 
-const navStatus = ref(true);
-var isScrolling = false;
+const navStatus = ref(true)
+var isScrolling = false
 
 const handleSearch = () => {
   if (!searchValue.value) {
-    return;
+    return
   }
-  const query = getUrlQuery();
-  router.push({ path: "/search", query: { ...query, keyword: searchValue.value } });
-};
+  const query = getUrlQuery()
+  router.push({ path: '/search', query: { ...query, keyword: searchValue.value } })
+}
 
 const scrollCallback = () => {
   if (!isScrolling) {
-    isScrolling = true;
+    isScrolling = true
     window.requestAnimationFrame(() => {
-      const scrollTop =
-        document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
       if (scrollTop > 400 && navStatus.value) {
-        navStatus.value = false;
+        navStatus.value = false
       } else if (scrollTop <= 200 && !navStatus.value) {
-        navStatus.value = true;
+        navStatus.value = true
       }
-      isScrolling = false;
-    });
+      isScrolling = false
+    })
   }
-};
+}
 
-window.addEventListener("scroll", scrollCallback);
+window.addEventListener('scroll', scrollCallback)
 
 const handleLogoClick = () => {
-  const query = getUrlQuery();
-  router.push({ path: "/", query });
-};
+  const query = getUrlQuery()
+  router.push({ path: '/', query })
+}
 
 const handleNavClick = (path: string) => {
-  const query = getUrlQuery();
-  router.push({ path, query });
-};
+  const query = getUrlQuery()
+  router.push({ path, query })
+}
 
 interface naviNode {
-  path: string;
-  name?: string;
-  label: string;
+  path: string
+  name?: string
+  label: string
 }
 const naviConfig: naviNode[] = [
   {
-    path: "/",
-    name: "home",
-    label: "首页",
+    path: '/',
+    name: 'home',
+    label: '首页'
   },
   {
-    path: "/recommend",
-    name: "recommend",
-    label: "推荐",
+    path: '/recommend',
+    name: 'recommend',
+    label: '推荐'
   },
   {
-    path: "/course",
-    name: "course",
-    label: "课程",
+    path: '/course',
+    name: 'course',
+    label: '课程'
   },
 
   {
-    path: "/popular",
-    label: "沸点",
+    path: '/popular',
+    label: '沸点'
   },
   {
-    path: "/personal",
-    name: "personal",
-    label: "个人中心",
-  },
-];
-const activeNodeIndex = ref(0);
-//
-router.afterEach((to,) => {
-  activeNodeIndex.value = naviConfig.findIndex((item) => item.path === to.path);
-  const { keyword } = getUrlQuery();
-  if (keyword && to.path === '/search') {
-    searchValue.value = keyword || "";
-  } else {
-    delete to.query.keyword;
-    to.query = { ...to.query };
+    path: '/personal',
+    name: 'personal',
+    label: '个人中心'
   }
-});
+]
+const activeNodeIndex = ref(0)
+//
+router.afterEach((to) => {
+  activeNodeIndex.value = naviConfig.findIndex((item) => item.path === to.path)
+  const { keyword } = getUrlQuery()
+  if (keyword && to.path === '/search') {
+    searchValue.value = keyword || ''
+  } else {
+    delete to.query.keyword
+    to.query = { ...to.query }
+  }
+})
 // 搜索逻辑
-const searchValue = ref();
-
+const searchValue = ref()
 
 // 跳转创建文章界面
 const createArticle = () => {
-  const query = { ...getUrlQuery(), scene: FormType.create };
-  router.push({ name: routerName.CREATE_ARTICLE, query });
-};
+  const query = { ...getUrlQuery(), scene: FormType.create }
+  router.push({ name: routerName.CREATE_ARTICLE, query })
+}
 
 // 跳转登录页面
 const isLogined = computed(() => {
-  return !!userLocalInfo.value.user_id;
-});
+  return !!userLocalInfo.value.user_id
+})
 
 const handleLoginClick = () => {
-  router.push({ name: routerName.LOGIN });
-};
+  router.push({ name: routerName.LOGIN })
+}
 
 const getBaseInfo = async () => {
-  const categoriesInfo = await Ajax.post("article/category/list", {})
+  const categoriesInfo = await Ajax.post('article/category/list', {})
   const categories = categoriesInfo.data.map((item: any) => {
     return {
       label: item.category_name,
-      value: item.category_id,
-    };
-  });
+      value: item.category_id
+    }
+  })
   const { setCategories, Categories } = useCategorieStore()
-  setCategories({ ...Categories, 'article_categories': categories });
-};
-
+  setCategories({ ...Categories, article_categories: categories })
+}
 
 // 在这里获取 base信息
 onMounted(async () => {
-  await getBaseInfo();
+  await getBaseInfo()
 })
 </script>
 <style scoped lang="scss">

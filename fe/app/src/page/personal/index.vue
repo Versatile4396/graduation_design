@@ -27,28 +27,28 @@
 </template>
 
 <script lang="ts" setup>
-import { userInfoStore } from "@/store/user";
-import Article from "./tabsview/article.vue";
-import { onMounted, ref } from "vue";
+import { userInfoStore } from '@/store/user'
+import Article from './tabsview/article.vue'
+import { onMounted, ref } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
-import { getUrlQuery } from "@/utils/common";
-import Ajax from "@/ajax";
+import { getUrlQuery } from '@/utils/common'
+import Ajax from '@/ajax'
 
-const { userInfo } = userInfoStore();
+const { userInfo } = userInfoStore()
 
 const paneConfig = [
   {
     label: '个人文章',
-    name: 'article',
+    name: 'article'
   },
   {
     label: '收藏',
-    name: 'collection',
+    name: 'collection'
   },
   {
     label: '赞',
-    name: 'like',
-  },
+    name: 'like'
+  }
 ]
 
 const loading = ref(false)
@@ -59,50 +59,47 @@ const articleList = ref([])
 const handleClick = async (tab: TabsPaneContext, _event: Event) => {
   switch (tab.index) {
     case '0':
-      loading.value = true;
-      await getArticlePersonalList();
-      loading.value = false;
-      break;
+      loading.value = true
+      await getArticlePersonalList()
+      loading.value = false
+      break
     case '1':
-      loading.value = true;
-      await getCollectionList();
-      loading.value = false;
-      break;
+      loading.value = true
+      await getCollectionList()
+      loading.value = false
+      break
     case '2':
-      loading.value = true;
-      await getLikeList();
-      loading.value = false;
-      break;
+      loading.value = true
+      await getLikeList()
+      loading.value = false
+      break
     default:
-      break;
+      break
   }
 }
 const getArticlePersonalList = async () => {
-  const uid = getUrlQuery().uid;
-  const res = await Ajax.post("/article/list", { user_id: uid })
+  const uid = getUrlQuery().uid
+  const res = await Ajax.post('/article/list', { user_id: uid })
   articleList.value = res.data
 }
 
 const getLikeList = async () => {
-  const uid = getUrlQuery().uid;
-  const res = await Ajax.post("/article/getLikeList/" + uid)
+  const uid = getUrlQuery().uid
+  const res = await Ajax.post('/article/getLikeList/' + uid)
   articleList.value = res.data
 }
 const getCollectionList = async () => {
-  const uid = getUrlQuery().uid;
-  const res = await Ajax.post("/article/getCollectionList/" + uid)
+  const uid = getUrlQuery().uid
+  const res = await Ajax.post('/article/getCollectionList/' + uid)
   articleList.value = res.data
 }
 
-const setUserInfo = () => {
-
-}
+const setUserInfo = () => {}
 onMounted(async () => {
-  loading.value = true;
-  await getArticlePersonalList();
-  loading.value = false;
+  loading.value = true
+  await getArticlePersonalList()
+  loading.value = false
 })
-
 </script>
 <style scoped lang="scss">
 .main-personal-box {
@@ -153,7 +150,6 @@ onMounted(async () => {
 
       .content-header {
         padding: 8px;
-
       }
     }
   }
@@ -162,6 +158,5 @@ onMounted(async () => {
     width: 240px;
     height: 100px;
   }
-
 }
 </style>

@@ -5,106 +5,99 @@
       <slot name="submit_wrapper"></slot>
     </div>
     <div v-else class="default_submit_wrapper">
-      <ElButton class="submit_btn" :block="true" type="primary" @click="onFormSubmit">{{ submitText }}</ElButton>
-      <ElButton class="cancel_btn" :block="true" type="default" @click="onFormSubmitCancel">{{ cancelText }}</ElButton>
+      <ElButton class="submit_btn" :block="true" type="primary" @click="onFormSubmit">{{
+        submitText
+      }}</ElButton>
+      <ElButton class="cancel_btn" :block="true" type="default" @click="onFormSubmitCancel">{{
+        cancelText
+      }}</ElButton>
     </div>
   </FormProvider>
 </template>
 <script lang="ts">
 export default {
-  name: "Form",
-};
+  name: 'Form'
+}
 </script>
 <script lang="ts" setup>
-import { createForm, setValidateLanguage } from "@formily/core";
+import { createForm, setValidateLanguage } from '@formily/core'
 
-import { createSchemaField, FormProvider } from "@formily/vue";
-import {
-  Input,
-  Switch,
-  Radio,
-  FormItem,
-  Password,
-} from "@formily/element-plus";
+import { createSchemaField, FormProvider } from '@formily/vue'
+import { Input, Switch, Radio, FormItem, Password } from '@formily/element-plus'
 import { RRadio, RUpload, RSelect } from './components/index'
-import { ElButton } from "element-plus";
-import { computed, provide, ref } from "vue";
-import { formContextKey } from "./context/formcontext";
+import { ElButton } from 'element-plus'
+import { computed, provide, ref } from 'vue'
+import { formContextKey } from './context/formcontext'
 interface Props {
-  schema: any;
-  submitText?: string;
-  cancelText?: string;
-  initialValues?: any;
-  effects?: () => void;
-  submit?: (...args: any) => any;
+  schema: any
+  submitText?: string
+  cancelText?: string
+  initialValues?: any
+  effects?: () => void
+  submit?: (...args: any) => any
 }
 const props = withDefaults(defineProps<Props>(), {
-  submitText: "提交",
-  cancelText: "取消",
-});
+  submitText: '提交',
+  cancelText: '取消'
+})
 
 const compShcema = computed(() => {
   if (props.schema instanceof Function) {
-    return props.schema(form.value);
+    return props.schema(form.value)
   }
-  return props.schema;
-});
+  return props.schema
+})
 
-const emits = defineEmits([
-  "submit",
-  "cancel",
-  "onSubmitFailed",
-  "onSubmitSuccess",
-]);
-const form = ref();
+const emits = defineEmits(['submit', 'cancel', 'onSubmitFailed', 'onSubmitSuccess'])
+const form = ref()
 form.value = createForm({
   validateFirst: true, // 只展示第一个校验错误提示
   initialValues: props.initialValues,
-  effects: props.effects,
-});
-setValidateLanguage("cn");
+  effects: props.effects
+})
+setValidateLanguage('cn')
 
-const isSubmitting = ref(false);
+const isSubmitting = ref(false)
 
 const updateSubmittingStatus = (status: boolean) => {
-  isSubmitting.value = status;
-};
+  isSubmitting.value = status
+}
 
 const onSubmit = async () => {
   if (props?.submit) {
     // 传入的submit 返回的内容会在onsubmitSuccess
-    const res = await props?.submit(form.value.values);
-    return res;
+    const res = await props?.submit(form.value.values)
+    return res
   } else {
-    emits("submit", form.value.values);
+    emits('submit', form.value.values)
   }
-  return null;
-};
+  return null
+}
 
 const onFormSubmit = async () => {
-  if (isSubmitting.value) return;
-  updateSubmittingStatus(true);
+  if (isSubmitting.value) return
+  updateSubmittingStatus(true)
   form.value
     .submit(onSubmit)
     .then((res: any) => {
-      onSubmitSuccess(res);
-      updateSubmittingStatus(false);
+      onSubmitSuccess(res)
+      updateSubmittingStatus(false)
     })
     .catch((err: any) => {
-      onSubmitFaild(err);
-      updateSubmittingStatus(false);
-    });
-};
+      onSubmitFaild(err)
+      updateSubmittingStatus(false)
+    })
+}
 const onSubmitFaild = (args: any) => {
-  emits("onSubmitFailed", args);
-};
+  emits('onSubmitFailed', args)
+}
 const onFormSubmitCancel = () => {
-  emits("cancel", form);
-};
+  emits('cancel', form)
+}
 
 const onSubmitSuccess = (res: any) => {
-  emits("onSubmitSuccess", res);
-};
+  emits('onSubmitSuccess', res)
+}
 
 const fieldSchema = createSchemaField({
   components: {
@@ -113,12 +106,14 @@ const fieldSchema = createSchemaField({
     Radio,
     Password,
     FormItem,
-    RRadio, RUpload, RSelect,
-  },
-}).SchemaField;
+    RRadio,
+    RUpload,
+    RSelect
+  }
+}).SchemaField
 
-provide(formContextKey, form.value);
-defineExpose(form.value);
+provide(formContextKey, form.value)
+defineExpose(form.value)
 </script>
 <style scoped lang="scss">
 /* @import url(); 引入css类 */

@@ -1,11 +1,19 @@
 <template>
   <div class="main-container">
     <div class="index-nav">
-      <div v-for="(item) in sideBars" class="sidebar-item" :class="{
-        'active-sidebar-item': activeSideItem === item.value
-      }" @click="sidebarItemclick(item.value)">
+      <div
+        v-for="item in sideBars"
+        class="sidebar-item"
+        :class="{
+          'active-sidebar-item': activeSideItem === item.value
+        }"
+        @click="sidebarItemclick(item.value)"
+      >
         <div class="icon">
-          <svg-icon :iconName="item.iconName" :color="activeSideItem === item.value ? '#4f7def' : ''"></svg-icon>
+          <svg-icon
+            :iconName="item.iconName"
+            :color="activeSideItem === item.value ? '#4f7def' : ''"
+          ></svg-icon>
         </div>
         <div class="text">{{ item.label }}</div>
       </div>
@@ -15,12 +23,20 @@
         <div class="filter-bar">
           <el-tabs v-model="filterKey">
             <el-tab-pane label="推荐" name="recommend">
-              <ArticlePreview @click="goToArticle(pf?.aid!)" v-for="pf in previewInfos" :previewInfo="pf"
-                :key="pf?.aid"></ArticlePreview>
+              <ArticlePreview
+                @click="goToArticle(pf?.aid!)"
+                v-for="pf in previewInfos"
+                :previewInfo="pf"
+                :key="pf?.aid"
+              ></ArticlePreview>
             </el-tab-pane>
             <el-tab-pane label="最新" name="lastest">
-              <ArticlePreview @click="goToArticle(pf?.aid!)" v-for="pf in previewInfos" :previewInfo="pf"
-                :key="pf?.aid">
+              <ArticlePreview
+                @click="goToArticle(pf?.aid!)"
+                v-for="pf in previewInfos"
+                :previewInfo="pf"
+                :key="pf?.aid"
+              >
               </ArticlePreview>
             </el-tab-pane>
           </el-tabs>
@@ -33,9 +49,7 @@
             <div class="desc">点亮在社区的每一天~</div>
           </div>
         </div>
-        <div class="hot-article">
-          热门文章
-        </div>
+        <div class="hot-article">热门文章</div>
       </div>
     </div>
   </div>
@@ -43,33 +57,34 @@
 
 <script lang="ts" setup>
 import ArticlePreview from '@/page/components/ArticlePreview/index.vue'
-import { useCategorieStore } from '@/store/article';
-import { storeToRefs } from 'pinia';
-import { computed, onMounted, ref, watch } from 'vue';
-import { ElTabPane, ElTabs } from 'element-plus';
-import Ajax from '@/ajax';
+import { useCategorieStore } from '@/store/article'
+import { storeToRefs } from 'pinia'
+import { computed, onMounted, ref, watch } from 'vue'
+import { ElTabPane, ElTabs } from 'element-plus'
+import Ajax from '@/ajax'
 import { goToArticle } from '@/utils/goto'
 import { getUrlQuery } from '@/utils/common'
 
-
-const { Categories } = storeToRefs(useCategorieStore());
+const { Categories } = storeToRefs(useCategorieStore())
 const iconConfig = [
-  "icon-zonghechaxun",
-  "icon-bijibendiannao",
-  "icon-wheat__easyic",
-  "icon-jixiezulin",
-  "icon-dianzixinxi",
-  "icon-waiyu",
-  "icon-jichuguanli",
-  "icon-okr",
+  'icon-zonghechaxun',
+  'icon-bijibendiannao',
+  'icon-wheat__easyic',
+  'icon-jixiezulin',
+  'icon-dianzixinxi',
+  'icon-waiyu',
+  'icon-jichuguanli',
+  'icon-okr'
 ]
 const sideBars = computed(() => {
-  const temp = Categories.value?.['article_categories'].map((item: { value: number, label: string }, index: number) => {
-    return {
-      ...item,
-      iconName: iconConfig[index + 1]
+  const temp = Categories.value?.['article_categories'].map(
+    (item: { value: number; label: string }, index: number) => {
+      return {
+        ...item,
+        iconName: iconConfig[index + 1]
+      }
     }
-  })
+  )
   temp?.unshift({
     value: 0,
     label: '综合',
@@ -119,7 +134,7 @@ const previewInfos = ref<Array<PreviewInfo>>([])
 const getPreviewInfos = async (order = true) => {
   const { data } = await Ajax.post('/article/list', {
     order_by_time: order,
-    category_id: activeSideItem.value === 0 ? null : activeSideItem.value,
+    category_id: activeSideItem.value === 0 ? null : activeSideItem.value
   })
   previewInfos.value = data?.map((item: any) => {
     return {
@@ -127,12 +142,10 @@ const getPreviewInfos = async (order = true) => {
       likes: item.article_briefs.like_count,
       comments: item.article_briefs.comment_count,
       author: item.article_briefs.username,
-      ...item.articles,
+      ...item.articles
     }
   })
 }
-
-
 </script>
 <style scoped lang="scss">
 /* @import url(); 引入css类 */
@@ -181,8 +194,6 @@ const getPreviewInfos = async (order = true) => {
       background-color: $hover-bgc;
       color: $hover-font;
     }
-
-
   }
 
   .right-container {
@@ -209,8 +220,6 @@ const getPreviewInfos = async (order = true) => {
       min-width: 260px;
 
       .irelevant-content {
-
-
         .hello-box {
           font-weight: 600;
 
@@ -224,11 +233,11 @@ const getPreviewInfos = async (order = true) => {
         }
       }
 
-      .hot-article {}
-
+      .hot-article {
+      }
     }
 
-    .irrelevant-container>div {
+    .irrelevant-container > div {
       border-radius: 4px;
       background-color: #fff;
       padding: 12px;

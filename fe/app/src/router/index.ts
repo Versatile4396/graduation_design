@@ -1,116 +1,112 @@
-import {
-  createRouter,
-  createWebHistory,
-  type RouteRecordRaw,
-} from "vue-router";
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 
 export enum routerName {
-  HOME = "home",
-  LOGIN = "login",
-  RECOMMEND = "recommend",
-  COURSE = "course",
-  POPULAR = "popular",
-  PERSONAL = "personal",
-  CREATE_ARTICLE = "editor",
-  Article = "article",
-  SEARCH = "search",
-  CHAT = "chat",
-  TEST = "test",
+  HOME = 'home',
+  LOGIN = 'login',
+  RECOMMEND = 'recommend',
+  COURSE = 'course',
+  POPULAR = 'popular',
+  PERSONAL = 'personal',
+  CREATE_ARTICLE = 'editor',
+  Article = 'article',
+  SEARCH = 'search',
+  CHAT = 'chat',
+  TEST = 'test'
 }
 
 export const routes: RouteRecordRaw[] = [
   {
-    path: "/",
+    path: '/',
     name: routerName.HOME,
     meta: {
-      title: "互助首页",
+      title: '互助首页'
     },
-    component: () => import("@/page/home/index.vue"),
+    component: () => import('@/page/home/index.vue')
   },
   {
-    path: "/login",
+    path: '/login',
     name: routerName.LOGIN,
     meta: {
-      title: "互助登录页",
+      title: '互助登录页'
     },
-    component: () => import("@/page/login/index.vue"),
+    component: () => import('@/page/login/index.vue')
   },
   {
-    path: "/recommend",
+    path: '/recommend',
     name: routerName.RECOMMEND,
     meta: {
-      title: "推荐页",
+      title: '推荐页'
     },
-    component: () => import("@/page/recommend/index.vue"),
+    component: () => import('@/page/recommend/index.vue')
   },
   {
-    path: "/course",
+    path: '/course',
     name: routerName.COURSE,
     meta: {
-      title: "课程",
+      title: '课程'
     },
-    component: () => import("@/page/course/index.vue"),
+    component: () => import('@/page/course/index.vue')
   },
   {
-    path: "/popular",
+    path: '/popular',
     name: routerName.POPULAR,
     meta: {
-      title: "互助登录页",
+      title: '互助登录页'
     },
-    component: () => import("@/page/popular/index.vue"),
+    component: () => import('@/page/popular/index.vue')
   },
   {
-    path: "/personal",
+    path: '/personal',
     name: routerName.PERSONAL,
     meta: {
-      title: "个人中心",
+      title: '个人中心'
     },
-    component: () => import("@/page/personal/index.vue"),
+    component: () => import('@/page/personal/index.vue')
   },
   {
-    path: "/create-article",
+    path: '/create-article',
     name: routerName.CREATE_ARTICLE,
     meta: {
-      title: "创建文章",
+      title: '创建文章'
     },
-    component: () => import("@/page/create/index.vue"),
+    component: () => import('@/page/create/index.vue')
   },
   {
-    path: "/article",
+    path: '/article',
     name: routerName.Article,
     meta: {
-      title: "文章详情",
+      title: '文章详情'
     },
-    component: () => import("@/page/article/index.vue"),
+    component: () => import('@/page/article/index.vue')
   },
   {
-    path: "/search",
+    path: '/search',
     name: routerName.SEARCH,
     meta: {
-      title: "文章详情",
+      title: '文章详情'
     },
-    component: () => import("@/page/search/index.vue"),
+    component: () => import('@/page/search/index.vue')
   },
   {
-    path: "/chat",
+    path: '/chat',
     name: routerName.CHAT,
     meta: {
-      title: "私聊界面",
+      title: '私聊界面'
     },
-    component: () => import("@/page/chat/index.vue"),
+    component: () => import('@/page/chat/index.vue')
   },
   {
-    path: "/test",
+    path: '/test',
     name: routerName.TEST,
     meta: {
-      title: "测试界面",
+      title: '测试界面'
     },
-    component: () => import("@/page/test/index.vue"),
-  },
-];
-const BASE = "forum";
+    component: () => import('@/page/test/index.vue')
+  }
+]
+const BASE = 'forum'
 const router = createRouter({
   history: createWebHistory(BASE),
-  routes,
-});
-export default router;
+  routes
+})
+export default router

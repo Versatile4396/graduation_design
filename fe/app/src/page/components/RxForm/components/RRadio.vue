@@ -12,28 +12,28 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, ref } from 'vue'
 
 interface Props {
-  value: any;
-  options: any[];
+  value: any
+  options: any[]
 }
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
-const emits = defineEmits(["change"]);
-const checkedTag = ref(props.value);
+const emits = defineEmits(['change'])
+const checkedTag = ref(props.value)
 const tagConfig = computed(() => {
   return props.options.map((item) => {
     return {
       label: item.label,
-      value: item.value,
-    };
-  });
-});
+      value: item.value
+    }
+  })
+})
 const handleChange = (val: any) => {
-  checkedTag.value = val;
-  emits("change", val);
-};
+  checkedTag.value = val
+  emits('change', val)
+}
 </script>
 <style scoped lang="scss">
 .container {

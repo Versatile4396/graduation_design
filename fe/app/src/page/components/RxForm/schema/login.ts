@@ -1,163 +1,163 @@
-import type { Form } from "@formily/core";
-import type { ISchema } from "@formily/vue";
-import { t } from "@wangeditor/editor";
+import type { Form } from '@formily/core'
+import type { ISchema } from '@formily/vue'
+import { t } from '@wangeditor/editor'
 
 export const loginSchema = {
-  type: "object",
+  type: 'object',
   properties: {
     username: {
-      type: "string",
-      "x-decorator": "FormItem",
-      "x-component": "Input",
-      "x-component-props": {
-        placeholder: "请输入手机号/邮箱号",
+      type: 'string',
+      'x-decorator': 'FormItem',
+      'x-component': 'Input',
+      'x-component-props': {
+        placeholder: '请输入手机号/邮箱号'
       },
-      "x-validator": {
+      'x-validator': {
         required: true,
-        minLength: 4,
-      },
+        minLength: 4
+      }
     },
     password: {
-      type: "string",
-      "x-validator": {
+      type: 'string',
+      'x-validator': {
         required: true,
-        minLength: 6,
+        minLength: 6
       },
-      "x-decorator": "FormItem",
-      "x-component": "Password",
-      "x-component-props": {
-        placeholder: "输入账号密码",
-      },
-    },
-  },
-} as ISchema;
+      'x-decorator': 'FormItem',
+      'x-component': 'Password',
+      'x-component-props': {
+        placeholder: '输入账号密码'
+      }
+    }
+  }
+} as ISchema
 const validatorConfirmPassWord = (form: Form) => {
   return (field: string) => {
-    const password = form.query("password").value();
+    const password = form.query('password').value()
     if (password && password !== field) {
-      return "两次密码不一致";
+      return '两次密码不一致'
     }
-    return true;
-  };
-};
+    return true
+  }
+}
 
 const validatorPassword = (form: Form) => {
   return (field: string) => {
-    const password = form.query("confirm_password").value();
+    const password = form.query('confirm_password').value()
     if (password && password !== field) {
-      return "两次密码不一致";
+      return '两次密码不一致'
     }
-    return true;
-  };
-};
+    return true
+  }
+}
 
 export const registerSchema = (form: Form) => {
   return {
-    type: "object",
+    type: 'object',
     properties: {
       username: {
-        type: "string",
+        type: 'string',
         required: true,
-        "x-decorator": "FormItem",
-        "x-component": "Input",
-        "x-component-props": {
-          placeholder: "输入用户名",
+        'x-decorator': 'FormItem',
+        'x-component': 'Input',
+        'x-component-props': {
+          placeholder: '输入用户名'
         },
-        "x-validator": {
-          maxLength: 16,
-        },
+        'x-validator': {
+          maxLength: 16
+        }
       },
       nickname: {
-        type: "string",
+        type: 'string',
         required: true,
-        "x-decorator": "FormItem",
-        "x-component": "Input",
-        "x-component-props": {
-          placeholder: "输入昵称",
+        'x-decorator': 'FormItem',
+        'x-component': 'Input',
+        'x-component-props': {
+          placeholder: '输入昵称'
         },
-        "x-validator": {
-          maxLength: 16,
-        },
+        'x-validator': {
+          maxLength: 16
+        }
       },
       email: {
-        type: "string",
-        "x-decorator": "FormItem",
-        "x-component": "Input",
-        "x-component-props": {
-          placeholder: "输入你的邮箱",
+        type: 'string',
+        'x-decorator': 'FormItem',
+        'x-component': 'Input',
+        'x-component-props': {
+          placeholder: '输入你的邮箱'
         },
-        "x-validator": {
+        'x-validator': {
           required: true,
-          format: "email",
-        },
+          format: 'email'
+        }
       },
 
       password: {
-        type: "string",
-        "x-validator": [
+        type: 'string',
+        'x-validator': [
           {
             required: true,
-            minLength: 6,
+            minLength: 6
           },
-          validatorPassword(form),
+          validatorPassword(form)
         ],
-        "x-decorator": "FormItem",
-        "x-component": "Password",
-        "x-component-props": {
-          placeholder: "输入密码",
-        },
+        'x-decorator': 'FormItem',
+        'x-component': 'Password',
+        'x-component-props': {
+          placeholder: '输入密码'
+        }
       },
       confirm_password: {
-        type: "string",
-        "x-validator": [
+        type: 'string',
+        'x-validator': [
           {
             required: true,
-            minLength: 6,
+            minLength: 6
           },
-          validatorConfirmPassWord(form),
+          validatorConfirmPassWord(form)
         ],
 
-        "x-decorator": "FormItem",
-        "x-component": "Password",
-        "x-component-props": {
-          placeholder: "再次输入密码",
-        },
+        'x-decorator': 'FormItem',
+        'x-component': 'Password',
+        'x-component-props': {
+          placeholder: '再次输入密码'
+        }
       },
       gender: {
-        type: "number",
-        title: "性别",
-        "x-decorator": "FormItem",
-        "x-component": "Radio.Group",
-        "x-component-props": {
-          default: 2,
+        type: 'number',
+        title: '性别',
+        'x-decorator': 'FormItem',
+        'x-component': 'Radio.Group',
+        'x-component-props': {
+          default: 2
         },
         initialValue: 2,
         enum: [
           {
-            label: "男",
-            value: 0,
+            label: '男',
+            value: 0
           },
           {
-            label: "女",
-            value: 1,
+            label: '女',
+            value: 1
           },
           {
-            label: "未知",
-            value: 2,
-          },
-        ],
+            label: '未知',
+            value: 2
+          }
+        ]
       },
       avatar: {
-        type: "string",
-        title: "头像",
-        "x-decorator": "FormItem",
-        "x-component": "RUpload",
-        "x-component-props": {
-          url:"http://127.0.0.1:5555/images/WechatIMG.jpg",
-          width: "50px",
-          height: "50px",
-        },
-      },
-    },
-  };
-};
+        type: 'string',
+        title: '头像',
+        'x-decorator': 'FormItem',
+        'x-component': 'RUpload',
+        'x-component-props': {
+          url: 'http://127.0.0.1:5555/images/WechatIMG.jpg',
+          width: '50px',
+          height: '50px'
+        }
+      }
+    }
+  }
+}
