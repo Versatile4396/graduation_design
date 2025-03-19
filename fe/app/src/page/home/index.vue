@@ -20,27 +20,25 @@
     </div>
     <div class="right-container">
       <div class="article-content">
-        <div class="filter-bar">
-          <el-tabs v-model="filterKey">
-            <el-tab-pane label="推荐" name="recommend">
-              <ArticlePreview
-                @click="goToArticle(pf?.aid!)"
-                v-for="pf in previewInfos"
-                :previewInfo="pf"
-                :key="pf?.aid"
-              ></ArticlePreview>
-            </el-tab-pane>
-            <el-tab-pane label="最新" name="lastest">
-              <ArticlePreview
-                @click="goToArticle(pf?.aid!)"
-                v-for="pf in previewInfos"
-                :previewInfo="pf"
-                :key="pf?.aid"
-              >
-              </ArticlePreview>
-            </el-tab-pane>
-          </el-tabs>
-        </div>
+        <el-tabs v-model="filterKey">
+          <el-tab-pane label="推荐" name="recommend">
+            <ArticlePreview
+              @click="goToArticle(pf?.aid!)"
+              v-for="pf in previewInfos"
+              :previewInfo="pf"
+              :key="pf?.aid"
+            ></ArticlePreview>
+          </el-tab-pane>
+          <el-tab-pane label="最新" name="lastest">
+            <ArticlePreview
+              @click="goToArticle(pf?.aid!)"
+              v-for="pf in previewInfos"
+              :previewInfo="pf"
+              :key="pf?.aid"
+            >
+            </ArticlePreview>
+          </el-tab-pane>
+        </el-tabs>
       </div>
       <div class="irrelevant-container">
         <div class="irelevant-content">
@@ -199,17 +197,12 @@ const getPreviewInfos = async (order = true) => {
   .right-container {
     margin-left: 215px;
     display: flex;
-
+    gap: 24px;
     .article-content {
       border-radius: 4px;
       background-color: #fff;
       min-width: 720px;
-      padding: 8px 0;
-      margin-right: 16px;
-
-      .filter-bar {
-        padding: 4px;
-      }
+      padding: 16px;
     }
 
     .irrelevant-container {

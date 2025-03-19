@@ -102,12 +102,11 @@ const publicText = computed(() => {
 </script>
 <style scoped lang="scss">
 .article-container-box {
-  height: 74px;
-  padding: 12px 12px;
+  height: 90px;
   cursor: pointer;
   display: flex;
   border-bottom: 0.5px solid #e5e6eb;
-
+  padding: 12px 0;
   .detail-info {
     flex: 1 1 auto;
     display: flex;

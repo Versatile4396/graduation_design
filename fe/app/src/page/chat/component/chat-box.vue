@@ -29,7 +29,6 @@ const htmlContent = computed(() => {
 const isFromMe = computed(() => {
   return props.chat.from === MsgFrom.Me
 })
-console.log(props.chat, 'asdas')
 </script>
 <style scoped lang="scss">
 .chat-box-container-box {
