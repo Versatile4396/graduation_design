@@ -48,20 +48,20 @@ func GetHistoryChatMsg(uid uint64) (results map[string][]models.Trainer, err err
 	return results, nil
 }
 
-type chatInstance struct {
-	latestMsg string
-	time      int64
-	userInfo  models.UserInfo
+type ChatInstance struct {
+	LatestMsg string          `json:"latestMsg"`
+	Time      int64           `json:"time"`
+	UserInfo  models.UserInfo `json:"userInfo"`
 }
 
-func GetUserInfoChatMsg(results map[string][]models.Trainer) (chatList []chatInstance, err error) {
+func GetUserInfoChatMsg(results map[string][]models.Trainer) (chatList []ChatInstance, err error) {
 	uinfo := models.User{}
 	for key, value := range results {
 		global.Db.Model(models.User{}).Where("user_id", key).First(&uinfo)
-		chatList = append(chatList, chatInstance{
-			latestMsg: value[0].Content,
-			time:      value[0].StartTime,
-			userInfo: models.UserInfo{
+		chatList = append(chatList, ChatInstance{
+			LatestMsg: value[0].Content,
+			Time:      value[0].StartTime,
+			UserInfo: models.UserInfo{
 				UserId:   uinfo.UserId,
 				Avatar:   uinfo.Avatar,
 				UserName: uinfo.UserName,
