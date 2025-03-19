@@ -43,6 +43,7 @@ const handleComment = () => {
     display: flex;
     flex-direction: row-reverse;
     margin-top: 12px;
+    z-index: 12;
   }
 }
 </style>

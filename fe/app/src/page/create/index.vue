@@ -71,6 +71,7 @@ import { FormType } from '@/ajax/type/ariticle'
 import Ajax from '@/ajax'
 import { Message } from '@/utils/message'
 import { userInfoStore } from '@/store/user'
+import router, { routerName } from '@/router'
 Boot.registerModule(markdownModule)
 // 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef()
@@ -141,16 +142,20 @@ const submitHandle = (value: any) => {
     Message.info('请输入文章标题')
     return
   }
+  console.log(value, 'asdasdasljkh')
   const params = {
     ...value,
     tag_id: 1,
-    topic_id: 1,
+    topic_id: value.topic_id,
     content: aContent.value,
     title: aTitle.value,
     user_id: Number(getUrlQuery().uid)
   }
   Ajax.post('/article/create', params).then((_) => {
     popoverStatus.value = false
+    // 跳转主页
+    const { uid } = getUrlQuery()
+    router.push({ name: routerName.HOME, query: { uid } })
   })
 }
 

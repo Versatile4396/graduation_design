@@ -22,5 +22,9 @@ export const useCategorieStore = defineStore('Categorie', () => {
   const setCategories = (_cateGorie: {}) => {
     Categories.value = _cateGorie
   }
-  return { Categories, setCategories }
+  const Topics = ref()
+  const setTopics = (_topic: []) => {
+    Topics.value = _topic
+  }
+  return { Categories, Topics, setCategories, setTopics }
 })

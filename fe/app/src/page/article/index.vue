@@ -428,11 +428,12 @@ onMounted(async () => {
     border-radius: 4px;
 
     .editor-content {
+      padding-bottom: 12px;
       .gpt-wrapper {
         background-color: #f7f8fa;
         padding: 12px;
         border-radius: 12px;
-
+        margin-bottom: 12px;
         .gpt-title {
           padding: 8px;
           line-height: 24px;
@@ -561,6 +562,9 @@ onMounted(async () => {
       margin-top: 12px;
       display: flex;
       flex-direction: row-reverse;
+    }
+    .comments-list {
+      margin-top: 45px;
     }
   }
 }

@@ -18,7 +18,7 @@ func TopicCreate(t *models.Topic) (rTopic *models.Topic, err error) {
 func TopicGetList(p *models.Pagination) (rTopics []*models.Topic, err error) {
 	var topics []*models.Topic
 	offset := p.PageSize * (p.Page - 1)
-	result := global.Db.Limit(p.PageSize).Offset(offset).Find(&topics)
+	result := global.Db.Model(&models.Topic{}).Find(&topics)
 	fmt.Println(offset, p.Page, p.PageSize, "pagesize", result)
 	err = result.Error
 	if err != nil {

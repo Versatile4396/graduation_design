@@ -183,8 +183,17 @@ const getBaseInfo = async () => {
       value: item.category_id
     }
   })
-  const { setCategories, Categories } = useCategorieStore()
+  const topicsInfo = await Ajax.post('/topic/list', {})
+  const topics = topicsInfo.data.map((item: any) => {
+    return {
+      label: item.topic_name,
+      value: Number(item.topic_id),
+      desc: item.topic_desc
+    }
+  })
+  const { setCategories, Categories, setTopics } = useCategorieStore()
   setCategories({ ...Categories, article_categories: categories })
+  setTopics(topics)
 }
 
 // 在这里获取 base信息

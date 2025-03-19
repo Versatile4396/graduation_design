@@ -21,7 +21,7 @@ func GetHistoryChatMsg(uid uint64) (results map[string][]models.Trainer, err err
 	for _, collectName := range collectionNames {
 		if strings.Contains(collectName, strUid) {
 			collection := mongodb.MongoDBClient.Database(mongodb.MongoDBName).Collection(collectName)
-			cursor, err := collection.Find(context.TODO(), bson.D{}, options.Find().SetSort(bson.D{{"startTime", 1}}).SetLimit(1))
+			cursor, err := collection.Find(context.TODO(), bson.D{}, options.Find().SetSort(bson.D{{"startTime", -1}}).SetLimit(1))
 			if err != nil {
 				continue
 			}
@@ -41,7 +41,7 @@ func GetHistoryChatMsg(uid uint64) (results map[string][]models.Trainer, err err
 
 	for key, val := range results {
 		sort.Slice(val, func(i, j int) bool {
-			return val[i].StartTime < val[j].StartTime
+			return val[i].StartTime > val[j].StartTime
 		})
 		results[key] = val[:1]
 	}

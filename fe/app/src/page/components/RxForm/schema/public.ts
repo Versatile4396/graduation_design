@@ -2,7 +2,8 @@ import type { Form } from '@formily/core'
 import { useCategorieStore } from '@/store/article'
 
 const { Categories } = useCategorieStore()
-console.log(Categories, 'Categories')
+const { Topics } = useCategorieStore()
+console.log(Topics, 'TopicsTopics')
 const articleCategories = Categories?.article_categories || []
 export const publicSchema = (form: Form) => {
   return {
@@ -14,7 +15,7 @@ export const publicSchema = (form: Form) => {
         required: true,
         'x-decorator': 'FormItem',
         'x-decorator-props': {
-          labelWidth: 70
+          labelWidth: 100
         },
         'x-component': 'RRadio',
         'x-component-props': {
@@ -27,7 +28,7 @@ export const publicSchema = (form: Form) => {
         required: true,
         'x-decorator': 'FormItem',
         'x-decorator-props': {
-          labelWidth: 70
+          labelWidth: 100
         },
         'x-component': 'RUpload',
         'x-component-props': {
@@ -38,47 +39,14 @@ export const publicSchema = (form: Form) => {
         title: '创作话题',
         required: true,
         'x-decorator-props': {
-          labelWidth: 70
+          labelWidth: 100
         },
         'x-decorator': 'FormItem',
         'x-component': 'RSelect',
         'x-component-props': {
           id: 'topic_title',
           placeholder: '请添加创作话题，最多添加一个话题',
-          options: [
-            {
-              label: '选项1',
-              value: 1
-            },
-            {
-              label: '选项2',
-              value: 2
-            },
-            {
-              label: '选项3',
-              value: 3
-            },
-            {
-              label: '选项4',
-              value: 4
-            },
-            {
-              label: '选项5',
-              value: 5
-            },
-            {
-              label: '选项6',
-              value: 6
-            },
-            {
-              label: '选项7',
-              value: 7
-            },
-            {
-              label: '选项8',
-              value: 8
-            }
-          ],
+          options: Topics,
           teleported: false
         }
       },
@@ -88,7 +56,7 @@ export const publicSchema = (form: Form) => {
         type: 'string',
         'x-decorator': 'FormItem',
         'x-decorator-props': {
-          labelWidth: 70
+          labelWidth: 100
         },
         'x-component': 'Input',
         'x-component-props': {

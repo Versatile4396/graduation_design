@@ -221,3 +221,36 @@ insert into
     article_categories (category_name, parent_id)
 values
     ('校园OKR', null)
+insert into
+    topics (topic_name, topic_desc)
+values
+    ('新人报道', '新人报道赛道')
+    -- 插入数学学习方法主题
+INSERT INTO
+    topics (topic_name, topic_desc)
+VALUES
+    ('数学学习方法', '探讨数学学科的高效学习方法与技巧');
+
+-- 插入英语单词记忆主题
+INSERT INTO
+    topics (topic_name, topic_desc)
+VALUES
+    ('英语单词记忆', '分享英语单词的记忆方法和策略');
+
+-- 插入编程学习经验主题
+INSERT INTO
+    topics (topic_name, topic_desc)
+VALUES
+    ('编程学习经验', '交流编程学习过程中的经验和遇到的问题');
+
+-- 插入历史事件分析主题
+INSERT INTO
+    topics (topic_name, topic_desc)
+VALUES
+    ('历史事件分析', '对重要历史事件进行深入分析和解读');
+
+-- 插入物理实验技巧主题
+INSERT INTO
+    topics (topic_name, topic_desc)
+VALUES
+    ('物理实验技巧', '分享物理实验中的操作技巧和注意事项');
