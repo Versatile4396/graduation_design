@@ -74,5 +74,10 @@ func SetupRouter() *gin.Engine {
 		chat.GET("/ws", controller.WSHandler)
 		chat.GET("/history", controller.ChatHistoryController)
 	}
+	// 处理 所有的ws请求
+	ws := router.Group("api/ws")
+	{
+		ws.GET("/:uid", controller.WSHandler)
+	}
 	return router
 }
