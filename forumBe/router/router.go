@@ -62,6 +62,16 @@ func SetupRouter() *gin.Engine {
 	upload := router.Group("/api/upload")
 	{
 		upload.POST("/image", controller.UploadImageController)
+		upload.POST("/video", controller.UploadVideoController)
+	}
+	// 视频
+	video := router.Group("/api/video")
+	{
+		video.POST("/create", controller.VideoCreateController)
+		video.POST("/update", controller.VideoUpdateController)
+		video.GET("/getById/:vid", controller.VideoGetController)
+		video.DELETE("/delete/:vid", controller.VideoDeleteController)
+		video.POST("/list", controller.VideoGetListController)
 	}
 	comment := router.Group("/api/comment")
 	{

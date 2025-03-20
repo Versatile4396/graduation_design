@@ -186,6 +186,23 @@ CREATE TABLE
         UNIQUE KEY article_user (article_id, user_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+-- 创建视频表
+CREATE TABLE
+    videos (
+        video_id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id VARCHAR(20) NOT NULL,
+        title VARCHAR(255) NOT NULL,
+        abstract VARCHAR(255) NOT NULL,
+        upload_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        duration INT,
+        views INT DEFAULT 0,
+        likes INT DEFAULT 0,
+        dislikes INT DEFAULT 0,
+        tag_ids JSON,
+        category VARCHAR(100),
+        video_url VARCHAR(255) NOT NULL
+    );
+
 -- 插入 article_categories 数据
 INSERT INTO
     article_categories (category_name, parent_id)
