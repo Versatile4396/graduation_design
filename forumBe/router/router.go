@@ -43,6 +43,19 @@ func SetupRouter() *gin.Engine {
 		article.POST("/getLikeList/:uid", controller.GetLikeListController)
 		article.POST("/getCollectionList/:uid", controller.GetCollectionListController)
 	}
+	assistance := router.Group("/api/assistance")
+	{
+		assistance.POST("/create", controller.AssistanceCreateController)
+		assistance.POST("/delete/:aid", controller.AssistanceDeleteController)
+		assistance.POST("/list", controller.AssistanceGetListController)
+		assistance.POST("/update", controller.AssistanceUpdateController)
+	}
+	assistanceComment := router.Group("/api/assistanceComment")
+	{
+		assistanceComment.POST("/create", controller.AssistanceCommentCreateController)
+		assistanceComment.POST("/delete/:aid", controller.AssistanceCommentDeleteController)
+		assistanceComment.POST("/list", controller.AssistanceCommentGetListController)
+	}
 	topic := router.Group("/api/topic")
 	{
 		topic.POST("/create", controller.TopicCreateController)
