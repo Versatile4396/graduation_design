@@ -136,8 +136,8 @@ const naviConfig: naviNode[] = [
   },
 
   {
-    path: '/popular',
-    label: '沸点'
+    path: '/assistance',
+    label: '互助帮学'
   },
   {
     path: '/personal',
@@ -264,7 +264,7 @@ onMounted(async () => {
 
         .nav-node {
           color: rgb(82, 87, 102);
-          min-width: 52px;
+          margin-right: 12px;
           cursor: pointer;
         }
 

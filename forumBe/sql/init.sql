@@ -203,6 +203,48 @@ CREATE TABLE
         video_url VARCHAR(255) NOT NULL
     );
 
+-- 创建互补帮学表
+CREATE TABLE
+    IF NOT EXISTS assistances (
+        assistance_index INT (11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '互助序号' PRIMARY KEY,
+        assistance_id VARCHAR(20) COMMENT '互助ID',
+        title VARCHAR(255) NOT NULL COMMENT '互助标题',
+        content TEXT NOT NULL COMMENT '互助内容',
+        user_id VARCHAR(20) NOT NULL COMMENT '用户ID',
+        category_id INT NOT NULL COMMENT '分类id',
+        tag_id INT NOT NULL COMMENT '标签id',
+        topic_id INT NOT NULL COMMENT '话题id',
+        abstract VARCHAR(200) NOT NULL COMMENT '互助摘要',
+        cover VARCHAR(200) NOT NULL COMMENT '互助封面',
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        assistance_status INT NOT NULL DEFAULT 0,
+        -- 外键关联互助分类表，设置级联更新和删除
+        FOREIGN KEY (category_id) REFERENCES article_categories (category_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+        UNIQUE KEY assistance_id (assistance_id),
+        KEY created_at (created_at)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+-- 创建互助模块评论表
+CREATE TABLE
+    IF NOT EXISTS assistance_comments (
+        comment_index INT AUTO_INCREMENT PRIMARY KEY,
+        comment_id VARCHAR(20) UNIQUE COMMENT '评论ID',
+        assistance_id VARCHAR(20) NOT NULL,
+        user_id VARCHAR(20) NOT NULL,
+        content TEXT NOT NULL,
+        create_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        update_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        parent_comment_id VARCHAR(20) NULL,
+        -- 外键关联文章表，设置级联更新和删除
+        FOREIGN KEY (assistance_id) REFERENCES assistances (assistance_id) ON UPDATE CASCADE ON DELETE CASCADE,
+        -- 外键关联自身，用于多级评论，设置级联更新和删除
+        FOREIGN KEY (parent_comment_id) REFERENCES assistance_comments (comment_id) ON UPDATE CASCADE ON DELETE SET NULL,
+        -- 为文章 ID 和用户 ID 添加索引
+        KEY assistance_id (assistance_id),
+        KEY user_id (user_id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
 -- 插入 article_categories 数据
 INSERT INTO
     article_categories (category_name, parent_id)

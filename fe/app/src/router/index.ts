@@ -5,7 +5,7 @@ export enum routerName {
   LOGIN = 'login',
   RECOMMEND = 'recommend',
   COURSE = 'course',
-  POPULAR = 'popular',
+  ASSISTANCE = 'assistance',
   PERSONAL = 'personal',
   CREATE_ARTICLE = 'editor',
   Article = 'article',
@@ -48,12 +48,12 @@ export const routes: RouteRecordRaw[] = [
     component: () => import('@/page/course/index.vue')
   },
   {
-    path: '/popular',
-    name: routerName.POPULAR,
+    path: '/assistance',
+    name: routerName.ASSISTANCE,
     meta: {
       title: '互助登录页'
     },
-    component: () => import('@/page/popular/index.vue')
+    component: () => import('@/page/assistance/index.vue')
   },
   {
     path: '/personal',
