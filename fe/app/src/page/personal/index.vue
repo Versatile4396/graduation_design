@@ -6,7 +6,7 @@
           <el-avatar :src="userInfo.avatar" :size="90"></el-avatar>
         </div>
         <div class="right-box">
-          <div class="briefly">{{ userInfo.username }}</div>
+          <div class="briefly">{{ userInfo.nickname }}</div>
           <div class="editor-content">
             <el-button type="primary" @click="setUserInfo">设置</el-button>
           </div>
@@ -35,7 +35,7 @@ import { getUrlQuery } from '@/utils/common'
 import Ajax from '@/ajax'
 
 const { userInfo } = userInfoStore()
-
+console.log(userInfo, 'userInfo')
 const paneConfig = [
   {
     label: '个人文章',

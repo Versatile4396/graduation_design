@@ -139,7 +139,7 @@ const getPreviewInfos = async (order = true) => {
       aid: item.articles.article_id,
       likes: item.article_briefs.like_count,
       comments: item.article_briefs.comment_count,
-      author: item.article_briefs.username,
+      author: item.article_briefs.nickname,
       ...item.articles
     }
   })

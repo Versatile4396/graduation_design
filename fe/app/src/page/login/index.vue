@@ -26,7 +26,9 @@
               confirm_password: '123456',
               password: '123456',
               gender: 1,
-              nickname: '章三'
+              nickname: '章三',
+              overview: '一个叫张三的man'
+              
             }"
             submit-text="注册"
             cancel-text="去登录"

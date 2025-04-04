@@ -4,10 +4,10 @@
       <el-avatar :size="avatarSize" class="avatar" :src="userInfo.avatar" />
       <div class="comment-content">
         <div class="username">
-          {{ userInfo.username }}
+          {{ userInfo.nickname }}
         </div>
         <div class="comment-text">
-          {{ commentInfo.content || ' a' }}
+          {{ commentInfo.content || '' }}
         </div>
         <div class="comment-brief">
           <span class="create-time">

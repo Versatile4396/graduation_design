@@ -20,7 +20,7 @@
         {{ aInfo?.title }}
       </div>
       <div class="author-info-block">
-        <span class="username">{{ authorInfo.username }}</span>
+        <span class="username">{{ authorInfo.nickname }}</span>
         <div class="base-info-article">
           <span class="create-time">{{ aInfo.create_at }}</span>
           <span class="page-view">
@@ -68,7 +68,7 @@
     <div class="author-info-box">
       <div class="author-title">
         <el-avatar :src="authorInfo.avatar"></el-avatar>
-        <div class="name">{{ authorInfo.username }}</div>
+        <div class="name">{{ authorInfo.nickname }}</div>
       </div>
       <div class="author-create-info">
         <div class="count-info">

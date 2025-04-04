@@ -17,6 +17,8 @@ CREATE TABLE
         user_index INT (11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户ID',
         user_id VARCHAR(20) NOT NULL COMMENT '用户ID',
         user_name VARCHAR(20) NOT NULL COMMENT '用户名',
+        nickname VARCHAR(20) NOT NULL COMMENT '昵称',
+        overview VARCHAR(255) DEFAULT NULL COMMENT '简介',
         email VARCHAR(320) COMMENT '邮箱',
         phone_number VARCHAR(11) DEFAULT NULL COMMENT '手机号',
         password VARCHAR(255) NOT NULL COMMENT '密码',

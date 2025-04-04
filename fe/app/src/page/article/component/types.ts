@@ -18,6 +18,7 @@ export interface IAuthor {
   email: string
   user_id: number
   username: string
+  nickname: string
   gender: number
   like_count: number
   view_count: number
@@ -33,6 +34,7 @@ export interface IArticleBrief {
   title: string
   user_id: number
   username: string
+  nickname: string
 }
 
 export interface IComment {
@@ -54,4 +56,5 @@ export interface UserInfo {
   gender: number
   user_id: number
   username: string
+  nickname: string
 }

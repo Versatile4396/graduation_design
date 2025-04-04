@@ -13,7 +13,7 @@
     </div>
     <div class="chat-container">
       <div class="chat-header">
-        <span class="username">{{ curChatInfo?.userInfo.username }}</span>
+        <span class="username">{{ curChatInfo?.userInfo.nickname }}</span>
         <div class="operator"></div>
       </div>
       <div class="chat-content" ref="chatWrapperDom">

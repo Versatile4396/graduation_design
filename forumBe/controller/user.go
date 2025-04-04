@@ -72,6 +72,8 @@ func UserLoginController(c *gin.Context) {
 		"user_name":     user.UserName,
 		"avatar":        user.Avatar,
 		"gender":        user.Gender,
+		"nickname":      user.Nickname,
+		"overview":      user.Overview,
 		"email":         user.Email,
 		"access_token":  user.AccessToken,
 		"refresh_token": user.RefreshToken,

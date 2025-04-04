@@ -41,6 +41,8 @@ func SignUp(fo *models.User) (user models.User, err error) {
 		UserName:     fo.UserName,
 		UserId:       fo.UserId,
 		Avatar:       fo.Avatar,
+		Nickname:     fo.Nickname,
+		Overview:     fo.Overview,
 	}
 	// 插入数据库
 	err = global.Db.Create(&fo).Error
@@ -72,6 +74,8 @@ func Login(u *models.LoginForm) (user *models.User, error error) {
 	user.UserName = dbuser.UserName
 	user.Avatar = dbuser.Avatar
 	user.Gender = dbuser.Gender
+	user.Nickname = dbuser.Nickname
+	user.Overview = dbuser.Overview
 	return
 }
 

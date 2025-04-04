@@ -1,6 +1,5 @@
 import type { Form } from '@formily/core'
 import type { ISchema } from '@formily/vue'
-import { t } from '@wangeditor/editor'
 
 export const loginSchema = {
   type: 'object',
@@ -91,7 +90,22 @@ export const registerSchema = (form: Form) => {
           format: 'email'
         }
       },
-
+      overview:{
+        type:'string',
+        'x-decorator': 'FormItem',
+        'x-component': 'Input',
+        'x-component-props': {
+          type: 'textarea',
+          placeholder: '一句话介绍自己',
+          maxlength: 100,
+          minlength: 20,
+          'show-word-limit': true,
+          autosize: {
+            minRows: 2,
+            maxRows: 3,
+          }
+        }
+      },
       password: {
         type: 'string',
         'x-validator': [

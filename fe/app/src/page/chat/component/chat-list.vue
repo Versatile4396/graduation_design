@@ -11,7 +11,7 @@
         <el-avatar :size="40" :src="chat.userInfo.avatar"></el-avatar>
       </div>
       <div class="chat-info">
-        <div class="username">{{ chat.userInfo.username }}</div>
+        <div class="username">{{ chat.userInfo.nickname }}</div>
         <div class="chat-msg" v-html="chat.latestMsg"></div>
       </div>
     </div>
