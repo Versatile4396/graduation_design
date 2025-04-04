@@ -73,13 +73,50 @@ func AssistanceUpdateController(c *gin.Context) {
 }
 
 func AssistanceCommentCreateController(c *gin.Context) {
-
+	var assistanceComment *models.AssistanceComment
+	if err := c.ShouldBindJSON(&assistanceComment); err != nil {
+		zap.L().Error("assistance comment create with invalid Param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	rAssistanceComment, err := logic.CreateAssistanceComment(assistanceComment)
+	if err != nil {
+		zap.L().Error("assistance comment create with invalid Param", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, rAssistanceComment)
 }
 
 func AssistanceCommentDeleteController(c *gin.Context) {
-
+	var id = c.Param("cid")
+	postId, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		zap.L().Error("assistance comment delete with invalid Param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	err = logic.DeleteAssistanceComment(postId)
+	if err != nil {
+		zap.L().Error("assistance comment delete with invalid Param", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, nil)
 }
 
 func AssistanceCommentGetListController(c *gin.Context) {
-
+	var filter models.AssistanceCommentFilter
+	if err := c.ShouldBindJSON(&filter); err != nil {
+		zap.L().Error("assistance comment get list with invalid Param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	rAssistanceComments, err := logic.GetAssistanceCommentList(filter)
+	if err != nil {
+		zap.L().Error("assistance comment get list with invalid Param", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, rAssistanceComments)
 }
