@@ -27,13 +27,6 @@
               <PublicForm @submit="submitHandle"></PublicForm>
             </el-popover>
           </span>
-          <!-- <span>
-          <el-popover :width="200" trigger="hover" content="切换成富文本编辑器">
-            <template #reference>
-              <Switch class="switch-icon"></Switch>
-            </template>
-          </el-popover>
-        </span> -->
           <span>
             <Avatar></Avatar>
           </span>
@@ -65,17 +58,14 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
 import PublicForm from './public-form.vue'
 import Avatar from '../components/navigator/components/avatar.vue'
-import { Switch } from '@element-plus/icons-vue'
 import { getUrlQuery } from '@/utils/common'
 import { FormType } from '@/ajax/type/ariticle'
 import Ajax from '@/ajax'
 import { Message } from '@/utils/message'
-import { userInfoStore } from '@/store/user'
 import router, { routerName } from '@/router'
 Boot.registerModule(markdownModule)
 // 编辑器实例，必须用 shallowRef
 const editorRef = shallowRef()
-const { userInfo } = userInfoStore()
 
 // 内容 HTML
 const aContent = ref('')
@@ -142,7 +132,6 @@ const submitHandle = (value: any) => {
     Message.info('请输入文章标题')
     return
   }
-  console.log(value, 'asdasdasljkh')
   const params = {
     ...value,
     tag_id: 1,

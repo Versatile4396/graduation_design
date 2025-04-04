@@ -51,13 +51,22 @@
       class="message-input"
       placeholder="请输入聊天内容"
     />
-    <div class="msg-footer">按 Enter 发送消息</div>
+    <div class="msg-footer">{{ footerMsg }}</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import Emoji from './Emoji.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+
+interface Props {
+  enterLock?: boolean
+  footerMsg?: string
+}
+const props = withDefaults(defineProps<Props>(), {
+  enterLock: false,
+  footerMsg: '按 Enter 发送消息'
+})
 
 const emits = defineEmits(['sendMsg'])
 
@@ -66,7 +75,6 @@ const messageInputDom = ref<HTMLInputElement>()
 const handleSendMessage = () => {
   const message = messageInputDom.value?.innerHTML || ''
   if (message.trim() !== '') {
-    console.log(message, 'message')
     emits('sendMsg', message)
     if (document.activeElement != messageInputDom.value) {
       messageInputDom.value?.focus()
@@ -93,10 +101,17 @@ onMounted(() => {
   messageInputDom.value?.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
       event.preventDefault()
+      if (props.enterLock) {
+        return
+      }
       handleSendMessage()
     }
   })
 })
+const value = computed(() => {
+  return messageInputDom.value?.innerHTML || ''
+})
+defineExpose({ value })
 </script>
 
 <style scoped lang="scss">
@@ -126,7 +141,6 @@ onMounted(() => {
     color: #262932;
     flex: 1;
     width: 100%;
-    height: 80%;
     resize: none;
     border: none;
     outline: none;

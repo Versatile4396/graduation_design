@@ -1,7 +1,7 @@
 interface user {
   refresh_token: string
   access_token: string
-  username: string
+  user_name: string
   email: string
   gender: number
   user_id: string

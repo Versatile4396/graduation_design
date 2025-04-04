@@ -8,6 +8,28 @@ export const publicSchema = (form: Form) => {
   return {
     type: 'object',
     properties: {
+      title: {
+        title: '标题',
+        type: 'string',
+        required: true,
+        'x-decorator': 'FormItem',
+        'x-decorator-props': {
+          labelWidth: 100
+        },
+        'x-component': 'Input',
+      },
+      cover: {
+        title: '帖子封面',
+        required: true,
+        'x-decorator': 'FormItem',
+        'x-decorator-props': {
+          labelWidth: 100
+        },
+        'x-component': 'RUpload',
+        'x-component-props': {
+          desc: '建议尺寸：192*128px (封面仅展示在首页信息流中)'
+        }
+      },
       category_id: {
         title: '分类',
         type: 'string',
@@ -19,19 +41,6 @@ export const publicSchema = (form: Form) => {
         'x-component': 'RRadio',
         'x-component-props': {
           options: articleCategories
-        }
-      },
-
-      cover: {
-        title: '文章封面',
-        required: true,
-        'x-decorator': 'FormItem',
-        'x-decorator-props': {
-          labelWidth: 100
-        },
-        'x-component': 'RUpload',
-        'x-component-props': {
-          desc: '建议尺寸：192*128px (封面仅展示在首页信息流中)'
         }
       },
       topic_id: {
@@ -50,7 +59,7 @@ export const publicSchema = (form: Form) => {
         }
       },
       abstract: {
-        title: '文章摘要',
+        title: '帖子摘要',
         required: true,
         type: 'string',
         'x-decorator': 'FormItem',
@@ -60,7 +69,7 @@ export const publicSchema = (form: Form) => {
         'x-component': 'Input',
         'x-component-props': {
           type: 'textarea',
-          placeholder: '请输入文章摘要',
+          placeholder: '请输入帖子摘要',
           maxlength: 100,
           minlength: 20,
           'show-word-limit': true,

@@ -188,7 +188,6 @@ const commentListCmp = computed(() => {
 // 跳转私聊界面
 const goToChat = () => {
   const { uid } = getUrlQuery()
-  console.log(authorInfo.value.user_id, 'uiuser_iduser_idd')
   const toUid = authorInfo.value?.user_id
   if (!uid) {
     Message.info('请先登录')
