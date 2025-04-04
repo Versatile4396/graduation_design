@@ -39,7 +39,6 @@ if (props.value) {
   emits('change', props.url)
   imageUrl.value = props.url!
 }
-console.log(props)
 const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
   imageUrl.value = response.data.image_url
   emits('change', response.data.image_url)

@@ -19,7 +19,6 @@ interface Props {
   avatarYou: string
 }
 const props = defineProps<Props>()
-console.log(props)
 </script>
 <style scoped lang="scss">
 .chat-wrapper-container-box {

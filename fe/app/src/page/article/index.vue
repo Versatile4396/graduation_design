@@ -227,7 +227,6 @@ const articleCollect = async () => {
 const getArticleBrief = async () => {
   const { aid } = getUrlQuery()
   const res = await Ajax.get('/article/getById/' + String(aid))
-  console.log(res, 'resres')
   aBrief.value = res.data.article_brief
 }
 

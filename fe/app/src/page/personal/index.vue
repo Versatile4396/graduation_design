@@ -35,7 +35,6 @@ import { getUrlQuery } from '@/utils/common'
 import Ajax from '@/ajax'
 
 const { userInfo } = userInfoStore()
-console.log(userInfo, 'userInfo')
 const paneConfig = [
   {
     label: '个人文章',
