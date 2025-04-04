@@ -70,6 +70,9 @@
         <el-avatar :src="authorInfo.avatar"></el-avatar>
         <div class="name">{{ authorInfo.nickname }}</div>
       </div>
+      <div class="overview">
+        {{ authorInfo.overview || '暂无简介' }}
+      </div>
       <div class="author-create-info">
         <div class="count-info">
           <span>{{ authorInfo.article_count ?? 0 }}</span>
@@ -372,6 +375,11 @@ onMounted(async () => {
     padding: 16px;
     z-index: 2;
     border-radius: 4px;
+    .overview {
+      padding-left: 58px;
+      font-size: 12px;
+      color: #8a919f;
+    }
 
     .author-title {
       display: flex;

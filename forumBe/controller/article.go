@@ -91,6 +91,8 @@ func ArticleGetController(c *gin.Context) {
 		Avatar:   rUserInfo.Avatar,
 		Email:    rUserInfo.Email,
 		Gender:   rUserInfo.Gender,
+		Overview: rUserInfo.Overview,
+		Nickname: rUserInfo.Nickname,
 	}
 	resData := ArticleUserInfo{
 		rArticle,

@@ -1,7 +1,7 @@
 <template>
   <div class="public-container">
     <div class="title">
-      <h3>发布文章</h3>
+      <h3>发布帖子</h3>
     </div>
     <div class="form">
       <RxForm :schema="publicSchema" :initial-values="{ category_id: 1 }" ref="form">

@@ -23,6 +23,7 @@ export interface IAuthor {
   like_count: number
   view_count: number
   article_count: number
+  overview: string
 }
 
 export interface IArticleBrief {
@@ -57,4 +58,5 @@ export interface UserInfo {
   user_id: number
   username: string
   nickname: string
+  overview: string
 }

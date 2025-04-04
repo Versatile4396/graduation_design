@@ -20,6 +20,9 @@
           </el-popover>
         </div>
       </div>
+      <div class="assistance-list">
+        <Assistance v-for="item in asssistanceList" :assistance="item"></Assistance>
+      </div>
     </div>
     <div class="right-box">
       <div class="personal-info">
@@ -27,7 +30,7 @@
           <div class="avatar">
             <el-avatar :src="userInfo.avatar"></el-avatar>
             <span class="name">
-              {{ userInfo.user_name }}
+              {{ userInfo.nickname }}
             </span>
           </div>
           <div class="name"></div>
@@ -42,12 +45,13 @@
 import { userInfoStore } from '@/store/user'
 import { storeToRefs } from 'pinia'
 import InputChat from '../chat/component/input-chat.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import SubmitForm from './components/public-form.vue'
 import Ajax from '@/ajax'
 import { getUrlQuery } from '@/utils/common'
 import { computed } from 'vue'
 import { Message } from '@/utils/message'
+import Assistance from './components/assistance-item.vue'
 
 const { userInfo } = storeToRefs(userInfoStore())
 const popoverStatus = ref(false)
@@ -71,8 +75,15 @@ const submitHandle = async (value: Iparams) => {
     content: assistanceContent.value
   }
   await Ajax.post('/assistance/create', params)
+  inputChat?.value?.clearMsg()
   popoverStatus.value = false
 }
+const asssistanceList = ref()
+onMounted(async () => {
+  const res = await Ajax.post('/assistance/list', {})
+  asssistanceList.value = res.data
+  console.log(res.data, 'rasdas')
+})
 </script>
 <style scoped lang="scss">
 .assistance-container {
@@ -82,15 +93,15 @@ const submitHandle = async (value: Iparams) => {
   .left-box {
     width: 800px;
     margin-right: 16px;
-    background-color: #fff;
-    padding: 16px;
-    border-radius: 4px;
     .submit-wrapper {
-      height: 218px;
+      border-radius: 4px;
+      padding: 16px;
+      background-color: #fff;
+      height: 250px;
       .input-wrapper {
         background-color: #f8f7f7;
         border-radius: 4px;
-        height: 140px;
+        height: 180px;
       }
       .submit-botton {
         height: 78px;
@@ -98,6 +109,10 @@ const submitHandle = async (value: Iparams) => {
         display: flex;
         flex-direction: row-reverse;
       }
+    }
+    .assistance-list {
+      margin-top: 12px;
+      height: 1200px;
     }
   }
   .right-box {

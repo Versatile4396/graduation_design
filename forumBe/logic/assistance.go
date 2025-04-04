@@ -58,7 +58,22 @@ func GetAssistanceList(f models.AssistanceFilter) (rAssistance []*models.Assista
 	}
 	query = query.Order(fmt.Sprintf("created_at %s", orderDir)).Offset(offset).Limit(f.Pagination.PageSize)
 	query.Find(&rAssistance)
+	var userInfo models.UserInfo
+	for _, v := range rAssistance {
+		userInfo, err = GetUserInfo(v.UserId)
+		if err != nil {
+			return nil, err
+		}
+		v.UserInfo = &userInfo
+	}
 	return rAssistance, nil
+}
+func GetUserInfo(userId uint64) (userInfo models.UserInfo, err error) {
+	err = global.Db.Model(&models.User{}).Where("user_id =?", userId).First(&userInfo).Error
+	if err != nil {
+		return userInfo, err
+	}
+	return userInfo, nil
 }
 
 func CreateAssistanceComment(f *models.AssistanceComment) (rf *models.AssistanceComment, err error) {
@@ -96,5 +111,10 @@ func GetAssistanceCommentList(f models.AssistanceCommentFilter) (rAssistanceComm
 	}
 	query = query.Offset(offset).Limit(f.Pagination.PageSize)
 	query.Find(&rAssistanceComment)
+	for _, v := range rAssistanceComment {
+		var userInfo models.UserInfo
+		userInfo, err = GetUserInfo(uint64(v.UserId))
+		v.UserInfo = &userInfo
+	}
 	return
 }

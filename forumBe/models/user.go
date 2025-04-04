@@ -19,7 +19,7 @@ type UserInfo struct {
 	Email    string `json:"email" binding:"required"`       // 邮箱
 	Gender   int    `json:"gender" binding:"oneof=0 1 2 3"` // 性别 0:未知 1:男 2:女
 	Avatar   string `json:"avatar"`
-	NickName string `json:"nickname"` // 昵称
+	Nickname string `json:"nickname"` // 昵称
 	Overview string `json:"overview"` // 简介
 }
 

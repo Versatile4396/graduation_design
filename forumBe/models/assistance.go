@@ -12,6 +12,7 @@ type Assistance struct {
 	TagId        int       `json:"tag_id"`
 	Cover        string    `json:"cover"`
 	Abstract     string    `json:"abstract"`
+	UserInfo     *UserInfo `json:"user_info" gorm:"-"`
 	CreateTime   time.Time `json:"create_at" gorm:"column:created_at;default:CURRENT_TIMESTAMP"`
 	UpdateTime   time.Time `json:"update_at" gorm:"column:updated_at;default:CURRENT_TIMESTAMP"`
 }

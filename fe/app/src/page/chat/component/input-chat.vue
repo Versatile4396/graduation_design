@@ -2,7 +2,12 @@
   <div class="container">
     <div class="top-icon">
       <!-- emoji图标 -->
-      <el-popover placement="top-end" trigger="click" width="450">
+      <el-popover
+        placement="top-end"
+        trigger="click"
+        width="450"
+        v-model:visible="emojiPopoverStatus"
+      >
         <template #reference>
           <div class="icon-box">
             <svg
@@ -40,6 +45,15 @@
         </template>
         <Emoji @selectEmoji="handleSelectEmoji"></Emoji>
       </el-popover>
+      <el-upload
+        class="avatar-uploader"
+        action="http://127.0.0.1:5555/api/upload/image"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess"
+        :before-upload="beforeAvatarUpload"
+      >
+        <svg-icon iconName="icon-shangchuantupian" color="#4F4F4F"></svg-icon>
+      </el-upload>
     </div>
     <!-- 自定义输入框 -->
     <div
@@ -58,6 +72,8 @@
 <script setup lang="ts">
 import Emoji from './Emoji.vue'
 import { computed, onMounted, ref } from 'vue'
+import type { UploadProps } from 'element-plus'
+import { ElMessage } from 'element-plus'
 
 interface Props {
   enterLock?: boolean
@@ -69,6 +85,25 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emits = defineEmits(['sendMsg'])
+
+const emojiPopoverStatus = ref(false)
+
+const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+  if (rawFile.type !== 'image/jpeg') {
+    ElMessage.error('Avatar picture must be JPG format!')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error('Avatar picture size can not exceed 2MB!')
+    return false
+  }
+  return true
+}
+
+const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
+  const imageUrl = response.data.image_url
+  const imageNode = `<img src="${imageUrl}" width="50" height="50" style="vertical-align: middle; margin:2px;">`
+  handleInsertImage(imageNode)
+}
 
 const messageInputDom = ref<HTMLInputElement>()
 
@@ -82,7 +117,8 @@ const handleSendMessage = () => {
     messageInputDom.value!.innerHTML = ''
   }
 }
-const handleSelectEmoji = (index: number) => {
+
+const handleInsertImage = (imageUrl: string) => {
   if (document.activeElement != messageInputDom.value) {
     messageInputDom.value?.focus()
     // 将光标移动到输入框的末尾
@@ -93,9 +129,14 @@ const handleSelectEmoji = (index: number) => {
     selection?.removeAllRanges()
     selection?.addRange(range)
   }
+  document.execCommand('insertHTML', false, imageUrl)
+}
+
+const handleSelectEmoji = (index: number) => {
   // 构建emoji的HTML字符串
   const emojiImg = `<img src="/src/assets/gif/${index}.gif" width="25" height="25" style="vertical-align: middle; margin:2px;">`
-  document.execCommand('insertHTML', false, emojiImg)
+  handleInsertImage(emojiImg)
+  emojiPopoverStatus.value = false
 }
 onMounted(() => {
   messageInputDom.value?.addEventListener('keydown', (event) => {
@@ -111,7 +152,12 @@ onMounted(() => {
 const value = computed(() => {
   return messageInputDom.value?.innerHTML || ''
 })
-defineExpose({ value })
+
+const clearMsg = () => {
+  messageInputDom.value!.innerHTML = ''
+}
+
+defineExpose({ value, clearMsg })
 </script>
 
 <style scoped lang="scss">
