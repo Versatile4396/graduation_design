@@ -212,9 +212,9 @@ CREATE TABLE
         content TEXT NOT NULL COMMENT '互助内容',
         user_id VARCHAR(20) NOT NULL COMMENT '用户ID',
         category_id INT NOT NULL COMMENT '分类id',
-        tag_id INT  COMMENT '标签id',
-        topic_id INT  COMMENT '话题id',
-        abstract VARCHAR(200)  COMMENT '互助摘要',
+        tag_id INT COMMENT '标签id',
+        topic_id INT COMMENT '话题id',
+        abstract VARCHAR(200) COMMENT '互助摘要',
         cover VARCHAR(200) NOT NULL COMMENT '互助封面',
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -276,15 +276,16 @@ INSERT INTO
 VALUES
     ('管理学类', null);
 
-insert into
+INSERT into
     article_categories (category_name, parent_id)
 values
-    ('校园OKR', null)
-insert into
+    ('校园OKR', null);
+INSERT INTO
     topics (topic_name, topic_desc)
 values
-    ('新人报道', '新人报道赛道')
-    -- 插入数学学习方法主题
+    ('新人报道', '新人报道赛道');
+
+-- 插入数学学习方法主题
 INSERT INTO
     topics (topic_name, topic_desc)
 VALUES
