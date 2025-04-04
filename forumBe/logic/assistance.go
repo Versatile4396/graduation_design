@@ -5,7 +5,6 @@ import (
 	"forum/global"
 	"forum/models"
 	"forum/pkg/snowflake"
-	"time"
 )
 
 func CreateAssistance(a *models.Assistance) (ra *models.Assistance, err error) {
@@ -13,9 +12,6 @@ func CreateAssistance(a *models.Assistance) (ra *models.Assistance, err error) {
 	if err != nil {
 		return nil, err
 	}
-	now := time.Now()
-	a.CreateTime = now
-	a.UpdateTime = now
 	err = global.Db.Create(&a).Error
 	if err != nil {
 		return nil, err

@@ -12,8 +12,8 @@ type Assistance struct {
 	TagId        int       `json:"tag_id"`
 	Cover        string    `json:"cover"`
 	Abstract     string    `json:"abstract"`
-	CreateTime   time.Time `json:"create_at" gorm:"column:created_at"`
-	UpdateTime   time.Time `json:"update_at" gorm:"column:updated_at"`
+	CreateTime   time.Time `json:"create_at" gorm:"column:created_at;default:CURRENT_TIMESTAMP"`
+	UpdateTime   time.Time `json:"update_at" gorm:"column:updated_at;default:CURRENT_TIMESTAMP"`
 }
 type AssistanceFilter struct {
 	AssistanceId uint64 `json:"assistance_id"`

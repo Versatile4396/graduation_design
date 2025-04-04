@@ -22,7 +22,7 @@ type CommentFilter struct {
 type AssistanceComment struct {
 	CommentId       uint64     `json:"comment_id"`
 	UserId          int64      `json:"user_id"`
-	ArticleId       int64      `json:"article_id"`
+	AssistanceId    int64      `json:"article_id"`
 	Content         string     `json:"content" binding:"required"`
 	ParentCommentId *uint64    `json:"parent_comment_id"`
 	UserInfo        *UserInfo  `json:"user_info" gorm:"-"`
