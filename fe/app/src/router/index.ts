@@ -11,6 +11,7 @@ export enum routerName {
   Article = 'article',
   SEARCH = 'search',
   CHAT = 'chat',
+  BACKEND = 'backend',
   TEST = 'test'
 }
 
@@ -94,6 +95,14 @@ export const routes: RouteRecordRaw[] = [
       title: '私聊界面'
     },
     component: () => import('@/page/chat/index.vue')
+  },
+  {
+    path: '/backend',
+    name: routerName.BACKEND,
+    meta: {
+      title: '后台管理'
+    },
+    component: () => import('@/page/backend/index.vue')
   },
   {
     path: '/test',

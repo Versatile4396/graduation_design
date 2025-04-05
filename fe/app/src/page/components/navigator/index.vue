@@ -143,6 +143,11 @@ const naviConfig: naviNode[] = [
     path: '/personal',
     name: 'personal',
     label: '个人中心'
+  },
+  {
+    path: '/backend',
+    name: 'backend',
+    label: '后台管理'
   }
 ]
 const activeNodeIndex = ref(0)

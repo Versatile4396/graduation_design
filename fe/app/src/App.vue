@@ -2,8 +2,9 @@
   <Navigator v-show="navigatorStatus"></Navigator>
   <div
     :class="{
-      occpancy: navigatorStatus
+      occpancy: navigatorStatus && !marginStatus
     }"
+    class="base-content"
   >
     <RouterView />
   </div>
@@ -13,7 +14,7 @@ import Navigator from '@/page/components/navigator/index.vue'
 import { RouterView } from 'vue-router'
 import { computed, onMounted, watch } from 'vue'
 import router, { routerName } from './router'
-import { getUrlQuery, userLocalInfo } from '@/utils/common'
+import { userLocalInfo } from '@/utils/common'
 import { userInfoStore } from './store/user'
 const { setUserInfo } = userInfoStore()
 
@@ -22,6 +23,9 @@ const navigatorStatus = computed(() => {
     // @ts-ignore
     router.currentRoute.value.name
   )
+})
+const marginStatus = computed(() => {
+  return router.currentRoute.value.name === routerName.BACKEND
 })
 
 const initApp = () => {
@@ -63,5 +67,10 @@ onMounted(() => {
 <style scoped>
 .occpancy {
   margin-top: 16px;
+  height: calc(100vh - 76px);
+}
+.base-content {
+  height: calc(100vh - 60px);
+  width: 100%;
 }
 </style>
