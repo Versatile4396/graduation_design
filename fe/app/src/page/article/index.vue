@@ -89,7 +89,7 @@
         </div>
       </div>
       <div class="chat-author">
-        <el-button type="primary" @click="goToChat">
+        <el-button type="primary" @click="handleChatClick">
           <template #default><span class="chat-btn">私聊</span></template>
         </el-button>
       </div>
@@ -108,8 +108,7 @@ import { userInfoStore } from '@/store/user'
 import { type IArticle, type IAuthor, type IComment, type IArticleBrief } from './component/types'
 import CommentInput from './component/comment-input.vue'
 import { scrollToAnchor } from '@/utils/utils'
-import router, { routerName } from '@/router'
-import { Message } from '@/utils/message'
+import { goToChat } from '@/utils/goto'
 
 const { userInfo } = userInfoStore()
 
@@ -188,19 +187,12 @@ const commentListCmp = computed(() => {
   })
   return result
 })
+
 // 跳转私聊界面
-const goToChat = () => {
+const handleChatClick = () => {
   const { uid } = getUrlQuery()
   const toUid = authorInfo.value?.user_id
-  if (!uid) {
-    Message.info('请先登录')
-    return
-  }
-  if (String(uid) === String(toUid)) {
-    Message.info('不能和自己私聊')
-    return
-  }
-  router.push({ name: routerName.CHAT, query: { uid, toUid } })
+  goToChat(Number(uid), toUid!)
 }
 
 const articleLike = async () => {

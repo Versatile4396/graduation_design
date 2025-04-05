@@ -60,13 +60,11 @@ func GetAssistanceList(f models.AssistanceFilter) (rAssistance []*models.Assista
 	query.Find(&rAssistance)
 	for _, v := range rAssistance {
 		var userInfo models.UserInfo
-		fmt.Println(v.UserId, "userid")
 		userInfo, err = GetUserInfo(v.UserId)
 		if err != nil {
 			return nil, err
 		}
 		v.UserInfo = &userInfo
-		fmt.Println(v.UserInfo, "userid")
 	}
 	return rAssistance, nil
 }

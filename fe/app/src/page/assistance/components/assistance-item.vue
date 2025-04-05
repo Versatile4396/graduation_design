@@ -2,11 +2,7 @@
   <div class="assistance-item-container-box">
     <div class="detail-info">
       <div class="userinfo">
-        <el-popover>
-          <template #reference>
-            <el-avatar :src="assistance.user_info.avatar" />
-          </template>
-        </el-popover>
+        <chatAvatar :user-info="assistance.user_info"></chatAvatar>
         <div class="overview-wrapper">
           <div class="name">{{ assistance.user_info.nickname }}</div>
           <div class="overview">
@@ -49,7 +45,7 @@ import { computed, onMounted, ref } from 'vue'
 import SvgIcon from '@/assets/iconfont/SvgIcon.vue'
 import CommentInput from '@/page/article/component/comment-input.vue'
 import Comment from '@/page/article/component/comment.vue'
-
+import chatAvatar from '@/components/chat-avatar.vue'
 import Ajax from '@/ajax'
 import { getUrlQuery } from '@/utils/common'
 
@@ -152,6 +148,9 @@ onMounted(async () => {
           font-size: 12px;
           color: #8a919f;
         }
+      }
+      .popover-wrapper {
+        display: flex;
       }
     }
   }

@@ -82,7 +82,6 @@ const asssistanceList = ref()
 onMounted(async () => {
   const res = await Ajax.post('/assistance/list', {})
   asssistanceList.value = res.data
-  console.log(res.data, 'rasdas')
 })
 </script>
 <style scoped lang="scss">

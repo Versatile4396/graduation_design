@@ -1,7 +1,7 @@
 <template>
   <div class="comment-container-box">
     <div class="first-comment-box">
-      <el-avatar :size="avatarSize" class="avatar" :src="userInfo.avatar" />
+      <chatAvatar :user-info="userInfo" :avatar-size="30"></chatAvatar>
       <div class="comment-content">
         <div class="username">
           {{ userInfo.nickname }}
@@ -42,6 +42,7 @@
 import { computed } from 'vue'
 import { type IComment } from './types'
 import CommentInput from './comment-input.vue'
+import chatAvatar from '@/components/chat-avatar.vue'
 
 interface Props {
   avatarSize?: number
@@ -87,6 +88,7 @@ const timeFormat = (time: string) => {
       display: flex;
       flex-direction: column;
       row-gap: 4px;
+      margin-left: 4px;
 
       .username {
         font-size: 16px;
