@@ -1,6 +1,6 @@
 <template>
   <div class="operator-container-box">
-    <el-button type="primary">编辑</el-button>
+    <el-button type="primary" @click="handleEditorClick">编辑</el-button>
     <el-popover trigger="click" width="90px" v-model:visible="deleteVisible">
       <template #reference>
         <el-button type="danger"> {{ buttonText[0] }}</el-button>
@@ -39,6 +39,11 @@ const handleDeleteClick = async () => {
 }
 const handleCancelClick = () => {
   deleteVisible.value = false
+}
+const handleEditorClick = () => {
+  if (props.handleEditor) {
+    props.handleEditor(props.row)
+  }
 }
 </script>
 <style scoped lang="scss">

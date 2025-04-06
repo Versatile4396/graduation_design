@@ -1,3 +1,4 @@
+import router from '@/router'
 import type { Form } from '@formily/core'
 import type { ISchema } from '@formily/vue'
 
@@ -49,7 +50,6 @@ const validatorPassword = (form: Form) => {
     return true
   }
 }
-
 export const registerSchema = (form: Form) => {
   return {
     type: 'object',
@@ -90,8 +90,8 @@ export const registerSchema = (form: Form) => {
           format: 'email'
         }
       },
-      overview:{
-        type:'string',
+      overview: {
+        type: 'string',
         'x-decorator': 'FormItem',
         'x-component': 'Input',
         'x-component-props': {
@@ -102,7 +102,7 @@ export const registerSchema = (form: Form) => {
           'show-word-limit': true,
           autosize: {
             minRows: 2,
-            maxRows: 3,
+            maxRows: 3
           }
         }
       },
@@ -115,6 +115,8 @@ export const registerSchema = (form: Form) => {
           },
           validatorPassword(form)
         ],
+        // 根据页面url判断是否显示
+        'x-visible': window.location.pathname !== '/forum/backend',
         'x-decorator': 'FormItem',
         'x-component': 'Password',
         'x-component-props': {
@@ -130,7 +132,7 @@ export const registerSchema = (form: Form) => {
           },
           validatorConfirmPassWord(form)
         ],
-
+        'x-visible': window.location.pathname !== '/forum/backend',
         'x-decorator': 'FormItem',
         'x-component': 'Password',
         'x-component-props': {
