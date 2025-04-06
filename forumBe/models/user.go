@@ -34,3 +34,13 @@ type UserCountInfo struct {
 	AritcleCount int64 `json:"article_count"`
 	CommentCount int64 `json:"comment_cnt"`
 }
+type UserFilter struct {
+	Pagination *Pagination `json:"pagination"`
+	UserId     uint64      `json:"user_id"`
+	UserName   string      `json:"username"`
+	Nickname   string      `json:"nickname"`
+	Overview   string      `json:"overview"`
+	Email      string      `json:"email"`
+	Gender     int         `json:"gender"`
+	Order      string      `json:"order"`
+}

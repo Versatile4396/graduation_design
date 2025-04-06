@@ -106,3 +106,34 @@ func GetCountController(uid uint64) (countInfo *models.UserCountInfo, err error)
 	// comments.Count(&countInfo.CommentCount)
 	return countInfo, nil
 }
+
+func GetUserList(fo *models.UserFilter) (userList []models.UserInfo, err error) {
+	if fo.Pagination == nil {
+		fo.Pagination = &models.Pagination{
+			Page:     1,
+			PageSize: 10,
+		}
+	}
+	query := global.Db.Model(&models.User{})
+	if fo.UserId != 0 {
+		query = query.Where("user_id = ?", fo.UserId)
+	}
+	if fo.UserName != "" {
+		query = query.Where("username LIKE ?", "%"+fo.UserName+"%")
+	}
+	if fo.Nickname != "" {
+		query = query.Where("nickname LIKE?", "%"+fo.Nickname+"%")
+	}
+	if fo.Overview != "" {
+		query = query.Where("overview LIKE?", "%"+fo.Overview+"%")
+	}
+	if fo.Email != "" {
+		query = query.Where("email LIKE?", "%"+fo.Email+"%")
+	}
+	if fo.Gender != 0 {
+		query = query.Where("gender =?", fo.Gender)
+	}
+	offset := fo.Pagination.PageSize * (fo.Pagination.Page - 1)
+	query.Find(&userList).Offset(offset).Limit(fo.Pagination.PageSize)
+	return
+}

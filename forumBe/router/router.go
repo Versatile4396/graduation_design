@@ -25,6 +25,7 @@ func SetupRouter() *gin.Engine {
 		user.POST("/login", controller.UserLoginController)
 		user.POST("/userinfo", controller.UserLoginController)
 		user.POST("/count/info/:uid", controller.UserGetCountController)
+		user.POST("/list", controller.UserGetListController)
 	}
 	article := router.Group("/api/article")
 	{

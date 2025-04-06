@@ -92,3 +92,22 @@ func UserGetCountController(c *gin.Context) {
 	}
 	ResponseSuccess(c, countInfo)
 }
+
+func UserGetListController(c *gin.Context) {
+	filter := &models.UserFilter{}
+	if c.Request.ContentLength != 0 {
+		if err := c.ShouldBindJSON(&filter); err != nil {
+			zap.L().Error("GetUserList with invalid param", zap.Error(err))
+			ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+			return
+		}
+	}
+	// 业务处理-获取用户信息
+	userList, err := logic.GetUserList(filter)
+	if err != nil {
+		zap.L().Error("logic.GetUserList failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, userList)
+}
