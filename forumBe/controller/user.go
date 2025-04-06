@@ -133,8 +133,8 @@ func UserUpdateController(c *gin.Context) {
 func UserDeleteController(c *gin.Context) {
 	// 业务处理-删除用户信息
 	type deleteForm struct {
-		UserId  uint64 `json:"user_id" binding:"required"`
-		Deleted int    `json:"deleted" binding:"required"`
+		UserId  uint64 `json:"user_id"`
+		Deleted int    `json:"deleted"`
 	}
 	var fo *deleteForm
 	if err := c.ShouldBindJSON(&fo); err != nil {

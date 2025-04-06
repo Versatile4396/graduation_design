@@ -44,6 +44,8 @@ const pageComponents = {
   '4': AnnouncementPage
 }
 
+
+//@ts-ignore
 const currentComponent = computed(() => pageComponents[currentMenu.value as string])
 
 const currentMenu = ref('1')

@@ -32,7 +32,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { type FilterConfigType, FilterType } from './filterConfig'
+import { type FilterConfigType, FilterType } from './config/filterConfig'
 interface Props {
   filterConfig: FilterConfigType[]
   filterValue: any

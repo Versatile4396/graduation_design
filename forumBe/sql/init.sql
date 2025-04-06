@@ -41,6 +41,7 @@ CREATE TABLE
         inbox_unread INT (11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '未读私信数',
         headline VARCHAR(40) DEFAULT NULL COMMENT '一句话介绍',
         deleted TINYINT (1) NOT NULL DEFAULT 0 COMMENT '是否已删除',
+        role TINYINT (1) NOT NULL DEFAULT 0 COMMENT '用户角色 0:普通用户 1:管理员 ',
         deleted_at DATETIME DEFAULT NULL COMMENT '删除时间',
         bio VARCHAR(160) DEFAULT NULL COMMENT '个人简介',
         company VARCHAR(255) DEFAULT NULL COMMENT '公司名称',
