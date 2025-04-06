@@ -44,3 +44,13 @@ type UserFilter struct {
 	Gender     int         `json:"gender"`
 	Order      string      `json:"order"`
 }
+
+type UserUpdateForm struct {
+	UserId   uint64 `json:"user_id"`
+	Email    string `json:"email"`
+	Gender   int    `json:"gender"`
+	UserName string `json:"username"`
+	Avatar   string `json:"avatar"`
+	Nickname string `json:"nickname"`
+	Overview string `json:"overview"`
+}

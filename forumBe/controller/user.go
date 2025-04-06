@@ -111,3 +111,21 @@ func UserGetListController(c *gin.Context) {
 	}
 	ResponseSuccess(c, userList)
 }
+
+func UserUpdateController(c *gin.Context) {
+	var user *models.UserUpdateForm
+	if err := c.ShouldBindJSON(&user); err != nil {
+		zap.L().Error("update with invalid param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	// 业务处理-更新用户信息
+	err := logic.UpdateUser(user)
+
+	if err != nil {
+		zap.L().Error("logic.UpdateUser failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, nil)
+}
