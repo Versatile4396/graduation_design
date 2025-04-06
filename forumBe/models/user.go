@@ -46,7 +46,7 @@ type UserFilter struct {
 }
 
 type UserUpdateForm struct {
-	UserId   uint64 `json:"user_id"`
+	UserId   uint64 `json:"user_id" gorm:"-"`
 	Email    string `json:"email"`
 	Gender   int    `json:"gender"`
 	UserName string `json:"username"`

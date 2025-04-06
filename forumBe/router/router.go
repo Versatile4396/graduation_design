@@ -1,18 +1,49 @@
 package router
 
 import (
+	"bytes"
 	"forum/controller"
 	"forum/logger"
 	"forum/middleware"
+	"io"
+	"net/http"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
+// SetEmptyBodyToJSON 是一个Gin中间件，用于在POST请求中，如果请求体为空，则将其设置为 {}
+func SetEmptyBodyToJSON() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if c.Request.Method == http.MethodPost {
+			// 读取请求体
+			body, err := io.ReadAll(c.Request.Body)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read request body"})
+				c.Abort()
+				return
+			}
+			// 关闭原请求体
+			c.Request.Body.Close()
+
+			// 如果请求体为空，则设置为 {}
+			if len(body) == 0 {
+				body = []byte("{}")
+			}
+
+			// 重新设置请求体
+			c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
+		}
+		// 继续处理请求
+		c.Next()
+	}
+}
+
 func SetupRouter() *gin.Engine {
 	router := gin.New()
 	router.Use(cors.Default())
+	router.Use(SetEmptyBodyToJSON())
 	// 设置中间件 recovery 中间件会recovery项目中kennel会出现的panic
 	router.Use(logger.GinLogger(),
 		logger.GinRecovery(true),
