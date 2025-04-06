@@ -6,6 +6,7 @@ import (
 	"forum/models"
 	"forum/pkg/jwt"
 	"forum/pkg/snowflake"
+	"time"
 )
 
 const secret = "mande.versatile"
@@ -146,5 +147,13 @@ func UpdateUser(fo *models.UserUpdateForm) (err error) {
 	}
 	// 更新用户信息
 	err = global.Db.Model(&models.User{}).Where("user_id =?", fo.UserId).Updates(fo).Error
+	return
+}
+
+func DeleteUser(uid uint64, delete int) (err error) {
+	// 处理用户信息
+	err = global.Db.Model(&models.User{}).Where("user_id =?", uid).Update("deleted", delete).Error
+	curTime := time.Now()
+	err = global.Db.Model(&models.User{}).Where("user_id =?", uid).Update("deleted_at", curTime).Error
 	return
 }

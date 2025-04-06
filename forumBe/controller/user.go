@@ -129,3 +129,25 @@ func UserUpdateController(c *gin.Context) {
 	}
 	ResponseSuccess(c, nil)
 }
+
+func UserDeleteController(c *gin.Context) {
+	// 业务处理-删除用户信息
+	type deleteForm struct {
+		UserId  uint64 `json:"user_id" binding:"required"`
+		Deleted int    `json:"deleted" binding:"required"`
+	}
+	var fo *deleteForm
+	if err := c.ShouldBindJSON(&fo); err != nil {
+		zap.L().Error("delete with invalid param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+
+	err := logic.DeleteUser(fo.UserId, fo.Deleted)
+	if err != nil {
+		zap.L().Error("logic.DeleteUser failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, nil)
+}

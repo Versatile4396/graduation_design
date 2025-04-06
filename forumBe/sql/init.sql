@@ -40,6 +40,8 @@ CREATE TABLE
         notification_unread INT (11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '未读通知数',
         inbox_unread INT (11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '未读私信数',
         headline VARCHAR(40) DEFAULT NULL COMMENT '一句话介绍',
+        deleted TINYINT (1) NOT NULL DEFAULT 0 COMMENT '是否已删除',
+        deleted_at DATETIME DEFAULT NULL COMMENT '删除时间',
         bio VARCHAR(160) DEFAULT NULL COMMENT '个人简介',
         company VARCHAR(255) DEFAULT NULL COMMENT '公司名称',
         location VARCHAR(255) DEFAULT NULL COMMENT '地址',
@@ -282,6 +284,7 @@ INSERT into
     article_categories (category_name, parent_id)
 values
     ('校园OKR', null);
+
 INSERT INTO
     topics (topic_name, topic_desc)
 values
