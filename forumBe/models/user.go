@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type User struct {
 	UserId          uint64 `json:"user_id"`                        // 用户Id
 	UserName        string `json:"username" binding:"required"`    // 用户名
@@ -64,4 +66,19 @@ type UserUpdateForm struct {
 	Avatar   string `json:"avatar"`
 	Nickname string `json:"nickname"`
 	Overview string `json:"overview"`
+}
+
+type UserFriendForm struct {
+	UserId   uint64 `json:"user_id"`
+	FriendId uint64 `json:"friend_id"`
+	Add      int    `json:"add"` // 1:添加好友 2:删除好友
+}
+
+type UserFriend struct {
+	ID        int32     `json:"id" gorm:"primarykey"`
+	CreatedAt time.Time `json:"createAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	DeletedAt uint      `json:"deletedAt"`
+	UserId    uint64    `json:"userId" gorm:"index;comment:'用户ID'"`
+	FriendId  uint64    `json:"friendId" gorm:"index;comment:'好友ID'"`
 }

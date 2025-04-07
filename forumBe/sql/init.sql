@@ -250,6 +250,21 @@ CREATE TABLE
         KEY user_id (user_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
+-- 创建user_friends表，用于存储用户之间的关注关系
+DROP TABLE IF EXISTS `user_friends`;
+CREATE TABLE
+    IF NOT EXISTS `user_friends` (
+        `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',
+        `created_at` datetime (3) DEFAULT NULL COMMENT '创建时间',
+        `updated_at` datetime (3) DEFAULT NULL COMMENT '更新时间',
+        `deleted_at` bigint unsigned DEFAULT NULL COMMENT '删除时间戳',
+        `user_id` int DEFAULT NULL COMMENT '用户ID',
+        `friend_id` int DEFAULT NULL COMMENT '好友ID',
+        PRIMARY KEY (`id`),
+        KEY `idx_user_friends_user_id` (`user_id`),
+        KEY `idx_user_friends_friend_id` (`friend_id`)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT '好友信息表';
+
 -- 插入 article_categories 数据
 INSERT INTO
     article_categories (category_name, parent_id)

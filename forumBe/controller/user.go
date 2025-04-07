@@ -223,3 +223,19 @@ func UserDeleteController(c *gin.Context) {
 	}
 	ResponseSuccess(c, nil)
 }
+
+func UserFriendController(c *gin.Context) {
+	var fo *models.UserFriendForm
+	if err := c.ShouldBindJSON(&fo); err != nil {
+		zap.L().Error("friend with invalid param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	err := logic.Friend(fo)
+	if err != nil {
+		zap.L().Error("logic.Friend failed", zap.Error(err))
+		ResponseSuccess(c, nil)
+		return
+	}
+	ResponseSuccess(c, nil)
+}

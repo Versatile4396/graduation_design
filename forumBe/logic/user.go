@@ -157,3 +157,17 @@ func DeleteUser(uid uint64, delete int) (err error) {
 	err = global.Db.Model(&models.User{}).Where("user_id =?", uid).Update("deleted_at", curTime).Error
 	return
 }
+
+func Friend(fo *models.UserFriendForm) (err error) {
+	// 前置处理
+	err = mysql.CheckFriendsExit(fo)
+	if err != nil {
+		return err
+	}
+	userFriend := models.UserFriend{
+		UserId:   fo.UserId,
+		FriendId: fo.FriendId,
+	}
+	global.Db.Create(&userFriend)
+	return err
+}

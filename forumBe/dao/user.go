@@ -22,6 +22,30 @@ func CheckUserExit(user *models.User) (error error) {
 	return
 }
 
+func CheckUserExitById(user *models.User) (error error) {
+	var count int64
+	result := global.Db.Model(&models.User{}).Where("user_id =?", user.UserId).Count(&count)
+	if result.Error != nil {
+		panic(result.Error)
+	}
+	if count > 0 {
+		return errors.New(ErrorUserExit)
+	}
+	return
+}
+func CheckFriendsExit(fo *models.UserFriendForm) (error error) {
+	var count = int64(0)
+	userFriendQuery := models.UserFriend{}
+	result := global.Db.Model(&userFriendQuery).Where("user_id =? and friend_id =?", fo.UserId, fo.FriendId).Count(&count)
+	if result.Error != nil {
+		panic(result.Error)
+	}
+	if count > 0 {
+		return errors.New("已经是好友了")
+	}
+	return
+}
+
 func Login(user *models.User) (u *models.User, error error) {
 	// 记录用户原始密码
 	originPassword := user.Password
