@@ -21,10 +21,9 @@ export default {
 </script>
 <script lang="ts" setup>
 import { createForm, setValidateLanguage } from '@formily/core'
-
 import { createSchemaField, FormProvider } from '@formily/vue'
 import { Input, Switch, Radio, FormItem, Password } from '@formily/element-plus'
-import { RRadio, RUpload, RSelect } from './components/index'
+import { RRadio, RUpload, RSelect, RVericode } from './components/index'
 import { ElButton } from 'element-plus'
 import { computed, provide, ref } from 'vue'
 import { formContextKey } from './context/formcontext'
@@ -108,7 +107,8 @@ const fieldSchema = createSchemaField({
     FormItem,
     RRadio,
     RUpload,
-    RSelect
+    RSelect,
+    RVericode
   }
 }).SchemaField
 

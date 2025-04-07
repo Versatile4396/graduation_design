@@ -6,7 +6,7 @@
       :initial-values="{ ...row }"
       submit-text="确定更改"
       cancel-text="取消更改"
-      :submit="(f: any) => submitHandle(f)"
+      :submit="submitHandle"
       @cancel="cancelHandle"
     ></RxForm>
   </div>

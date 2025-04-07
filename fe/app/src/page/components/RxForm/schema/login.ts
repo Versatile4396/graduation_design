@@ -78,6 +78,7 @@ export const registerSchema = (form: Form) => {
           maxLength: 16
         }
       },
+
       email: {
         type: 'string',
         'x-decorator': 'FormItem',
@@ -173,6 +174,20 @@ export const registerSchema = (form: Form) => {
           width: '50px',
           height: '50px'
         }
+      },
+      capcha: {
+        type: 'string',
+        required: true,
+        'x-decorator': 'FormItem',
+        'x-component': 'RVericode',
+        'x-component-props': {
+          placeholder: '输入验证码'
+        },
+        'x-validator': {
+          maxLength: 6,
+          minLength: 6
+        },
+        'x-visible': window.location.pathname !== '/forum/backend'
       }
     }
   }

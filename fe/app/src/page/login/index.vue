@@ -22,13 +22,12 @@
             :schema="registerSchema"
             :initial-values="{
               username: 'username',
-              email: 'asd@qq.com',
+              email: '13411194396@163.com',
               confirm_password: '123456',
               password: '123456',
               gender: 1,
               nickname: '章三',
               overview: '一个叫张三的man'
-              
             }"
             submit-text="注册"
             cancel-text="去登录"
@@ -51,8 +50,11 @@ import Ajax from '@/ajax'
 import { userInfoStore } from '@/store/user'
 import router from '@/router'
 import type { userInfo } from '@/ajax/type/user'
+import type { Form } from '@formily/core'
 
 const { setUserInfo } = userInfoStore()
+const registerForm = ref<Form>()
+
 enum loginType {
   Login = 'login',
   Register = 'register'
