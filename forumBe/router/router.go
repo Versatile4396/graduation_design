@@ -56,6 +56,8 @@ func SetupRouter() *gin.Engine {
 		user.POST("/login", controller.UserLoginController)
 		user.POST("/userinfo", controller.UserLoginController)
 		user.POST("/count/info/:uid", controller.UserGetCountController)
+		user.POST("/sendEmailCode", controller.SendEmailCodeController)
+		user.POST("/validateEmail", controller.UserValidateEmailController)
 		user.POST("/list", controller.UserGetListController)
 		user.POST("/update", controller.UserUpdateController)
 		user.POST("/delete", controller.UserDeleteController)

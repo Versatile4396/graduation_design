@@ -6,6 +6,7 @@ type User struct {
 	Nickname        string `json:"nickname"`                              // 昵称
 	Overview        string `json:"overview"`                              // 昵称
 	Email           string `json:"email" binding:"required"`              // 邮箱
+	Captcha         string `json:"captcha" binding:"required" gorm:"-"`   // 邮箱验证码
 	Gender          int    `json:"gender" binding:"oneof=0 1 2 3"`        // 性别 0:未知 1:男 2:女
 	Password        string `json:"password,omitempty" binding:"required"` // 密码
 	ConfirmPassword string `json:"confirm_password,omitempty" binding:"required,eqfield=Password"`
@@ -38,6 +39,12 @@ type UserCountInfo struct {
 	AritcleCount int64 `json:"article_count"`
 	CommentCount int64 `json:"comment_cnt"`
 }
+
+type UserValidateEmailForm struct {
+	Email   []string `json:"email"`
+	Captcha string   `json:"captcha"`
+}
+
 type UserFilter struct {
 	Pagination *Pagination `json:"pagination"`
 	UserId     uint64      `json:"user_id"`

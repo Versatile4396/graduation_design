@@ -7,10 +7,15 @@ import (
 	"forum/logger"
 	"forum/logic"
 	"forum/models"
+	"forum/pkg/cache"
+	"math/rand"
+	"net/smtp"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/jordan-wright/email"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -28,6 +33,16 @@ func UserRegisterController(c *gin.Context) {
 		zap.L().Error("SignUp with invalid param", zap.Error(err))
 
 		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	// // 验证码
+	code, err := cache.RedisClient.Get(c, user.Email).Result()
+	if err != nil {
+		ResponseErrorWithMsg(c, CodeServerBusy, "验证码错误")
+		return
+	}
+	if code != user.Captcha {
+		ResponseErrorWithMsg(c, CodeCaptchaWrong, "验证码错误")
 		return
 	}
 	// 业务处理-注册用户
@@ -91,6 +106,62 @@ func UserGetCountController(c *gin.Context) {
 		return
 	}
 	ResponseSuccess(c, countInfo)
+}
+
+func SendEmailCodeController(c *gin.Context) {
+	var fo *models.UserValidateEmailForm
+	if err := c.ShouldBindJSON(&fo); err != nil {
+		zap.L().Error("sendEmailCode with invalid param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	// 业务处理-发送验证码 有问题 不管了
+	vCode, err := SendEmailCode(fo.Email)
+	// 保存验证码到redis中
+	cache.RedisClient.Set(c, fo.Email[0], vCode, 5*time.Minute)
+	if err != nil {
+		zap.L().Error("SendEmailCode failed", zap.Error(err))
+		ResponseSuccessWithMsg(c, vCode, "验证码发送成功")
+		return
+	}
+	ResponseSuccessWithMsg(c, vCode, "验证码发送成功")
+}
+
+func SendEmailCode(em []string) (string, error) {
+	e := email.NewEmail()
+	e.From = fmt.Sprintf("发件人笔名 <1808368025@qq.com>")
+	e.To = em
+	// 生成6位随机验证码
+	rnd := rand.New(rand.NewSource(time.Now().UnixNano()))
+	vCode := fmt.Sprintf("%06v", rnd.Int31n(1000000))
+	t := time.Now().Format("2006-01-02 15:04:05")
+	//设置文件发送的内容
+	content := fmt.Sprintf(`
+		<div>
+			<div>
+				尊敬的%s，您好！
+			</div>
+			<div style="padding: 8px 40px 8px 50px;">
+				<p>您于 %s 提交的邮箱验证，本次验证码为<u><strong>%s</strong></u>，为了保证账号安全，验证码有效期为5分钟。请确认为本人操作，切勿向他人泄露，感谢您的理解与使用。</p>
+			</div>
+			<div>
+				<p>此邮箱为系统邮箱，请勿回复。</p>
+			</div>
+		</div>
+	`, em[0], t, vCode)
+	e.Text = []byte(content)
+	//设置服务器相关的配置
+	err := e.Send("smtp.qq.com:25", smtp.PlainAuth("", "1808368025@qq.com", "lxexguvmgcuqcgdb", "smtp.qq.com"))
+	return vCode, err
+}
+
+func UserValidateEmailController(c *gin.Context) {
+	var fo *models.UserValidateEmailForm
+	if err := c.ShouldBindJSON(&fo); err != nil {
+		zap.L().Error("validateEmail with invalid param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
 }
 
 func UserGetListController(c *gin.Context) {

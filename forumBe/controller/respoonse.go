@@ -24,7 +24,7 @@ func ResponseErrorWithMsg(ctx *gin.Context, code MyCode, data interface{}) {
 	rd := &ResponseData{
 		Code:    code,
 		Message: code.Msg(),
-		Data:    nil,
+		Data:    data,
 	}
 	ctx.JSON(http.StatusOK, rd)
 }

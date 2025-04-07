@@ -18,6 +18,8 @@ const (
 	CodeInvalidSize       MyCode = 1012
 	CodeLimiteTimes       MyCode = 1013
 	CodeConnectionSuccess MyCode = 1014
+	CodeCaptchaFail       MyCode = 1015
+	CodeCaptchaWrong      MyCode = 1016
 )
 
 var msgFlags = map[MyCode]string{
@@ -35,6 +37,8 @@ var msgFlags = map[MyCode]string{
 	CodeNotLogin:          "未登录",
 	ErrVoteRepeated:       "请勿重复投票",
 	ErrorVoteTimeExpire:   "投票时间已过",
+	CodeCaptchaFail:       "验证码发送失败",
+	CodeCaptchaWrong:      "验证码错误",
 }
 
 func (c MyCode) Msg() string {
