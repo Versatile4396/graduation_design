@@ -51,6 +51,7 @@ import { userInfoStore } from '@/store/user'
 import router from '@/router'
 import type { userInfo } from '@/ajax/type/user'
 import type { Form } from '@formily/core'
+import { Message } from '@/utils'
 
 const { setUserInfo } = userInfoStore()
 const registerForm = ref<Form>()
@@ -71,6 +72,9 @@ const submitHandle = async (values: any, type = loginType.Login) => {
   } catch (error) {}
 }
 const onSubmitSuccess = (data: userInfo) => {
+  if (data.user_id === undefined) {
+    return
+  }
   // 登录注册成功之后的回掉 存储token信息 存储userInfo
   setUserInfo(data)
   // 携带uid跳转主页

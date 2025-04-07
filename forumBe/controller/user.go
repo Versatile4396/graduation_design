@@ -38,11 +38,12 @@ func UserRegisterController(c *gin.Context) {
 	// // 验证码
 	code, err := cache.RedisClient.Get(c, user.Email).Result()
 	if err != nil {
-		ResponseErrorWithMsg(c, CodeServerBusy, "验证码错误")
+		ResponseErrorWithMsg(c, CodeServerBusy, "验证码错误1")
 		return
 	}
+	fmt.Println(code, user.Captcha, "code != user.Captcha")
 	if code != user.Captcha {
-		ResponseErrorWithMsg(c, CodeCaptchaWrong, "验证码错误")
+		ResponseErrorWithMsg(c, CodeCaptchaWrong, "验证码错误2")
 		return
 	}
 	// 业务处理-注册用户
@@ -118,7 +119,7 @@ func SendEmailCodeController(c *gin.Context) {
 	// 业务处理-发送验证码 有问题 不管了
 	vCode, err := SendEmailCode(fo.Email)
 	// 保存验证码到redis中
-	cache.RedisClient.Set(c, fo.Email[0], vCode, 5*time.Minute)
+	cache.RedisClient.Set(c, fo.Email[0], vCode, 50*time.Minute)
 	if err != nil {
 		zap.L().Error("SendEmailCode failed", zap.Error(err))
 		ResponseSuccessWithMsg(c, vCode, "验证码发送成功")

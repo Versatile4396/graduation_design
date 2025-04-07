@@ -1,14 +1,14 @@
 package models
 
 type User struct {
-	UserId          uint64 `json:"user_id"`                               // 用户Id
-	UserName        string `json:"username" binding:"required"`           // 用户名
-	Nickname        string `json:"nickname"`                              // 昵称
-	Overview        string `json:"overview"`                              // 昵称
-	Email           string `json:"email" binding:"required"`              // 邮箱
-	Captcha         string `json:"captcha" binding:"required" gorm:"-"`   // 邮箱验证码
-	Gender          int    `json:"gender" binding:"oneof=0 1 2 3"`        // 性别 0:未知 1:男 2:女
-	Password        string `json:"password,omitempty" binding:"required"` // 密码
+	UserId          uint64 `json:"user_id"`                        // 用户Id
+	UserName        string `json:"username" binding:"required"`    // 用户名
+	Nickname        string `json:"nickname"`                       // 昵称
+	Overview        string `json:"overview"`                       // 昵称
+	Email           string `json:"email"`                          // 邮箱
+	Captcha         string `json:"captcha" gorm:"-"`               // 邮箱验证码
+	Gender          int    `json:"gender" binding:"oneof=0 1 2 3"` // 性别 0:未知 1:男 2:女
+	Password        string `json:"password,omitempty"`             // 密码
 	ConfirmPassword string `json:"confirm_password,omitempty" binding:"required,eqfield=Password"`
 	Deleted         int    `json:"deleted"`
 	Avatar          string `json:"avatar"`

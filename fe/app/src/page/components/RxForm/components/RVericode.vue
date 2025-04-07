@@ -20,7 +20,6 @@ import { inject, ref } from 'vue'
 import { formContextKey } from '@/page/components/RxForm/context/formcontext.ts'
 interface Props {
   value: string
-  email: string
 }
 const form = inject<Form>(formContextKey)
 const buttonDisabled = ref(false)
@@ -32,13 +31,12 @@ function validateEmail(email: string) {
 }
 const getVeriCode = async () => {
   loading.value = true
-  console.log(form?.values?.email, 'emailChange')
   if (validateEmail(form?.values?.email || '') === false) {
     Message.err('请输入正确的邮箱')
     return
   }
   await Ajax.post('/user/sendEmailCode', {
-    email: [props.email]
+    email: [form?.values?.email || '']
   })
   loading.value = false
   let count = 60

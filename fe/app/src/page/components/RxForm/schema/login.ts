@@ -175,17 +175,13 @@ export const registerSchema = (form: Form) => {
           height: '50px'
         }
       },
-      capcha: {
+      captcha: {
         type: 'string',
         required: true,
         'x-decorator': 'FormItem',
         'x-component': 'RVericode',
         'x-component-props': {
           placeholder: '输入验证码'
-        },
-        'x-validator': {
-          maxLength: 6,
-          minLength: 6
         },
         'x-visible': window.location.pathname !== '/forum/backend'
       }
