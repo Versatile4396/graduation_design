@@ -121,7 +121,7 @@ func GetUserList(fo *models.UserFilter) (userList []models.UserInfo, err error) 
 		query = query.Where("user_id = ?", fo.UserId)
 	}
 	if fo.UserName != "" {
-		query = query.Where("username LIKE ?", "%"+fo.UserName+"%")
+		query = query.Where("user_name LIKE ?", "%"+fo.UserName+"%")
 	}
 	if fo.Nickname != "" {
 		query = query.Where("nickname LIKE?", "%"+fo.Nickname+"%")

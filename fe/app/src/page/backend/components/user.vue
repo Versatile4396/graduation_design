@@ -27,28 +27,16 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import FilterBar from './filter-bar.vue'
-import { userFilterConfig } from './config/filterConfig'
-import { userTableConfig } from './config/tableConfig'
-import Ajax from '@/ajax'
+import { useUserList } from './config/tableConfig'
+import { debounce } from 'lodash-es'
 const filterValue = ref<any>({})
 
-const PageNation = {
-  page: 1,
-  pageSize: 10,
-  total: 0
-}
+const handleFilterChange = debounce(async (value: any) => {
+  filterValue.value = value
+  await getUserList(filterValue.value)
+}, 500)
 
-const handleFilterChange = async (val: any) => {
-  filterValue.value = val
-  await getUserList()
-}
-
-const userList = ref<any>([])
-
-const getUserList = async () => {
-  const { data } = await Ajax.post('/user/list')
-  userList.value = data
-}
+const { userList, getUserList, userTableConfig, userFilterConfig } = useUserList()
 
 onMounted(async () => {
   await getUserList()
@@ -63,7 +51,6 @@ onMounted(async () => {
   display: flex;
   .wrapper {
     margin: 0 auto;
-
   }
 }
 </style>

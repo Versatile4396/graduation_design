@@ -103,6 +103,14 @@ func ArticleDelete(aid int64) (rArticle *models.Article, err error) {
 
 }
 
+func ArticleStatusChange(a *models.StatusForm) (rArticle *models.StatusForm, err error) {
+	err = global.Db.Model(&models.Article{}).Where("article_id =?", a.ArticleId).Select("article_status").Update("article_status", a.ArticleStatus).Error
+	if err != nil {
+		return nil, errors.New("更新文章状态失败")
+	}
+	return a, nil
+}
+
 func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, rArticleBriefs []*models.ArticleBrief, err error) {
 	if filter.Pagination == nil {
 		filter.Pagination = &models.Pagination{
@@ -116,9 +124,6 @@ func ArticleGetList(filter *models.ArticleFilter) (rArticles []*models.Article, 
 		return nil, nil, err
 	}
 	query.Find(&rArticles)
-	if err != nil {
-		return nil, nil, errors.New("获取文章列表失败")
-	}
 	// 获取文章列表 点赞 评论数量
 	for _, article := range rArticles {
 		ArticleBrief, err := ArticleGetBrief(article.ArticleId, article.UserId)

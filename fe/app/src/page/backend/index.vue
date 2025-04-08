@@ -48,7 +48,7 @@ const pageComponents = {
 //@ts-ignore
 const currentComponent = computed(() => pageComponents[currentMenu.value as string])
 
-const currentMenu = ref('1')
+const currentMenu = ref('2')
 const handleClick = (v: string) => {
   currentMenu.value = v
 }

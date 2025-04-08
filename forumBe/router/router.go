@@ -70,6 +70,7 @@ func SetupRouter() *gin.Engine {
 		article.GET("/getById/:aid", controller.ArticleGetController)
 		article.DELETE("/delete/:aid", controller.ArticleDeleteController)
 		article.POST("/list", controller.ArticleGetListController)
+		article.POST("/status", controller.ArticleStatusController)
 		article.POST("/category/list", controller.ArticleCategoryGetListController)
 		article.POST("/like", controller.ArticleLikeController)
 		article.POST("/isLiked", controller.ArticleIsLikedController)

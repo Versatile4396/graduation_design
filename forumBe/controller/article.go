@@ -132,6 +132,23 @@ func ArticleGetListController(c *gin.Context) {
 	ResponseSuccess(c, resData)
 }
 
+func ArticleStatusController(c *gin.Context) {
+	// 文章状态
+	var statusForm *models.StatusForm
+	if err := c.ShouldBindJSON(&statusForm); err != nil {
+		zap.L().Error("article status with invalid param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	status, err := logic.ArticleStatusChange(statusForm)
+	if err != nil {
+		zap.L().Error("logic.ArticleStatusChange failed", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
+		return
+	}
+	ResponseSuccess(c, status)
+}
+
 func ArticleCategoryGetListController(c *gin.Context) {
 	// 获取文章分类列表
 	// 业务处理-文章分类列表获取

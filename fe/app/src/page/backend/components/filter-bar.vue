@@ -1,7 +1,8 @@
 <template>
   <div class="filter-bar-container-box">
-    <div v-for="item in filterConfig" :key="item.label">
+    <div v-for="item in filterConfig" :key="item.key">
       <div class="filter-item">
+        <span>{{ item.label + ':' }}</span>
         <el-select
           @change="(v:any)=>handleSelectChange(item.key!,v)"
           v-if="item.type == FilterType.select"
@@ -32,7 +33,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { type FilterConfigType, FilterType } from './config/filterConfig'
+import { type FilterConfigType, FilterType } from './config/tableConfig'
 interface Props {
   filterConfig: FilterConfigType[]
   filterValue: any
@@ -61,5 +62,16 @@ const handleFilterChange = (v: any) => {
   gap: 12px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   align-items: center;
+  .filter-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    span {
+      color: #666;
+      text-align: end;
+      padding: 4px;
+      width: 75px;
+    }
+  }
 }
 </style>
