@@ -22,6 +22,7 @@ interface Props {
   row?: any
 }
 const props = defineProps<Props>()
+console.log(props.row,"props.row")
 const emits = defineEmits(['update', 'cancel'])
 const form = ref<Form>()
 const submitHandle = async () => {

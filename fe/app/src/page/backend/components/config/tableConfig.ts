@@ -14,8 +14,8 @@ const handleDelete = async (row: any) => {
   await Ajax.post('/user/delete', { user_id: row.user_id, deleted: row?.deleted ? 0 : 1 })
 }
 const onUpdate = async (data: any) => {
-  console.log(data, 'datadatadatadata')
   await Ajax.post('/user/update', data)
+  ElMessageBox.close()
 }
 const handleEditor = (row: any) => {
   ElMessageBox({

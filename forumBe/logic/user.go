@@ -140,11 +140,6 @@ func GetUserList(fo *models.UserFilter) (userList []models.UserInfo, err error) 
 }
 
 func UpdateUser(fo *models.UserUpdateForm) (err error) {
-	// 检查用户是否存在
-	err = mysql.CheckUserExit(&models.User{UserName: fo.UserName})
-	if err != nil {
-		return
-	}
 	// 更新用户信息
 	err = global.Db.Model(&models.User{}).Where("user_id =?", fo.UserId).Updates(fo).Error
 	return

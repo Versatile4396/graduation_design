@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import type { UploadProps } from 'element-plus'
@@ -33,17 +33,17 @@ const props = withDefaults(defineProps<Props>(), {
   width: '192px',
   height: '128px'
 })
+
 const emits = defineEmits(['change'])
 const imageUrl = ref('')
 if (props.value) {
-  emits('change', props.url)
-  imageUrl.value = props.url!
+  imageUrl.value =props.value!
+  emits('change', props.value)
 }
 const handleAvatarSuccess: UploadProps['onSuccess'] = (response) => {
   imageUrl.value = response.data.image_url
   emits('change', response.data.image_url)
 }
-
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   if (rawFile.type !== 'image/jpeg') {
     ElMessage.error('Avatar picture must be JPG format!')

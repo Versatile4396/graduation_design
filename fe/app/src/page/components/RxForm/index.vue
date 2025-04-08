@@ -25,7 +25,7 @@ import { createSchemaField, FormProvider } from '@formily/vue'
 import { Input, Switch, Radio, FormItem, Password } from '@formily/element-plus'
 import { RRadio, RUpload, RSelect, RVericode } from './components/index'
 import { ElButton } from 'element-plus'
-import { computed, provide, ref } from 'vue'
+import { computed, onMounted, provide, ref } from 'vue'
 import { formContextKey } from './context/formcontext'
 interface Props {
   schema: any
@@ -54,6 +54,10 @@ form.value = createForm({
   initialValues: props.initialValues,
   effects: props.effects
 })
+onMounted(() => {
+  console.log(form.value.values, 'initialValues')
+})
+
 setValidateLanguage('cn')
 
 const isSubmitting = ref(false)

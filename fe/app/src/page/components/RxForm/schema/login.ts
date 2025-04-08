@@ -55,6 +55,7 @@ export const registerSchema = (form: Form) => {
     type: 'object',
     properties: {
       username: {
+        title:"用户名",
         type: 'string',
         required: true,
         'x-decorator': 'FormItem',
@@ -67,6 +68,7 @@ export const registerSchema = (form: Form) => {
         }
       },
       nickname: {
+        title:"昵称",
         type: 'string',
         required: true,
         'x-decorator': 'FormItem',
@@ -80,6 +82,7 @@ export const registerSchema = (form: Form) => {
       },
 
       email: {
+        title:"邮箱",
         type: 'string',
         'x-decorator': 'FormItem',
         'x-component': 'Input',
@@ -92,6 +95,7 @@ export const registerSchema = (form: Form) => {
         }
       },
       overview: {
+        title:"一句话",
         type: 'string',
         'x-decorator': 'FormItem',
         'x-component': 'Input',
@@ -170,7 +174,6 @@ export const registerSchema = (form: Form) => {
         'x-decorator': 'FormItem',
         'x-component': 'RUpload',
         'x-component-props': {
-          url: 'http://127.0.0.1:5555/images/WechatIMG.jpg',
           width: '50px',
           height: '50px'
         }
