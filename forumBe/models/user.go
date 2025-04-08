@@ -14,6 +14,7 @@ type User struct {
 	ConfirmPassword string `json:"confirm_password,omitempty" binding:"required,eqfield=Password"`
 	Deleted         int    `json:"deleted"`
 	Avatar          string `json:"avatar"`
+	Role            int    `json:"role"`
 	AccessToken     string `json:"access_token" gorm:"-"`
 	RefreshToken    string `json:"refresh_token" gorm:"-"`
 }
@@ -66,6 +67,7 @@ type UserUpdateForm struct {
 	Avatar   string `json:"avatar"`
 	Nickname string `json:"nickname"`
 	Overview string `json:"overview"`
+	Role     int    `json:"role"`
 }
 
 type UserFriendForm struct {

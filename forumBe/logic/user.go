@@ -6,6 +6,7 @@ import (
 	"forum/models"
 	"forum/pkg/jwt"
 	"forum/pkg/snowflake"
+	"log"
 	"time"
 )
 
@@ -141,7 +142,11 @@ func GetUserList(fo *models.UserFilter) (userList []models.UserInfo, err error) 
 
 func UpdateUser(fo *models.UserUpdateForm) (err error) {
 	// 更新用户信息
-	err = global.Db.Model(&models.User{}).Where("user_id =?", fo.UserId).Updates(fo).Error
+	result := global.Db.Model(&models.User{}).Where("user_id =?", fo.UserId).Updates(fo)
+	if result.Error != nil {
+		log.Printf("更新用户信息时出错: %v", result.Error)
+		return result.Error
+	}
 	return
 }
 

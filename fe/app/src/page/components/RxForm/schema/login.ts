@@ -55,7 +55,7 @@ export const registerSchema = (form: Form) => {
     type: 'object',
     properties: {
       username: {
-        title:"用户名",
+        title: '用户名',
         type: 'string',
         required: true,
         'x-decorator': 'FormItem',
@@ -68,7 +68,7 @@ export const registerSchema = (form: Form) => {
         }
       },
       nickname: {
-        title:"昵称",
+        title: '昵称',
         type: 'string',
         required: true,
         'x-decorator': 'FormItem',
@@ -82,7 +82,7 @@ export const registerSchema = (form: Form) => {
       },
 
       email: {
-        title:"邮箱",
+        title: '邮箱',
         type: 'string',
         'x-decorator': 'FormItem',
         'x-component': 'Input',
@@ -95,7 +95,7 @@ export const registerSchema = (form: Form) => {
         }
       },
       overview: {
-        title:"一句话",
+        title: '一句话',
         type: 'string',
         'x-decorator': 'FormItem',
         'x-component': 'Input',
@@ -156,15 +156,15 @@ export const registerSchema = (form: Form) => {
         enum: [
           {
             label: '男',
-            value: 0
-          },
-          {
-            label: '女',
             value: 1
           },
           {
-            label: '未知',
+            label: '女',
             value: 2
+          },
+          {
+            label: '未知',
+            value: 3
           }
         ]
       },
@@ -177,6 +177,26 @@ export const registerSchema = (form: Form) => {
           width: '50px',
           height: '50px'
         }
+      },
+      role: {
+        type: 'number',
+        title: '橘色',
+        'x-decorator': 'FormItem',
+        'x-component': 'Radio.Group',
+        'x-component-props': {
+          default: 2
+        },
+        initialValue: 1,
+        enum: [
+          {
+            label: '普通用户',
+            value: 1
+          },
+          {
+            label: '管理员',
+            value: 2
+          }
+        ]
       },
       captcha: {
         type: 'string',

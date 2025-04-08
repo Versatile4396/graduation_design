@@ -106,9 +106,9 @@ export const userTableConfig = [
         ElTag,
         {
           //@ts-ignore
-          type: row.role ? 'success' : 'primary'
+          type: row.role == 2 ? 'success' : 'primary'
         },
-        row.role ? `管理员` : '普通用户'
+        row.role == 2 ? `管理员` : '普通用户'
       )
     }
   },
