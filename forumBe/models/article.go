@@ -39,7 +39,7 @@ type ArticleFilter struct {
 	TopicId       uint64 `json:"topic_id" `
 	TagId         uint64 `json:"tag_id"`
 	OrderByTime   bool   `json:"order_by_time" gorm:"default:0"`
-	ArticleStatus int    `json:"article_status"`
+	ArticleStatus *int   `json:"article_status"`
 	Pagination    *Pagination
 }
 type StatusForm struct {

@@ -147,8 +147,10 @@ func HandleFilterInfo(query *gorm.DB, filter *models.ArticleFilter) (err error) 
 		query = query.Where("tag_id =?", filter.TagId)
 	}
 	if filter.UserId != "" {
-		fmt.Println("userid", filter.UserId)
 		query = query.Where("user_id =?", filter.UserId)
+	}
+	if filter.ArticleStatus != nil {
+		query = query.Where("article_status =?", *filter.ArticleStatus)
 	}
 	orderDir := "desc"
 	if filter.OrderByTime {

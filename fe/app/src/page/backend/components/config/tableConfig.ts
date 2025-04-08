@@ -325,8 +325,8 @@ export const userAritcle = () => {
       componentProps: {
         placeholder: '请选择文章状态',
         options: [
-          { label: '未审核', value: 1 },
-          { label: '已发布', value: 2 },
+          { label: '未审核', value: 0 },
+          { label: '已发布', value: 1 },
           { label: '全部', value: undefined }
         ]
       }
