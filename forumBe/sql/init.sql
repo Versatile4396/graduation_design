@@ -208,6 +208,28 @@ CREATE TABLE
         video_url VARCHAR(255) NOT NULL
     );
 
+-- 信息表
+DROP TABLE IF EXISTS `messages`;
+
+CREATE TABLE
+    IF NOT EXISTS `messages` (
+        `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+        `created_at` datetime (3) DEFAULT NULL COMMENT '创建时间',
+        `updated_at` datetime (3) DEFAULT NULL COMMENT '更新时间',
+        `deleted_at` bigint unsigned DEFAULT NULL COMMENT '删除时间戳',
+        `from_user_id` varchar(20) DEFAULT NULL COMMENT '发送人ID',
+        `to_user_id` varchar(20) DEFAULT NULL COMMENT '发送对象ID',
+        `content` varchar(2500) DEFAULT NULL COMMENT '消息内容',
+        `url` varchar(350) DEFAULT NULL COMMENT '''文件或者图片地址''',
+        `pic` text COMMENT '缩略图',
+        `message_type` smallint DEFAULT NULL COMMENT '''消息类型：1单聊，2群聊''',
+        `content_type` smallint DEFAULT NULL COMMENT '''消息内容类型：1文字，2语音，3视频''',
+        PRIMARY KEY (`id`),
+        KEY `idx_messages_deleted_at` (`deleted_at`),
+        KEY `idx_messages_from_user_id` (`from_user_id`),
+        KEY `idx_messages_to_user_id` (`to_user_id`)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT '消息表';
+
 -- 创建互补帮学表
 CREATE TABLE
     IF NOT EXISTS assistances (
@@ -252,6 +274,7 @@ CREATE TABLE
 
 -- 创建user_friends表，用于存储用户之间的关注关系
 DROP TABLE IF EXISTS `user_friends`;
+
 CREATE TABLE
     IF NOT EXISTS `user_friends` (
         `id` int NOT NULL AUTO_INCREMENT COMMENT 'id',

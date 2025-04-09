@@ -14,10 +14,17 @@ type AppConfig struct {
 }
 
 type AppBaseConfig struct {
-	Name     string `mapstructure:"name"`
-	Port     string `mapstructure:"port"`
-	ImageDir string `mapstructure:"image_dir"`
-	VideoDir string `mapstructure:"video_dir"`
+	Name           string `mapstructure:"name"`
+	Port           string `mapstructure:"port"`
+	ImageDir       string `mapstructure:"image_dir"`
+	VideoDir       string `mapstructure:"video_dir"`
+	StaticFilePath string `mapstructure:"staticFielPath"`
+	MsgChannelType MsgChannelType
+}
+type MsgChannelType struct {
+	ChannelType string
+	KafkaHosts  string
+	KafkaTopic  string
 }
 
 type LogConfig struct {
