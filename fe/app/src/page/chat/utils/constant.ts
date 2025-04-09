@@ -1,3 +1,4 @@
+export const TEXT = 1; // 语音聊天
 export const AUDIO_ONLINE = 6; // 语音聊天
 export const VIDEO_ONLINE = 7; // 视频聊天
 

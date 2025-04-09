@@ -5,7 +5,6 @@ import * as Constant from './constant'
 
 export const useWebSocket = (uid: string) => {
   var peer = new RTCPeerConnection();
-  var lockConnection = false;
   const socket = new WebSocket('ws://localhost:5555/api/chat/ws?uid=' + uid)
   const heartCheck = {
     timeout: 10000, // 10s
@@ -40,16 +39,16 @@ export const useWebSocket = (uid: string) => {
   }
 
   const sendMessage = (messageData: any, propsToUid?: string, propsMessageType?: number) => {
+    console.log("sendMessage", messageData)
     let toUid = messageData.toUid;
     if (null == toUid) {
       toUid = propsToUid;
     }
     let data = {
-      ...messageData,
       messageType: propsMessageType, // 消息类型，1.单聊 2.群聊
-      fromUsername: localStorage.username,
-      from: localStorage.uuid,
+      contentType: Constant.TEXT, // 消息类型，1.文本 2.图片 3.文件 4.语音 5.视频 6.位置 7.自定义,
       to: toUid,
+      ...messageData,
     }
     const messagePB = create(MessageSchema, data)
     socket.send(toBinary(MessageSchema, messagePB))
@@ -123,6 +122,7 @@ export const useWebSocket = (uid: string) => {
 
   return {
     socket,
-    heartCheck
+    heartCheck,
+    sendMessage,
   }
 }

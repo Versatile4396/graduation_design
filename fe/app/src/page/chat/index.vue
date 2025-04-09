@@ -36,13 +36,13 @@ import type { ChatInstance, IChatList } from './type'
 import { userInfoStore } from '@/store/user'
 import { useWebSocket } from './utils'
 // 获取聊天列表用户信息？
-const { uid } = getUrlQuery()
+const { uid, toUid } = getUrlQuery()
 const { userInfo } = userInfoStore()
 const chatWrapperDom = ref<HTMLElement>()
 const avatarMe = ref(userInfo.avatar!)
 
 // 建立ws链接 发起聊天
-const { socket } = useWebSocket(uid as string)
+const { socket, sendMessage } = useWebSocket(uid as string)
 
 const chatListInfo = ref<IChatList[]>([])
 const curChatInfo = ref<IChatList>()
@@ -50,7 +50,12 @@ const chatInfo = ref<ChatInstance[]>([])
 
 const handleChatChange = () => {}
 const handleSendMsg = (msg: string) => {
-  console.log(msg)
+  sendMessage({
+    from: uid,
+    content: msg,
+    messageType: 1,
+    to: toUid
+  })
 }
 onUnmounted(() => {
   socket.close()
