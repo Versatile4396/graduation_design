@@ -28,109 +28,29 @@
 
 <script lang="ts" setup>
 import { getUrlQuery } from '@/utils/common'
-import { objectEntries } from '@vueuse/core'
 import inputChat from './component/input-chat.vue'
 import chatWrapper from './component/chat-wrapper.vue'
 import ChatList from './component/chat-list.vue'
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
-import Ajax from '@/ajax'
+import { onUnmounted, ref } from 'vue'
 import type { ChatInstance, IChatList } from './type'
-import { MsgFrom } from './type'
 import { userInfoStore } from '@/store/user'
 // 获取聊天列表用户信息？
-const { uid, toUid } = getUrlQuery()
-const query = {
-  uid,
-  toUid
-}
+const { uid } = getUrlQuery()
 const { userInfo } = userInfoStore()
 const chatWrapperDom = ref<HTMLElement>()
 const avatarMe = ref(userInfo.avatar!)
-const queryStr = objectEntries(query)
-  //@ts-ignore
-  .map(([key, value]) => encodeURIComponent(key) + '=' + encodeURIComponent(value))
-  .join('&')
+
 // 建立ws链接 发起聊天
-const socket = new WebSocket('ws://localhost:5555/api/chat/ws?' + queryStr)
+const socket = new WebSocket('ws://localhost:5555/api/chat/ws?uid=' + uid)
 
 const chatListInfo = ref<IChatList[]>([])
 const curChatInfo = ref<IChatList>()
 const chatInfo = ref<ChatInstance[]>([])
-// 连接成功 获取历史消息
-socket.onopen = () => {
-  // 获取历史消息
-  initChat()
-}
-socket.onmessage = (event) => {
-  if (event.data) {
-    const msg = JSON.parse(event.data)
-    if (msg.code === 2) {
-      // 历史聊天记录
-      chatInfo.value.push(msg)
-      nextTick(() => {
-        chatWrapperDom.value?.scrollTo({
-          top: chatWrapperDom.value?.scrollHeight,
-          behavior: 'smooth'
-        })
-      })
-    } else if (msg.code === 50001) {
-      // 在线主动推送
-      chatInfo.value.push(msg)
-    }
-  }
-}
 
+const handleChatChange = () => {}
 const handleSendMsg = (msg: string) => {
-  // 判断socket是否在链接中
-  if (socket.readyState === WebSocket.OPEN) {
-    const formatMsg = {
-      type: 1,
-      content: msg
-    }
-    socket.send(JSON.stringify(formatMsg))
-    chatInfo.value.push({
-      from: MsgFrom.Me,
-      content: msg,
-      code: 1
-    })
-    if (chatWrapperDom.value) {
-      nextTick(() => {
-        chatWrapperDom.value?.scrollTo({
-          top: chatWrapperDom.value?.scrollHeight,
-          behavior: 'smooth'
-        })
-      })
-    }
-  }
+  console.log(msg)
 }
-
-const initChat = () => {
-  socket.send(
-    JSON.stringify({
-      type: 2
-    })
-  )
-}
-
-const getChatHistory = async () => {
-  // 获取历史消息
-  const { data } = await Ajax.get(`/chat/history?uid=${uid}`)
-  chatListInfo.value = data
-  curChatInfo.value = data[0]
-}
-
-const handleChatChange = (chat: IChatList) => {
-  // 点击切换聊天界面 需要重新获取历史消息 建立ws链接
-  curChatInfo.value = chat
-  chatInfo.value = []
-  // 关闭链接
-  socket.close()
-}
-
-onMounted(async () => {
-  await getChatHistory()
-})
-
 onUnmounted(() => {
   socket.close()
 })
