@@ -130,15 +130,5 @@ func SetupRouter() *gin.Engine {
 		comment.POST("/list", controller.CommentGetListController)
 		comment.DELETE("/delete/:cid", controller.CommentDeleteController)
 	}
-	chat := router.Group("/api/chat")
-	{
-		chat.GET("/ws", controller.WSHandler)
-		chat.GET("/history", controller.ChatHistoryController)
-	}
-	// 处理 所有的ws请求
-	ws := router.Group("api/ws")
-	{
-		ws.GET("/:uid", controller.WSHandler)
-	}
 	return router
 }
