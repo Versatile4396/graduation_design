@@ -19,7 +19,7 @@ var MessageService = new(messageService)
 func (m *messageService) SaveMessage(message protocol.Message) {
 	db := global.Db
 	var fromUser models.User
-	db.Find(&fromUser, "uuid = ?", message.From)
+	db.Find(&fromUser, "user_id = ?", message.From)
 	if NULL_ID == fromUser.UserId {
 		zap.L().Error("SaveMessage not find from user", zap.Any("SaveMessage not find from user", fromUser.UserId))
 		return
@@ -29,7 +29,7 @@ func (m *messageService) SaveMessage(message protocol.Message) {
 
 	if message.MessageType == constant.MESSAGE_TYPE_USER {
 		var toUser models.User
-		db.Find(&toUser, "uuid = ?", message.To)
+		db.Find(&toUser, "user_id = ?", message.To)
 		if NULL_ID == toUser.UserId {
 			return
 		}
@@ -38,7 +38,7 @@ func (m *messageService) SaveMessage(message protocol.Message) {
 
 	if message.MessageType == constant.MESSAGE_TYPE_GROUP {
 		var group models.Group
-		db.Find(&group, "uuid = ?", message.To)
+		db.Find(&group, "user_id = ?", message.To)
 		if NULL_ID == uint64(group.ID) {
 			return
 		}
