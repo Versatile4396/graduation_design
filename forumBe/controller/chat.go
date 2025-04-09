@@ -50,12 +50,13 @@ var upGrader = websocket.Upgrader{
 
 // 建立websocket连接
 func RunSocekt(c *gin.Context) {
-	user := c.Query("user")
+	user := c.Query("uid")
 	if user == "" {
 		return
 	}
 	zap.L().Info("newUser", zap.String("newUser", user))
 	ws, err := upGrader.Upgrade(c.Writer, c.Request, nil)
+
 	if err != nil {
 		return
 	}
@@ -65,8 +66,9 @@ func RunSocekt(c *gin.Context) {
 		Conn: ws,
 		Send: make(chan []byte),
 	}
-
-	server.MyServer.Register <- client
+	go func() {
+		server.MyServer.Register <- client
+	}()
 	go client.Read()
 	go client.Write()
 }
