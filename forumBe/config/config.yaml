@@ -3,6 +3,10 @@ app:
   port: :5555
   image_dir: "./images/"
   video_dir: "./videos/"
+  staticFielPath: "./static/"
+  channelType: "gochannel"
+  kafkaHosts: "kafka:9092"
+  kafkaTopic: "go-chat-message"
 mysql:
   host: "127.0.0.1"
   user: "root"
