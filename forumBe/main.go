@@ -12,6 +12,7 @@ import (
 	"forum/pkg/mongodb"
 	"forum/pkg/snowflake"
 	"forum/router"
+	"forum/server"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -37,6 +38,8 @@ func main() {
 	mongodb.Init()
 	// redis 初始化
 	cache.Init()
+	// 聊天程序启动
+	go server.MyServer.Start()
 	// 大模型初始化
 	gpt.Init()
 	// 雪花算法 生成分布式ID

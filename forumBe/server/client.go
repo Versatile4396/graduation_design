@@ -1,10 +1,11 @@
 package server
 
 import (
+	"fmt"
 	"forum/config"
 	"forum/constant"
 	"forum/pkg/kafka"
-	"forum/protocol"
+	"forum/pkg/protocol"
 
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
@@ -32,10 +33,14 @@ func (c *Client) Read() {
 			c.Conn.Close()
 			break
 		}
-
 		msg := &protocol.Message{}
-		proto.Unmarshal(message, msg)
-
+		fmt.Println("proto", message)
+		err = proto.Unmarshal(message, msg)
+		if err != nil {
+			zap.L().Error("client unmarshal message error", zap.Any("client unmarshal message error", err.Error()))
+		}
+		fmt.Println("message", message)
+		fmt.Println("msg", msg, msg.Content, msg.Type)
 		// pong
 		if msg.Type == constant.HEAT_BEAT {
 			pong := &protocol.Message{
