@@ -34,6 +34,7 @@ import ChatList from './component/chat-list.vue'
 import { onUnmounted, ref } from 'vue'
 import type { ChatInstance, IChatList } from './type'
 import { userInfoStore } from '@/store/user'
+import { useWebSocket } from './utils'
 // 获取聊天列表用户信息？
 const { uid } = getUrlQuery()
 const { userInfo } = userInfoStore()
@@ -41,7 +42,7 @@ const chatWrapperDom = ref<HTMLElement>()
 const avatarMe = ref(userInfo.avatar!)
 
 // 建立ws链接 发起聊天
-const socket = new WebSocket('ws://localhost:5555/api/chat/ws?uid=' + uid)
+const { socket } = useWebSocket(uid as string)
 
 const chatListInfo = ref<IChatList[]>([])
 const curChatInfo = ref<IChatList>()
