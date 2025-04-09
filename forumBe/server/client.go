@@ -34,13 +34,10 @@ func (c *Client) Read() {
 			break
 		}
 		msg := &protocol.Message{}
-		fmt.Println("proto", message)
 		err = proto.Unmarshal(message, msg)
 		if err != nil {
 			zap.L().Error("client unmarshal message error", zap.Any("client unmarshal message error", err.Error()))
 		}
-		fmt.Println("message", message)
-		fmt.Println("msg", msg, msg.Content, msg.Type)
 		// pong
 		if msg.Type == constant.HEAT_BEAT {
 			pong := &protocol.Message{
@@ -53,9 +50,11 @@ func (c *Client) Read() {
 			}
 			c.Conn.WriteMessage(websocket.BinaryMessage, pongByte)
 		} else {
-			if config.AppConf.MsgChannelType.ChannelType == constant.KAFKA {
+			if config.AppConf.MsgChannelType.ChannelType != constant.KAFKA {
+				fmt.Println("is kafka")
 				kafka.Send(message)
 			} else {
+				fmt.Println("not kafka")
 				MyServer.Broadcast <- message
 			}
 		}

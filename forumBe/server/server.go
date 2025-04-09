@@ -41,7 +41,7 @@ func (s *Server) Start() {
 	for {
 		select {
 		case conn := <-s.Register:
-			zap.L().Info("login", zap.Any("login", "new user login in"+conn.Name))
+			zap.L().Info("login", zap.Any("login", "new user login in "+conn.Name))
 			s.Clients[conn.Name] = conn
 			msg := &protocol.Message{
 				From:    "System",
@@ -61,7 +61,7 @@ func (s *Server) Start() {
 		case message := <-s.Broadcast:
 			msg := &protocol.Message{}
 			proto.Unmarshal(message, msg)
-
+			zap.L().Info("msg", zap.Any("msg", msg))
 			if msg.To != "" {
 				// 一般消息，比如文本消息，视频文件消息等
 				if msg.ContentType >= constant.TEXT && msg.ContentType <= constant.VIDEO {
