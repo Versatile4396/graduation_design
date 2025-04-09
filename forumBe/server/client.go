@@ -7,9 +7,9 @@ import (
 	"forum/pkg/kafka"
 	"forum/pkg/protocol"
 
+	"github.com/gogo/protobuf/proto"
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
-	"google.golang.org/protobuf/proto"
 )
 
 type Client struct {

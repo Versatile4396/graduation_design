@@ -11,9 +11,9 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/gogo/protobuf/proto"
 	"github.com/google/uuid"
 	"go.uber.org/zap"
-	"google.golang.org/protobuf/proto"
 )
 
 type Server struct {
