@@ -4,20 +4,24 @@
       <div class="search-bar"></div>
       <div class="list-bar">
         <chat-list
-          :currentChat="curChatInfo!"
-          :chatList="chatListInfo"
-          v-if="chatListInfo.length"
+          :currentChat="currentChat!"
+          :chatList="chatList"
+          v-if="chatList?.length"
           @chatChange="handleChatChange"
         ></chat-list>
       </div>
     </div>
     <div class="chat-container">
       <div class="chat-header">
-        <span class="username">{{ curChatInfo?.userInfo.nickname }}</span>
+        <span class="username">{{ toUserInfo?.nickname }}</span>
         <div class="operator"></div>
       </div>
       <div class="chat-content" ref="chatWrapperDom">
-        <chat-wrapper :chatInfo :avatarMe :avatarYou="curChatInfo?.userInfo.avatar!"></chat-wrapper>
+        <chat-wrapper
+          :chatInfo="messageList"
+          :avatarMe="userInfo.avatar!"
+          :avatarYou="toUserInfo?.avatar!"
+        ></chat-wrapper>
       </div>
       <div class="chat-send-wrapper">
         <inputChat @send-msg="handleSendMsg"></inputChat>
@@ -31,22 +35,30 @@ import { getUrlQuery } from '@/utils/common'
 import inputChat from './component/input-chat.vue'
 import chatWrapper from './component/chat-wrapper.vue'
 import ChatList from './component/chat-list.vue'
-import { onUnmounted, ref } from 'vue'
-import type { ChatInstance, IChatList } from './type'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { userInfoStore } from '@/store/user'
 import { useWebSocket } from './utils'
+import { nextTick } from 'vue'
 // 获取聊天列表用户信息？
-const { uid, toUid } = getUrlQuery()
+const queryInfo = getUrlQuery()
+const uid = queryInfo?.uid as string
+const toUid = queryInfo?.toUid as string
 const { userInfo } = userInfoStore()
 const chatWrapperDom = ref<HTMLElement>()
-const avatarMe = ref(userInfo.avatar!)
-
+const currentChat = ref()
 // 建立ws链接 发起聊天
-const { socket, sendMessage } = useWebSocket(uid as string)
+const { socket, sendMessage, getHistoryMessage, historyMessage, chatList, toUserInfo } =
+  useWebSocket(uid as string)
 
-const chatListInfo = ref<IChatList[]>([])
-const curChatInfo = ref<IChatList>()
-const chatInfo = ref<ChatInstance[]>([])
+const messageList = computed(() => {
+  return historyMessage.value
+})
+onMounted(async () => {
+  await getHistoryMessage(uid, toUid)
+  if (chatWrapperDom.value) {
+    chatWrapperDom.value.scrollTop = chatWrapperDom.value.scrollHeight
+  }
+})
 
 const handleChatChange = () => {}
 const handleSendMsg = (msg: string) => {
@@ -55,6 +67,12 @@ const handleSendMsg = (msg: string) => {
     content: msg,
     messageType: 1,
     to: toUid
+  })
+  // 前端处理滚动条
+  nextTick(() => {
+    if (chatWrapperDom.value) {
+      chatWrapperDom.value.scrollTo({ top: chatWrapperDom.value.scrollHeight, behavior: 'smooth' })
+    }
   })
 }
 onUnmounted(() => {

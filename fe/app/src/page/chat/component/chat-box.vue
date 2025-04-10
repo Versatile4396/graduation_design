@@ -17,7 +17,8 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { MsgFrom, type ChatInstance } from '../type'
+import { type ChatInstance } from '../type'
+import { getUrlQuery } from '@/utils'
 
 const props = defineProps<{
   chat: ChatInstance
@@ -27,7 +28,7 @@ const htmlContent = computed(() => {
   return props.chat.content
 })
 const isFromMe = computed(() => {
-  return props.chat.from === MsgFrom.Me
+  return props.chat.fromUserId == Number(getUrlQuery().uid)
 })
 </script>
 <style scoped lang="scss">

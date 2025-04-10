@@ -26,7 +26,7 @@ func (m *messageService) GetMessages(message models.MessageRequest) ([]models.Me
 		var messages []models.MessageResponse
 		db.Model(&models.Message{}).
 			Where("from_user_id IN (?,?) AND to_user_id IN (?,?)",
-				message.Uid, message.FUid, message.Uid, message.FUid).
+				message.Uid, message.ToUid, message.Uid, message.ToUid).Order("created_at asc").
 			Find(&messages)
 		return messages, nil
 	}

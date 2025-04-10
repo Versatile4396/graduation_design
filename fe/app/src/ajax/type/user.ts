@@ -20,5 +20,6 @@ export interface UserInfo {
   username: string
   nickname: string
   overview: string
+  role: number
 }
-export interface userInfo extends Partial<user> {}
+export interface userInfo extends Partial<user> { }

@@ -1,9 +1,16 @@
 import { MessageSchema } from '@/proto/message_pb'
-import { create, toBinary } from "@bufbuild/protobuf"
+import { create, toBinary, fromBinary } from "@bufbuild/protobuf"
 import * as Constant from './constant'
+import { ref } from 'vue'
+import Ajax from '@/ajax'
+import type { userInfo } from '@/ajax/type/user'
+import type { ChatInstance } from '../type'
 
 
 export const useWebSocket = (uid: string) => {
+  const chatList = ref([])
+  const historyMessage = ref<ChatInstance[]>([])
+  const toUserInfo = ref<userInfo>({})
   var peer = new RTCPeerConnection();
   const socket = new WebSocket('ws://localhost:5555/api/chat/ws?uid=' + uid)
   const heartCheck = {
@@ -18,7 +25,6 @@ export const useWebSocket = (uid: string) => {
       this.serverTimeoutObj && clearTimeout(this.serverTimeoutObj)
       this.timeoutObj = setTimeout(function () {
         //这里发送一个心跳，后端收到后，返回一个心跳消息，
-        //onmessage拿到返回的心跳就说明连接正常
         let data = {
           type: 'heatbeat',
           content: 'ping'
@@ -39,7 +45,6 @@ export const useWebSocket = (uid: string) => {
   }
 
   const sendMessage = (messageData: any, propsToUid?: string, propsMessageType?: number) => {
-    console.log("sendMessage", messageData)
     let toUid = messageData.toUid;
     if (null == toUid) {
       toUid = propsToUid;
@@ -50,6 +55,15 @@ export const useWebSocket = (uid: string) => {
       to: toUid,
       ...messageData,
     }
+    const dataReflect = {
+      ...data,
+      type: Constant.MESSAGE_TRANS_TYPE,
+      contentType: data.messageType,
+      fromUserId: Number(data.from),
+      toUserId: Number(data.to),
+    }
+    // 发送给服务端的也要再本地存储一份
+    historyMessage.value.push(dataReflect)
     const messagePB = create(MessageSchema, data)
     socket.send(toBinary(MessageSchema, messagePB))
   }
@@ -119,10 +133,48 @@ export const useWebSocket = (uid: string) => {
     webrtcConnection()
     // this.props.setSocket(socket);
   }
+  socket.onmessage = (message) => {
+    heartCheck.start()
+
+    let reader = new FileReader();
+    reader.readAsArrayBuffer(message.data);
+    reader.onload = (e) => {
+      // @ts-ignore
+      const messagePB = fromBinary(MessageSchema, new Uint8Array(e.target?.result))
+      if (messagePB.type === "heatbeat" || messagePB.from === "System") {
+        return;
+      }
+      const reflectMessage = {
+        ...messagePB,
+        type: Constant.MESSAGE_TRANS_TYPE,
+        contentType: messagePB.messageType,
+        fromUserId: Number(messagePB.from),
+        toUserId: Number(messagePB.to),
+      }
+      //@ts-ignore
+      historyMessage.value.push(reflectMessage)
+    }
+  }
+  // 拿历史消息和用户信息
+  const getHistoryMessage = async (uid: string, toUid: string) => {
+    // 获取历史消息和用户信息
+    const { data } = await Ajax.get("/chat/message", { uid, toUid, messageType: 1 })
+    historyMessage.value = data?.messageInfo || [];
+    toUserInfo.value = data?.toUserInfo || {};
+  }
+  // 获取用户聊天列表
+  const getChatList = async (uid: string) => {
+    const { data } = await Ajax.get("/chat/list", { uid })
+  }
 
   return {
     socket,
     heartCheck,
+    historyMessage,
+    toUserInfo,
+    chatList,
     sendMessage,
+    getHistoryMessage,
+    getChatList
   }
 }

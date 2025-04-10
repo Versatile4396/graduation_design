@@ -44,7 +44,7 @@ type MessageRequest struct {
 	MessageType    int32  `form:"messageType"`
 	Uid            uint64 `form:"uid"`
 	FriendUsername string `form:"friendUsername"`
-	FUid           uint64 `form:"fUid"`
+	ToUid          uint64 `form:"toUid"`
 }
 
 type MessageResponse struct {

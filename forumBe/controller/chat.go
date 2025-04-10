@@ -3,6 +3,7 @@ package controller
 import (
 	"forum/config"
 	"forum/dao/service"
+	"forum/logic"
 	"forum/models"
 	"forum/server"
 	"io/ioutil"
@@ -86,8 +87,22 @@ func GetMessage(c *gin.Context) {
 
 	messages, err := service.MessageService.GetMessages(messageRequest)
 	if err != nil {
-		ResponseErrorWithMsg(c, CodeServerBusy, err)
+		ResponseErrorWithMsg(c, CodeServerBusy, "获取历史消息失败")
 		return
 	}
-	ResponseSuccess(c, messages)
+	// 拿用户信息
+	toUserInfo, err := logic.GetUserInfo(messageRequest.ToUid)
+	if err != nil {
+		ResponseErrorWithMsg(c, CodeServerBusy, "获取用户信息内容失败")
+		return
+	}
+	type TRes struct {
+		MessageInfo []models.MessageResponse `json:"messageInfo"`
+		ToUserInfo  models.UserInfo          `json:"toUserInfo"`
+	}
+
+	ResponseSuccess(c, &TRes{
+		MessageInfo: messages,
+		ToUserInfo:  toUserInfo,
+	})
 }
