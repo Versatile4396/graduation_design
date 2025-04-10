@@ -210,7 +210,7 @@ const stopAudio = () => {
       // 上传文件必须将ArrayBuffer转换为Uint8Array
       let data = {
         content: undefined,
-        contentType: 3,
+        contentType: 4,
         fileSuffix: 'wav',
         file: new Uint8Array(imgData)
       }
