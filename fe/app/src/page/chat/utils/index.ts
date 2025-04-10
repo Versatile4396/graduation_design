@@ -8,9 +8,8 @@ import type { ChatInstance } from '../type'
 
 
 export const useWebSocket = (uid: string) => {
-  const chatList = ref([])
   const historyMessage = ref<ChatInstance[]>([])
-  const toUserInfo = ref<userInfo>({})
+  const currentChat = ref<userInfo>({})
   var peer = new RTCPeerConnection();
   const socket = new WebSocket('ws://localhost:5555/api/chat/ws?uid=' + uid)
   const heartCheck = {
@@ -44,13 +43,10 @@ export const useWebSocket = (uid: string) => {
     }
   }
 
-  const sendMessage = (messageData: any, propsToUid?: string, propsMessageType?: number) => {
+  const sendMessage = (messageData: any,) => {
     let toUid = messageData.toUid;
-    if (null == toUid) {
-      toUid = propsToUid;
-    }
+
     let data = {
-      messageType: propsMessageType, // 消息类型，1.单聊 2.群聊
       contentType: Constant.TEXT, // 消息类型，1.文本 2.图片 3.文件 4.语音 5.视频 6.位置 7.自定义,
       to: toUid,
       ...messageData,
@@ -64,6 +60,7 @@ export const useWebSocket = (uid: string) => {
     }
     // 发送给服务端的也要再本地存储一份
     historyMessage.value.push(dataReflect)
+    console.log(data, "sendMessageasd")
     const messagePB = create(MessageSchema, data)
     socket.send(toBinary(MessageSchema, messagePB))
   }
@@ -133,6 +130,7 @@ export const useWebSocket = (uid: string) => {
     webrtcConnection()
     // this.props.setSocket(socket);
   }
+
   socket.onmessage = (message) => {
     heartCheck.start()
 
@@ -160,21 +158,22 @@ export const useWebSocket = (uid: string) => {
     // 获取历史消息和用户信息
     const { data } = await Ajax.get("/chat/message", { uid, toUid, messageType: 1 })
     historyMessage.value = data?.messageInfo || [];
-    toUserInfo.value = data?.toUserInfo || {};
-  }
-  // 获取用户聊天列表
-  const getChatList = async (uid: string) => {
-    const { data } = await Ajax.get("/chat/list", { uid })
+    currentChat.value = data?.toUserInfo || {};
   }
 
+  const chatList = ref<userInfo[]>([])
+  const getChatList = async () => {
+    const { data } = await Ajax.get('/chat/friend', { uid })
+    chatList.value = data || []
+  }
   return {
+    chatList,
+    getChatList,
     socket,
     heartCheck,
     historyMessage,
-    toUserInfo,
-    chatList,
+    currentChat,
     sendMessage,
     getHistoryMessage,
-    getChatList
   }
 }

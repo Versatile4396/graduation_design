@@ -4,6 +4,7 @@
       <div class="search-bar"></div>
       <div class="list-bar">
         <chat-list
+          :key="currentChat.user_id"
           :currentChat="currentChat!"
           :chatList="chatList"
           v-if="chatList?.length"
@@ -13,14 +14,15 @@
     </div>
     <div class="chat-container">
       <div class="chat-header">
-        <span class="username">{{ toUserInfo?.nickname }}</span>
+        <span class="username">{{ currentChat?.nickname + '_' + currentChat.user_id }}</span>
         <div class="operator"></div>
       </div>
       <div class="chat-content" ref="chatWrapperDom">
         <chat-wrapper
+          :key="currentChat.user_id"
           :chatInfo="messageList"
           :avatarMe="userInfo.avatar!"
-          :avatarYou="toUserInfo?.avatar!"
+          :avatarYou="currentChat?.avatar!"
         ></chat-wrapper>
       </div>
       <div class="chat-send-wrapper">
@@ -39,34 +41,46 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { userInfoStore } from '@/store/user'
 import { useWebSocket } from './utils'
 import { nextTick } from 'vue'
+import type { userInfo } from '@/ajax/type/user'
+import router, { routerName } from '@/router'
 // 获取聊天列表用户信息？
 const queryInfo = getUrlQuery()
 const uid = queryInfo?.uid as string
-const toUid = queryInfo?.toUid as string
 const { userInfo } = userInfoStore()
 const chatWrapperDom = ref<HTMLElement>()
-const currentChat = ref()
+
 // 建立ws链接 发起聊天
-const { socket, sendMessage, getHistoryMessage, historyMessage, chatList, toUserInfo } =
-  useWebSocket(uid as string)
+const {
+  socket,
+  chatList,
+  sendMessage,
+  getHistoryMessage,
+  getChatList,
+  historyMessage,
+  currentChat
+} = useWebSocket(uid as string)
 
 const messageList = computed(() => {
   return historyMessage.value
 })
 onMounted(async () => {
-  await getHistoryMessage(uid, toUid)
+  await getChatList()
+  await getHistoryMessage(uid, getUrlQuery().toUid as string)
   if (chatWrapperDom.value) {
     chatWrapperDom.value.scrollTop = chatWrapperDom.value.scrollHeight
   }
 })
 
-const handleChatChange = () => {}
+const handleChatChange = async (chat: userInfo) => {
+  router.push({ name: routerName.CHAT, query: { uid: uid, toUid: chat.user_id } })
+  await getHistoryMessage(uid, String(chat.user_id))
+}
 const handleSendMsg = (msg: string) => {
   sendMessage({
     from: uid,
     content: msg,
     messageType: 1,
-    to: toUid
+    to: currentChat.value.user_id
   })
   // 前端处理滚动条
   nextTick(() => {

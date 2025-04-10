@@ -8,6 +8,7 @@ import (
 	"forum/server"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -105,4 +106,21 @@ func GetMessage(c *gin.Context) {
 		MessageInfo: messages,
 		ToUserInfo:  toUserInfo,
 	})
+}
+
+func GetFriend(c *gin.Context) {
+	uid := c.Query("uid")
+	postId, err := strconv.ParseUint(uid, 10, 64)
+	if err != nil {
+		return
+	}
+	if uid == "" {
+		return
+	}
+	friends, err := logic.GetFriendList(postId)
+	if err != nil {
+		ResponseErrorWithMsg(c, CodeServerBusy, "获取聊天列表内容失败")
+		return
+	}
+	ResponseSuccess(c, friends)
 }
