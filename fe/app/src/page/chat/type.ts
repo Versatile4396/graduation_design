@@ -12,9 +12,15 @@ export interface ChatMessage {
 }
 
 export interface ChatInstance {
+  id: number
   from: MsgFrom
-  code: number
-  content: string
+  fromUserId: number,
+  createAt: string,
+  url: string,
+  toUserId: number,
+  code: number,
+  content: string,
+  [keyof: string]: any,
 }
 
 export const enum MsgFrom {
