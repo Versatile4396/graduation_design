@@ -1,13 +1,14 @@
 import { MessageSchema } from '@/proto/message_pb'
 import { create, toBinary, fromBinary } from "@bufbuild/protobuf"
 import * as Constant from './constant'
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import Ajax from '@/ajax'
 import type { userInfo } from '@/ajax/type/user'
 import type { ChatInstance } from '../type'
+import { watch } from 'vue'
 
 
-export const useWebSocket = (uid: string) => {
+export const useWebSocket = (uid: string, chatWrapperDom: any) => {
   const historyMessage = ref<ChatInstance[]>([])
   const currentChat = ref<userInfo>({})
   var peer = new RTCPeerConnection();
@@ -60,10 +61,20 @@ export const useWebSocket = (uid: string) => {
     }
     // 发送给服务端的也要再本地存储一份
     historyMessage.value.push(dataReflect)
-    console.log(data, "sendMessageasd")
     const messagePB = create(MessageSchema, data)
     socket.send(toBinary(MessageSchema, messagePB))
   }
+  watch(historyMessage, () => {
+    // 前端处理滚动条
+    nextTick(() => {
+      if (chatWrapperDom?.value) {
+        chatWrapperDom.value.scrollTo({
+          top: chatWrapperDom.value.scrollHeight,
+          behavior: 'smooth'
+        })
+      }
+    })
+  }, { immediate: true })
 
   const webrtcConnection = () => {
 
@@ -151,6 +162,14 @@ export const useWebSocket = (uid: string) => {
       }
       //@ts-ignore
       historyMessage.value.push(reflectMessage)
+      nextTick(() => {
+        if (chatWrapperDom?.value) {
+          chatWrapperDom.value.scrollTo({
+            top: chatWrapperDom.value.scrollHeight,
+            behavior: 'smooth'
+          })
+        }
+      })
     }
   }
   // 拿历史消息和用户信息

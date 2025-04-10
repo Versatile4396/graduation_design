@@ -43,6 +43,7 @@ import { useWebSocket } from './utils'
 import { nextTick } from 'vue'
 import type { userInfo } from '@/ajax/type/user'
 import router, { routerName } from '@/router'
+
 // 获取聊天列表用户信息？
 const queryInfo = getUrlQuery()
 const uid = queryInfo?.uid as string
@@ -58,7 +59,7 @@ const {
   getChatList,
   historyMessage,
   currentChat
-} = useWebSocket(uid as string)
+} = useWebSocket(uid as string, chatWrapperDom)
 
 const messageList = computed(() => {
   return historyMessage.value
@@ -66,9 +67,6 @@ const messageList = computed(() => {
 onMounted(async () => {
   await getChatList()
   await getHistoryMessage(uid, getUrlQuery().toUid as string)
-  if (chatWrapperDom.value) {
-    chatWrapperDom.value.scrollTop = chatWrapperDom.value.scrollHeight
-  }
 })
 
 const handleChatChange = async (chat: userInfo) => {
@@ -85,10 +83,14 @@ const handleSendMsg = (msg: string) => {
   // 前端处理滚动条
   nextTick(() => {
     if (chatWrapperDom.value) {
-      chatWrapperDom.value.scrollTo({ top: chatWrapperDom.value.scrollHeight, behavior: 'smooth' })
+      chatWrapperDom.value.scrollTo({
+        top: chatWrapperDom.value.scrollHeight,
+        behavior: 'smooth'
+      })
     }
   })
 }
+
 onUnmounted(() => {
   socket.close()
 })
