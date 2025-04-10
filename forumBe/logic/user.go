@@ -109,6 +109,21 @@ func GetCountController(uid uint64) (countInfo *models.UserCountInfo, err error)
 	return countInfo, nil
 }
 
+func GetFriendList(uid uint64) (userList []models.UserInfo, err error) {
+	// 获取用户的好友列表
+	var friends []models.UserFriend
+	err = global.Db.Model(&models.UserFriend{}).Where("user_id =?", uid).Find(&friends).Error
+	for _, friend := range friends {
+		var userInfo models.UserInfo
+		err = global.Db.Model(&models.User{}).Where("user_id =?", friend.FriendId).First(&userInfo).Error
+		userList = append(userList, userInfo)
+	}
+	if err != nil {
+		return nil, err
+	}
+	return userList, nil
+}
+
 func GetUserList(fo *models.UserFilter) (userList []models.UserInfo, err error) {
 	if fo.Pagination == nil {
 		fo.Pagination = &models.Pagination{
@@ -168,6 +183,11 @@ func Friend(fo *models.UserFriendForm) (err error) {
 		UserId:   fo.UserId,
 		FriendId: fo.FriendId,
 	}
+	userFriendReverse := models.UserFriend{
+		UserId:   fo.FriendId,
+		FriendId: fo.UserId,
+	}
 	global.Db.Create(&userFriend)
+	global.Db.Create(&userFriendReverse)
 	return err
 }

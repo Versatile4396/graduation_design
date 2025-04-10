@@ -19,6 +19,7 @@
 </template>
 
 <script lang="ts" setup>
+import Ajax from '@/ajax'
 import type { UserInfo } from '@/page/article/component/types'
 import { getUrlQuery } from '@/utils/common'
 import { goToChat } from '@/utils/goto'
@@ -31,10 +32,10 @@ const props = withDefaults(defineProps<Props>(), {
   showFooter: true
 })
 
-const handleChatClick = () => {
+const handleChatClick = async () => {
   const uid = Number(getUrlQuery().uid)
   const toUid = props.userInfo.user_id
-  goToChat(uid, toUid)
+  await goToChat(uid, toUid)
 }
 </script>
 <style scoped lang="scss">

@@ -136,6 +136,7 @@ func SetupRouter() *gin.Engine {
 		chatRouter.POST("/file", controller.Savefile)
 		chatRouter.GET("/ws", controller.RunSocekt)
 		chatRouter.GET("/message", controller.GetMessage)
+		chatRouter.GET("/friend", controller.GetFriend)
 	}
 	return router
 }

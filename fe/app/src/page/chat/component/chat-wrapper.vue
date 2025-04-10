@@ -13,7 +13,10 @@
 import { getUrlQuery } from '@/utils'
 import { type ChatInstance } from '../type'
 import chatBox from './chat-box.vue'
-
+import { onMounted } from 'vue'
+onMounted(() => {
+  console.log('reasd 刷新了')
+})
 interface Props {
   chatInfo: ChatInstance[]
   avatarMe: string

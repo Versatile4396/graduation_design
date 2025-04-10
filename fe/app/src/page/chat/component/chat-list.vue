@@ -2,32 +2,31 @@
   <div class="chat-list-container-box">
     <div
       class="chat-lite-item"
-      :class="{ 'active-chat-item': chat.userInfo.user_id === currentChat.userInfo.user_id }"
       v-for="(chat, index) in props.chatList"
+      :class="{ 'active-chat-item': chat.user_id === currentChat.user_id }"
       :key="index"
       @click="handleChatChange(chat)"
     >
       <div class="avatar">
-        <el-avatar :size="40" :src="chat.userInfo.avatar"></el-avatar>
+        <el-avatar :size="40" :src="chat.avatar"></el-avatar>
       </div>
       <div class="chat-info">
-        <div class="username">{{ chat.userInfo.nickname }}</div>
-        <div class="chat-msg" v-html="chat.latestMsg"></div>
+        <div class="username">{{ chat.nickname }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import type { IChatList } from '../type'
+import type { userInfo } from '@/ajax/type/user'
 
 interface Props {
-  chatList: IChatList[]
-  currentChat: IChatList
+  chatList: userInfo[]
+  currentChat: userInfo
 }
 const props = defineProps<Props>()
 const emits = defineEmits(['chatChange'])
-const handleChatChange = (chat: IChatList) => {
+const handleChatChange = (chat: userInfo) => {
   emits('chatChange', chat)
 }
 </script>

@@ -4,7 +4,7 @@ interface user {
   user_name: string
   email: string
   gender: number
-  user_id: string
+  user_id: number
   avatar: string
   nickname: string
   overview: string

@@ -189,10 +189,10 @@ const commentListCmp = computed(() => {
 })
 
 // 跳转私聊界面
-const handleChatClick = () => {
+const handleChatClick = async () => {
   const { uid } = getUrlQuery()
   const toUid = authorInfo.value?.user_id
-  goToChat(Number(uid), toUid!)
+  await goToChat(Number(uid), toUid!)
 }
 
 const articleLike = async () => {
