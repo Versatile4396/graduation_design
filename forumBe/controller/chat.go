@@ -18,11 +18,9 @@ import (
 )
 
 func GetFile(c *gin.Context) {
-	fileName := c.Param("fileName")
-	if fileName == "" {
-		return
-	}
-	zap.L().Info("fileName", zap.String("fileName", fileName))
+	fileName := c.Param("filename")
+
+	zap.L().Info("filename", zap.String("filename", fileName))
 	data, _ := ioutil.ReadFile(config.AppConf.StaticFilePath + fileName)
 	c.Writer.Write(data)
 }

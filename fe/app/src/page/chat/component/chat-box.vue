@@ -8,10 +8,14 @@
   >
     <el-avatar :size="35" class="avatar" :src="avatar" />
     <div
+      v-if="chat.contentType == 1"
       class="msg-content"
       v-html="htmlContent"
       :class="{ 'msg-left': !isFromMe, 'msg-right': isFromMe }"
     ></div>
+    <div v-else-if="chat.contentType === 4">
+      <audio :src="`${BASE_FILE_URL}${chat.url}`" controls autoPlay="false" preload="auto"></audio>
+    </div>
   </div>
 </template>
 
@@ -19,7 +23,7 @@
 import { computed } from 'vue'
 import { type ChatInstance } from '../type'
 import { getUrlQuery } from '@/utils'
-
+const BASE_FILE_URL = 'http://localhost:5555/api/chat/file/'
 const props = defineProps<{
   chat: ChatInstance
   avatar: string
@@ -27,6 +31,9 @@ const props = defineProps<{
 const htmlContent = computed(() => {
   return props.chat.content
 })
+console.log(`${BASE_FILE_URL}${props.chat.url}`, 'props.chat')
+
+console.log(props.chat)
 const isFromMe = computed(() => {
   return props.chat.fromUserId == Number(getUrlQuery().uid)
 })

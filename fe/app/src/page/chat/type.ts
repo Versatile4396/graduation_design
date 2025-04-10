@@ -20,6 +20,7 @@ export interface ChatInstance {
   toUserId: number,
   code: number,
   content: string,
+  contentType: number,
   [keyof: string]: any,
 }
 

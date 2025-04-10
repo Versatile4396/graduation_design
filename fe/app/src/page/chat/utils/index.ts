@@ -48,7 +48,6 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
 
     let data = {
       from: uid,
-      contentType: Constant.TEXT, // 消息类型，1.文本 2.图片 3.文件 4.语音 5.视频 6.位置 7.自定义,
       to: String(currentChat.value.user_id),
       messageType: Constant.MESSAGE_TYPE_TEXT,
       ...messageData,
@@ -56,7 +55,7 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
     const dataReflect = {
       ...data,
       type: Constant.MESSAGE_TRANS_TYPE,
-      contentType: data.messageType,
+      contentType: data.contentType,
       fromUserId: Number(data.from),
       toUserId: Number(data.to),
     }
