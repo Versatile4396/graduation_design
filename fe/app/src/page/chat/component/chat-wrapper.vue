@@ -1,7 +1,7 @@
 <template>
   <div class="chat-wrapper-container-box">
     <chat-box
-      v-for="(chat, index) in chatInfo"
+      v-for="(chat, index) in messageList"
       :chat="chat"
       :avatar="uid !== chat.toUserId ? avatarMe : avatarYou"
       :key="index"
@@ -18,12 +18,13 @@ onMounted(() => {
   console.log('reasd 刷新了')
 })
 interface Props {
-  chatInfo: ChatInstance[]
+  messageList: ChatInstance[]
   avatarMe: string
   avatarYou: string
 }
 const uid = Number(getUrlQuery().uid)
 const props = defineProps<Props>()
+console.log(props.messageList, 'props.messageList')
 </script>
 <style scoped lang="scss">
 .chat-wrapper-container-box {

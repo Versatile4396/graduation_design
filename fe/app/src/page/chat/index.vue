@@ -20,13 +20,13 @@
       <div class="chat-content" ref="chatWrapperDom">
         <chat-wrapper
           :key="currentChat.user_id"
-          :chatInfo="messageList"
+          :message-list="messageList"
           :avatarMe="userInfo.avatar!"
           :avatarYou="currentChat?.avatar!"
         ></chat-wrapper>
       </div>
       <div class="chat-send-wrapper">
-        <inputChat @send-msg="handleSendMsg"></inputChat>
+        <inputChat @send-msg="handleSendMsg" @send-audio="handleSendAudio"></inputChat>
       </div>
     </div>
   </div>
@@ -43,6 +43,7 @@ import { useWebSocket } from './utils'
 import { nextTick } from 'vue'
 import type { userInfo } from '@/ajax/type/user'
 import router, { routerName } from '@/router'
+import * as Constant from './utils/constant'
 
 // 获取聊天列表用户信息？
 const queryInfo = getUrlQuery()
@@ -73,11 +74,13 @@ const handleChatChange = async (chat: userInfo) => {
   router.push({ name: routerName.CHAT, query: { uid: uid, toUid: chat.user_id } })
   await getHistoryMessage(uid, String(chat.user_id))
 }
+
 const handleSendMsg = (msg: string) => {
   sendMessage({
     from: uid,
     content: msg,
     messageType: 1,
+    contentType: Constant.TEXT, // 消息类型，1.文本 2.图片 3.文件 4.语音 5.视频 6.位置 7.自定义,
     to: currentChat.value.user_id
   })
   // 前端处理滚动条
@@ -89,6 +92,10 @@ const handleSendMsg = (msg: string) => {
       })
     }
   })
+}
+
+const handleSendAudio = (audio: any) => {
+  sendMessage(audio)
 }
 
 onUnmounted(() => {

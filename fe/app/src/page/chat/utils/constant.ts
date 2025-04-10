@@ -1,6 +1,7 @@
 export const TEXT = 1; // 语音聊天
 export const AUDIO_ONLINE = 6; // 语音聊天
 export const VIDEO_ONLINE = 7; // 视频聊天
+export const MESSAGE_TYPE_TEXT = 1; // 文本消息类型
 
 export const DIAL_MEDIA_START = 10; // 拨打媒体开始占位符
 export const DIAL_AUDIO_ONLINE = 11; // 语音聊天拨号
