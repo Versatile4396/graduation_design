@@ -54,6 +54,18 @@
       >
         <svg-icon iconName="icon-shangchuantupian" color="#4F4F4F"></svg-icon>
       </el-upload>
+      <el-popover placement="top">
+        <template #reference>
+          <svg-icon
+            @mousedown="startAudio"
+            @mouseup="stopAudio"
+            icon-name="icon-luyin"
+            color="#4F4F4F"
+            class="icon-luyin"
+          ></svg-icon>
+        </template>
+        按下开始录音
+      </el-popover>
     </div>
     <!-- 自定义输入框 -->
     <div
@@ -74,6 +86,9 @@ import Emoji from './Emoji.vue'
 import { computed, onMounted, ref } from 'vue'
 import type { UploadProps } from 'element-plus'
 import { ElMessage } from 'element-plus'
+import SvgIcon from '@/assets/iconfont/SvgIcon.vue'
+import Recorder from 'recorder-core'
+import 'recorder-core/src/engine/wav.js'
 
 interface Props {
   enterLock?: boolean
@@ -84,7 +99,7 @@ const props = withDefaults(defineProps<Props>(), {
   footerMsg: '按 Enter 发送消息'
 })
 
-const emits = defineEmits(['sendMsg'])
+const emits = defineEmits(['sendMsg', 'sendAudio'])
 
 const emojiPopoverStatus = ref(false)
 
@@ -138,6 +153,73 @@ const handleSelectEmoji = (index: number) => {
   handleInsertImage(emojiImg)
   emojiPopoverStatus.value = false
 }
+let audiorecorder: any = null
+let wave: any
+const startAudio = async () => {
+  audiorecorder = Recorder({
+    type: 'wav', //录音格式，可以换成wav等其他格式
+    sampleRate: 16000, //录音的采样率，越大细节越丰富越细腻
+    bitRate: 16, //录音的比特率，越大音质越好
+    onProcess: (
+      buffers: any,
+      powerLevel: any,
+      _bufferDuration: any,
+      bufferSampleRate: any,
+      _newBufferIdx: any,
+      _asyncEnd: any
+    ) => {
+      //录音实时回调，大约1秒调用12次本回调
+      //可实时绘制波形，实时上传（发送）数据
+      if (wave) {
+        wave.input(buffers[buffers.length - 1], powerLevel, bufferSampleRate)
+      }
+    }
+  })
+  if (!audiorecorder) {
+    ElMessage.error('录音失败 当前浏览器不支持录音功能')
+    return
+  }
+  await audiorecorder.open(
+    () => {
+      audiorecorder.start()
+      console.log('录音开始')
+    },
+    (msg: any, isUserNotAllow: any) => {
+      //用户拒绝了录音权限，或者浏览器不支持录音
+      console.log((isUserNotAllow ? 'UserNotAllow,' : '') + '无法录音:' + msg)
+    }
+  )
+}
+let recBlob: any = null
+const stopAudio = () => {
+  if (!audiorecorder) {
+    console.error('未打开录音')
+    return
+  }
+  audiorecorder.stop((blob: any, _duration: any) => {
+    console.log(blob, '====>')
+    recBlob = blob
+    //简单利用URL生成本地文件地址，此地址只能本地使用，比如赋值给audio.src进行播放，赋值给a.href然后a.click()进行下载（a需提供download="xxx.mp3"属性）
+    const localUrl = (window.URL || window.webkitURL).createObjectURL(blob)
+    console.log('录音成功====>', blob, localUrl, '时长:' + _duration + 'ms')
+
+    let reader = new FileReader()
+    reader.readAsArrayBuffer(blob)
+    reader.onload = (e: any) => {
+      let imgData = e.target.result
+      // 上传文件必须将ArrayBuffer转换为Uint8Array
+      let data = {
+        content: undefined,
+        contentType: 3,
+        fileSuffix: 'wav',
+        file: new Uint8Array(imgData)
+      }
+      emits('sendAudio', data)
+    }
+    audiorecorder.close()
+  })
+}
+
 onMounted(() => {
   messageInputDom.value?.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
@@ -161,6 +243,11 @@ defineExpose({ value, clearMsg })
 </script>
 
 <style scoped lang="scss">
+.icon-luyin {
+  cursor: pointer;
+  margin-left: 4px;
+  outline: none;
+}
 .container {
   width: 100%;
   height: 100%;
