@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"forum/constant"
 	"forum/global"
 	"forum/models"
@@ -15,6 +16,22 @@ type messageService struct {
 }
 
 var MessageService = new(messageService)
+
+func (m *messageService) GetMessages(message models.MessageRequest) ([]models.MessageResponse, error) {
+	db := global.Db
+
+	zap.L().Info("message", zap.Any("message", message))
+	if message.MessageType == constant.MESSAGE_TYPE_USER {
+
+		var messages []models.MessageResponse
+		db.Model(&models.Message{}).
+			Where("from_user_id IN (?,?) AND to_user_id IN (?,?)",
+				message.Uid, message.FUid, message.Uid, message.FUid).
+			Find(&messages)
+		return messages, nil
+	}
+	return nil, errors.New("不支持查询类型")
+}
 
 func (m *messageService) SaveMessage(message protocol.Message) {
 	db := global.Db
