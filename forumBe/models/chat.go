@@ -39,3 +39,20 @@ type Group struct {
 	Name      string    `json:"name" gorm:"type:varchar(150);comment:'群名称"`
 	Notice    string    `json:"notice" gorm:"type:varchar(350);comment:'群公告"`
 }
+
+type MessageRequest struct {
+	MessageType    int32  `form:"messageType"`
+	Uid            uint64 `form:"uid"`
+	FriendUsername string `form:"friendUsername"`
+	FUid           uint64 `form:"fUid"`
+}
+
+type MessageResponse struct {
+	ID          int32     `json:"id" gorm:"primarykey"`
+	FromUserId  uint64    `json:"fromUserId" gorm:"index"`
+	ToUserId    uint64    `json:"toUserId" gorm:"index"`
+	Content     string    `json:"content" gorm:"type:varchar(2500)"`
+	ContentType int16     `json:"contentType" gorm:"comment:'消息内容类型：1文字，2语音，3视频'"`
+	CreatedAt   time.Time `json:"createAt"`
+	Url         string    `json:"url"`
+}

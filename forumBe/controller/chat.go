@@ -2,6 +2,8 @@ package controller
 
 import (
 	"forum/config"
+	"forum/dao/service"
+	"forum/models"
 	"forum/server"
 	"io/ioutil"
 	"net/http"
@@ -71,4 +73,21 @@ func RunSocekt(c *gin.Context) {
 	}()
 	go client.Read()
 	go client.Write()
+}
+
+func GetMessage(c *gin.Context) {
+	zap.L().Info(c.Query("uid"))
+	var messageRequest models.MessageRequest
+	err := c.BindQuery(&messageRequest)
+	if nil != err {
+		zap.L().Error("bindQueryError", zap.Any("bindQueryError", err))
+	}
+	zap.L().Info("messageRequest params: ", zap.Any("messageRequest", messageRequest))
+
+	messages, err := service.MessageService.GetMessages(messageRequest)
+	if err != nil {
+		ResponseErrorWithMsg(c, CodeServerBusy, err)
+		return
+	}
+	ResponseSuccess(c, messages)
 }
