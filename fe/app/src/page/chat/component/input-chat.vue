@@ -45,16 +45,21 @@
         </template>
         <Emoji @selectEmoji="handleSelectEmoji"></Emoji>
       </el-popover>
-      <el-upload
-        class="avatar-uploader"
-        action="http://127.0.0.1:5555/api/upload/image"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
-      >
-        <svg-icon iconName="icon-shangchuantupian" color="#4F4F4F"></svg-icon>
-      </el-upload>
       <el-popover placement="top">
+        <template #reference>
+          <el-upload
+            class="avatar-uploader"
+            action="http://127.0.0.1:5555/api/upload/image"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+          >
+            <svg-icon iconName="icon-shangchuantupian" color="#4F4F4F"></svg-icon>
+          </el-upload>
+        </template>
+        <div style="text-align: center">点击插入图片</div>
+      </el-popover>
+      <el-popover placement="top" :width="80">
         <template #reference>
           <svg-icon
             @mousedown="startAudio"
@@ -64,7 +69,29 @@
             class="icon-luyin"
           ></svg-icon>
         </template>
-        按下开始录音
+        <div style="text-align: center">按下开始录音</div>
+      </el-popover>
+      <el-popover placement="top" :width="80">
+        <template #reference>
+          <svg-icon
+            icon-name="icon-shangchuanwenjian"
+            color="#4F4F4F"
+            class="icon-luyin"
+          ></svg-icon>
+        </template>
+        <div style="text-align: center">发送文件</div>
+      </el-popover>
+      <el-popover placement="top" :width="80">
+        <template #reference>
+          <svg-icon icon-name="icon-yuyintonghua" color="#4F4F4F" class="icon-luyin"></svg-icon>
+        </template>
+        <div style="text-align: center">发起语音通话</div>
+      </el-popover>
+      <el-popover placement="top" :width="80">
+        <template #reference>
+          <svg-icon icon-name="icon-shipintonghua" color="#4F4F4F" class="icon-luyin"></svg-icon>
+        </template>
+        <div style="text-align: center">发起视频通话</div>
       </el-popover>
     </div>
     <!-- 自定义输入框 -->
@@ -89,6 +116,7 @@ import { ElMessage } from 'element-plus'
 import SvgIcon from '@/assets/iconfont/SvgIcon.vue'
 import Recorder from 'recorder-core'
 import 'recorder-core/src/engine/wav.js'
+import { duration } from 'moment'
 
 interface Props {
   enterLock?: boolean
@@ -196,12 +224,15 @@ const stopAudio = () => {
     console.error('未打开录音')
     return
   }
-  audiorecorder.stop((blob: any, _duration: any) => {
-    console.log(blob, '====>')
+  audiorecorder.stop((blob: any, duration: any) => {
+    if (duration < 1000) {
+      ElMessage.error('录音时间过短，请重新录音')
+      return
+    }
     recBlob = blob
     //简单利用URL生成本地文件地址，此地址只能本地使用，比如赋值给audio.src进行播放，赋值给a.href然后a.click()进行下载（a需提供download="xxx.mp3"属性）
     const localUrl = (window.URL || window.webkitURL).createObjectURL(blob)
-    console.log('录音成功====>', blob, localUrl, '时长:' + _duration + 'ms')
+    console.log('录音成功====>', blob, localUrl, '时长:' + duration + 'ms')
 
     let reader = new FileReader()
     reader.readAsArrayBuffer(blob)
@@ -212,7 +243,8 @@ const stopAudio = () => {
         content: undefined,
         contentType: 4,
         fileSuffix: 'wav',
-        file: new Uint8Array(imgData)
+        file: new Uint8Array(imgData),
+        url: localUrl
       }
       emits('sendAudio', data)
     }

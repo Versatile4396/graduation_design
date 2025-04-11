@@ -83,15 +83,6 @@ const handleSendMsg = (msg: string) => {
     contentType: Constant.TEXT, // 消息类型，1.文本 2.图片 3.文件 4.语音 5.视频 6.位置 7.自定义,
     to: currentChat.value.user_id
   })
-  // 前端处理滚动条
-  nextTick(() => {
-    if (chatWrapperDom.value) {
-      chatWrapperDom.value.scrollTo({
-        top: chatWrapperDom.value.scrollHeight,
-        behavior: 'smooth'
-      })
-    }
-  })
 }
 
 const handleSendAudio = (audio: any) => {
