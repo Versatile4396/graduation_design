@@ -14,7 +14,7 @@
       :class="{ 'msg-left': !isFromMe, 'msg-right': isFromMe }"
     ></div>
     <div v-else-if="chat.contentType === 4">
-      <audio :src="`${BASE_FILE_URL}${chat.url}`" controls autoPlay="false" preload="auto"></audio>
+      <audio :src="audioUrl" controls preload="auto"></audio>
     </div>
   </div>
 </template>
@@ -31,9 +31,13 @@ const props = defineProps<{
 const htmlContent = computed(() => {
   return props.chat.content
 })
-console.log(`${BASE_FILE_URL}${props.chat.url}`, 'props.chat')
+const audioUrl = computed(() => {
+  if (props.chat.url.startsWith('blob')) {
+    return props.chat.url
+  }
+  return BASE_FILE_URL + props.chat.url || ''
+})
 
-console.log(props.chat)
 const isFromMe = computed(() => {
   return props.chat.fromUserId == Number(getUrlQuery().uid)
 })

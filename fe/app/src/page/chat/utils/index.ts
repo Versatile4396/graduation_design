@@ -63,6 +63,15 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
     historyMessage.value.push(dataReflect)
     const messagePB = create(MessageSchema, data)
     socket.send(toBinary(MessageSchema, messagePB))
+    // 前端处理滚动条
+    nextTick(() => {
+      if (chatWrapperDom.value) {
+        chatWrapperDom.value.scrollTo({
+          top: chatWrapperDom.value.scrollHeight,
+          behavior: 'smooth'
+        })
+      }
+    })
   }
   watch(historyMessage, () => {
     // 前端处理滚动条
