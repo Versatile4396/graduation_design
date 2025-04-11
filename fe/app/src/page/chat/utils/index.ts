@@ -52,17 +52,23 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
       messageType: Constant.MESSAGE_TYPE_TEXT,
       ...messageData,
     }
-    const dataReflect = {
-      ...data,
-      type: Constant.MESSAGE_TRANS_TYPE,
-      contentType: data.contentType,
-      fromUserId: Number(data.from),
-      toUserId: Number(data.to),
-    }
+
     // 发送给服务端的也要再本地存储一份
-    historyMessage.value.push(dataReflect)
     const messagePB = create(MessageSchema, data)
     socket.send(toBinary(MessageSchema, messagePB))
+    const getDataReflectValue = (data: any) => {
+      const contentType = !['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(data?.fileSuffix) ? 2 : 3
+      return {
+        ...data,
+        type: Constant.MESSAGE_TRANS_TYPE,
+        contentType,
+        fromUserId: Number(data.from),
+        toUserId: Number(data.to),
+      }
+      return {}
+    }
+    const dataReflect = getDataReflectValue(data)
+    historyMessage.value.push(dataReflect)
     // 前端处理滚动条
     nextTick(() => {
       if (chatWrapperDom.value) {

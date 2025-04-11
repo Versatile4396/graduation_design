@@ -71,13 +71,16 @@
         </template>
         <div style="text-align: center">按下开始录音</div>
       </el-popover>
+      <input type="file" :onchange="uploadFile" v-show="false" id="chatFile" hidden />
       <el-popover placement="top" :width="80">
         <template #reference>
           <svg-icon
+            @click="fileClick"
             icon-name="icon-shangchuanwenjian"
             color="#4F4F4F"
             class="icon-luyin"
-          ></svg-icon>
+          >
+          </svg-icon>
         </template>
         <div style="text-align: center">发送文件</div>
       </el-popover>
@@ -116,7 +119,7 @@ import { ElMessage } from 'element-plus'
 import SvgIcon from '@/assets/iconfont/SvgIcon.vue'
 import Recorder from 'recorder-core'
 import 'recorder-core/src/engine/wav.js'
-import { duration } from 'moment'
+import * as Constant from '../utils/constant'
 
 interface Props {
   enterLock?: boolean
@@ -130,6 +133,46 @@ const props = withDefaults(defineProps<Props>(), {
 const emits = defineEmits(['sendMsg', 'sendAudio'])
 
 const emojiPopoverStatus = ref(false)
+
+const fileClick = () => {
+  let file = document.getElementById('chatFile')
+  file?.click()
+}
+
+const uploadFile = (e: any) => {
+  let files = e.target.files
+  if (!files || !files[0]) {
+    return
+  }
+  let fileName = files[0].name
+  if (null == fileName) {
+    ElMessage.error('文件无名称')
+    return
+  }
+  let index = fileName.lastIndexOf('.')
+  let fileSuffix = null
+  if (index >= 0) {
+    fileSuffix = fileName.substring(index + 1)
+  }
+  let reader = new FileReader()
+  reader.onload = (event) => {
+    let file = event.target?.result
+    // Uint8数组可以直观的看到ArrayBuffer中每个字节（1字节 == 8位）的值。一般我们要将ArrayBuffer转成Uint类型数组后才能对其中的字节进行存取操作。
+    const localUrl = getLocalBlobUrl(files[0])
+    //@ts-ignore
+    var u8 = new Uint8Array(file)
+    let data = {
+      content: undefined,
+      contentType: 3,
+      fileSuffix: fileSuffix,
+      file: u8,
+      fileName: fileName,
+      url: localUrl
+    }
+    emits('sendMsg', data)
+  }
+  reader.readAsArrayBuffer(files[0])
+}
 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
   if (rawFile.type !== 'image/jpeg') {
@@ -153,7 +196,11 @@ const messageInputDom = ref<HTMLInputElement>()
 const handleSendMessage = () => {
   const message = messageInputDom.value?.innerHTML || ''
   if (message.trim() !== '') {
-    emits('sendMsg', message)
+    emits('sendMsg', {
+      content: message,
+      messageType: 1,
+      contentType: Constant.TEXT // 消息类型，1.文本 2.图片 3.文件 4.语音 5.视频 6.位置 7.自定义,
+    })
     if (document.activeElement != messageInputDom.value) {
       messageInputDom.value?.focus()
     }
@@ -231,7 +278,7 @@ const stopAudio = () => {
     }
     recBlob = blob
     //简单利用URL生成本地文件地址，此地址只能本地使用，比如赋值给audio.src进行播放，赋值给a.href然后a.click()进行下载（a需提供download="xxx.mp3"属性）
-    const localUrl = (window.URL || window.webkitURL).createObjectURL(blob)
+    const localUrl = getLocalBlobUrl(blob)
     console.log('录音成功====>', blob, localUrl, '时长:' + duration + 'ms')
 
     let reader = new FileReader()
@@ -246,12 +293,14 @@ const stopAudio = () => {
         file: new Uint8Array(imgData),
         url: localUrl
       }
-      emits('sendAudio', data)
+      emits('sendMsg', data)
     }
     audiorecorder.close()
   })
 }
-
+const getLocalBlobUrl = (blob: any) => {
+  return (window.URL || window.webkitURL).createObjectURL(blob)
+}
 onMounted(() => {
   messageInputDom.value?.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
