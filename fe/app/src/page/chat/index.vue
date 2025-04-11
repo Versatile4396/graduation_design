@@ -40,10 +40,8 @@ import ChatList from './component/chat-list.vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { userInfoStore } from '@/store/user'
 import { useWebSocket } from './utils'
-import { nextTick } from 'vue'
 import type { userInfo } from '@/ajax/type/user'
 import router, { routerName } from '@/router'
-import * as Constant from './utils/constant'
 
 // 获取聊天列表用户信息？
 const queryInfo = getUrlQuery()
@@ -75,14 +73,8 @@ const handleChatChange = async (chat: userInfo) => {
   await getHistoryMessage(uid, String(chat.user_id))
 }
 
-const handleSendMsg = (msg: string) => {
-  sendMessage({
-    from: uid,
-    content: msg,
-    messageType: 1,
-    contentType: Constant.TEXT, // 消息类型，1.文本 2.图片 3.文件 4.语音 5.视频 6.位置 7.自定义,
-    to: currentChat.value.user_id
-  })
+const handleSendMsg = (msg: any) => {
+  sendMessage(msg)
 }
 
 const handleSendAudio = (audio: any) => {
