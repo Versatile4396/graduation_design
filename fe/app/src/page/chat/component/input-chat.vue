@@ -86,13 +86,23 @@
       </el-popover>
       <el-popover placement="top" :width="80">
         <template #reference>
-          <svg-icon icon-name="icon-yuyintonghua" color="#4F4F4F" class="icon-luyin"></svg-icon>
+          <svg-icon
+            @click="initAudioOnline"
+            icon-name="icon-yuyintonghua"
+            color="#4F4F4F"
+            class="icon-luyin"
+          ></svg-icon>
         </template>
         <div style="text-align: center">发起语音通话</div>
       </el-popover>
       <el-popover placement="top" :width="80">
         <template #reference>
-          <svg-icon icon-name="icon-shipintonghua" color="#4F4F4F" class="icon-luyin"></svg-icon>
+          <svg-icon
+            @click="startVideoOnline"
+            icon-name="icon-shipintonghua"
+            color="#4F4F4F"
+            class="icon-luyin"
+          ></svg-icon>
         </template>
         <div style="text-align: center">发起视频通话</div>
       </el-popover>
@@ -130,7 +140,7 @@ const props = withDefaults(defineProps<Props>(), {
   footerMsg: '按 Enter 发送消息'
 })
 
-const emits = defineEmits(['sendMsg', 'sendAudio'])
+const emits = defineEmits(['sendMsg', 'AudioOnline'])
 
 const emojiPopoverStatus = ref(false)
 
@@ -198,7 +208,7 @@ const handleSendMessage = () => {
   if (message.trim() !== '') {
     emits('sendMsg', {
       content: message,
-      messageType: 1,
+      messageType: Constant.MESSAGE_TYPE_TEXT,
       contentType: Constant.TEXT // 消息类型，1.文本 2.图片 3.文件 4.语音 5.视频 6.位置 7.自定义,
     })
     if (document.activeElement != messageInputDom.value) {
@@ -288,7 +298,7 @@ const stopAudio = () => {
       // 上传文件必须将ArrayBuffer转换为Uint8Array
       let data = {
         content: undefined,
-        contentType: 4,
+        contentType: 3,
         fileSuffix: 'wav',
         file: new Uint8Array(imgData),
         url: localUrl
@@ -301,6 +311,8 @@ const stopAudio = () => {
 const getLocalBlobUrl = (blob: any) => {
   return (window.URL || window.webkitURL).createObjectURL(blob)
 }
+
+const startVideoOnline = () => {}
 onMounted(() => {
   messageInputDom.value?.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
@@ -318,6 +330,11 @@ const value = computed(() => {
 
 const clearMsg = () => {
   messageInputDom.value!.innerHTML = ''
+}
+
+// 语音通话模块
+const initAudioOnline = () => {
+  emits('AudioOnline')
 }
 
 defineExpose({ value, clearMsg })

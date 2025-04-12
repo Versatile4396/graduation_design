@@ -10,7 +10,7 @@
       <el-avatar :size="35" :src="avatar" />
     </div>
     <div
-      v-if="chat.contentType == 1"
+      v-if="chat.contentType == 1 || chat.content"
       class="msg-content"
       v-html="chat.content"
       :class="{ 'msg-left': !isFromMe, 'msg-right': isFromMe }"
@@ -45,7 +45,6 @@ const props = defineProps<{
   chat: ChatInstance
   avatar: string
 }>()
-
 const isFromMe = computed(() => {
   return props.chat.fromUserId == Number(getUrlQuery().uid)
 })
@@ -53,8 +52,8 @@ const fileIcon = computed(() => {
   if (props.chat?.fileSuffix) {
     return FileIconName[props.chat.fileSuffix]
   }
-  const url = props.chat.url
-  const suffix = url.substring(url.lastIndexOf('.') + 1)
+  const url = props.chat?.url
+  const suffix = url?.substring(url.lastIndexOf('.') + 1)
   if (!FileIconName[suffix]) {
     return FileIconName.other
   }
@@ -62,7 +61,7 @@ const fileIcon = computed(() => {
 })
 const FileUrl = computed(() => {
   if ([2, 3, 4].includes(props.chat.contentType)) {
-    if (props.chat.url.startsWith('blob')) {
+    if (props.chat?.url?.startsWith('blob')) {
       return props.chat.url
     }
     return BASE_FILE_URL + props.chat.url || ''

@@ -49,23 +49,22 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
     let data = {
       from: uid,
       to: String(currentChat.value.user_id),
-      messageType: Constant.MESSAGE_TYPE_TEXT,
       ...messageData,
     }
 
     // 发送给服务端的也要再本地存储一份
     const messagePB = create(MessageSchema, data)
     socket.send(toBinary(MessageSchema, messagePB))
+
     const getDataReflectValue = (data: any) => {
-      const contentType = !['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(data?.fileSuffix) ? 2 : 3
+      if (data.contentType === 3) {
+        data.contentType = GetContentTypeBySuffix(data.fileSuffix || "")
+      }
       return {
         ...data,
-        type: Constant.MESSAGE_TRANS_TYPE,
-        contentType,
         fromUserId: Number(data.from),
         toUserId: Number(data.to),
       }
-      return {}
     }
     const dataReflect = getDataReflectValue(data)
     historyMessage.value.push(dataReflect)
@@ -90,65 +89,6 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
       }
     })
   }, { immediate: true })
-
-  const webrtcConnection = () => {
-
-    /**
-     * 对等方收到ice信息后，通过调用 addIceCandidate 将接收的候选者信息传递给浏览器的ICE代理。
-     * @param {候选人信息} e 
-     */
-    peer.onicecandidate = (e) => {
-      if (e.candidate) {
-        // rtcType参数默认是对端值为answer，如果是发起端，会将值设置为offer
-        let candidate = {
-          type: 'answer_ice',
-          iceCandidate: e.candidate
-        }
-        let message = {
-          content: JSON.stringify(candidate),
-          type: Constant.MESSAGE_TRANS_TYPE,
-        }
-        sendMessage(message);
-      }
-
-    };
-    const state = {
-      onlineType: 1, // 在线视频或者音频： 1视频，2音频
-      video: {
-        height: 400,
-        width: 540
-      },
-      share: {
-        height: 540,
-        width: 750
-      },
-      currentScreen: {
-        height: 0,
-        width: 0
-      },
-      videoCallModal: false,
-      callName: '',
-      fromUserUuid: '',
-    }
-
-    /**
-     * 当连接成功后，从里面获取语音视频流
-     * @param {包含语音视频流} e 
-     */
-    peer.ontrack = (e) => {
-      if (e && e.streams) {
-        if (state.onlineType === 1) {
-          let remoteVideo = document.getElementById("remoteVideoReceiver")!;
-          //@ts-ignore
-          remoteVideo.srcObject = e.streams[0];
-        } else {
-          let remoteAudio = document.getElementById("audioPhone")!;
-          //@ts-ignore
-          remoteAudio.srcObject = e.streams[0];
-        }
-      }
-    };
-  }
 
   socket.onopen = () => {
     heartCheck.start()
@@ -200,6 +140,49 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
     const { data } = await Ajax.get('/chat/friend', { uid })
     chatList.value = data || []
   }
+
+  const localPeer = new RTCPeerConnection()
+  const remoteAudioStream = ref(null)
+  /**
+   * 语音通话模块
+   * webrtc 绑定事件
+   */
+  const webrtcConnection = () => {
+    /**
+    * 对等方收到ice信息后，通过调用 addIceCandidate 将接收的候选者信息传递给浏览器的ICE代理。
+    * @param {候选人信息} e 
+    */
+    localPeer.onicecandidate = (e) => {
+      if (e.candidate) {
+        // rtcType参数默认是对端值为answer，如果是发起端，会将值设置为offer
+        let candidate = {
+          type: 'offer_ice',
+          iceCandidate: e.candidate
+        }
+        let message = {
+          content: JSON.stringify(candidate),
+          type: Constant.MESSAGE_TRANS_TYPE,
+        }
+        sendMessage(message)
+      }
+    }
+    /**
+     * 当连接成功后，从里面获取语音视频流
+     * @param {包含语音视频流} e
+     */
+    localPeer.ontrack = (e) => {
+      if (e && e.streams) {
+        let remoteAudio = document.getElementById("remoteAudioPhone");
+        //@ts-ignore
+        remoteAudio!.srcObject = e.streams[0];
+      }
+    };
+  }
+
+  /**
+   * 视频通话模块
+   */
+
   return {
     chatList,
     getChatList,
@@ -209,5 +192,21 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
     currentChat,
     sendMessage,
     getHistoryMessage,
+    // 音视频通话模块
+    webrtcConnection,
+    localPeer,
   }
+}
+
+export const GetContentTypeBySuffix = (suffix: string) => {
+  if (['png', 'jpg', 'jpeg', 'gif'].includes(suffix)) {
+    return Constant.ContentTypeEnum.IMAGE
+  }
+  if (['mp4', 'avi', 'mov'].includes(suffix)) {
+    return Constant.ContentTypeEnum.VIDEO
+  }
+  if (['mp3', 'wav'].includes(suffix)) {
+    return Constant.ContentTypeEnum.AUDIO
+  }
+  return Constant.ContentTypeEnum.FILE
 }

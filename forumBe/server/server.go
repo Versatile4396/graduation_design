@@ -131,7 +131,7 @@ func saveMessage(message *protocol.Message) {
 		}
 		message.Url = url
 		message.Content = ""
-	} else if message.ContentType >= 2 && message.ContentType <= 5 {
+	} else if message.ContentType == 3 {
 		// 普通的文件二进制上传
 		fileSuffix := util.GetFileType(message.File)
 		nullStr := ""

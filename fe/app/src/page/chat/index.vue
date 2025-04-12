@@ -26,7 +26,7 @@
         ></chat-wrapper>
       </div>
       <div class="chat-send-wrapper">
-        <inputChat @send-msg="handleSendMsg" @send-audio="handleSendAudio"></inputChat>
+        <inputChat @send-msg="handleSendMsg" @AudioOnline="handleSendAudio"></inputChat>
       </div>
     </div>
   </div>
@@ -42,6 +42,7 @@ import { userInfoStore } from '@/store/user'
 import { useWebSocket } from './utils'
 import type { userInfo } from '@/ajax/type/user'
 import router, { routerName } from '@/router'
+import * as Constant from './utils/constant'
 
 // 获取聊天列表用户信息？
 const queryInfo = getUrlQuery()
@@ -57,7 +58,9 @@ const {
   getHistoryMessage,
   getChatList,
   historyMessage,
-  currentChat
+  currentChat,
+  webrtcConnection,
+  localPeer
 } = useWebSocket(uid as string, chatWrapperDom)
 
 const messageList = computed(() => {
@@ -77,8 +80,24 @@ const handleSendMsg = (msg: any) => {
   sendMessage(msg)
 }
 
-const handleSendAudio = (audio: any) => {
-  sendMessage(audio)
+// 点击 发起语音通话
+const handleSendAudio = async () => {
+  webrtcConnection()
+  await navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+    stream.getTracks().forEach((track) => {
+      localPeer.addTrack(track, stream)
+    })
+    // 一定注意：需要将该动作，放在这里面，即流获取成功后，再进行offer创建。不然不能获取到流，从而不能播放视频。
+    localPeer.createOffer().then((offer) => {
+      localPeer.setLocalDescription(offer)
+      let data = {
+        contentType: Constant.AUDIO_ONLINE, // 消息内容类型
+        content: JSON.stringify(offer),
+        type: Constant.MESSAGE_TRANS_TYPE // 消息传输类型
+      }
+      sendMessage(data)
+    })
+  })
 }
 
 onUnmounted(() => {

@@ -1,4 +1,4 @@
-export const TEXT = 1; // 语音聊天
+export const TEXT = 1; // 文本类型
 export const AUDIO_ONLINE = 6; // 语音聊天
 export const VIDEO_ONLINE = 7; // 视频聊天
 export const MESSAGE_TYPE_TEXT = 1; // 文本消息类型
@@ -19,4 +19,14 @@ export const DIAL_MEDIA_END = 20; // 拨打媒体结束占位符
 
 export const MESSAGE_TRANS_TYPE = "webrtc"; // 消息传输类型：如果是心跳消息，该内容为heatbeat,在线视频或者音频为webrtc
 
-export const MESSAGE_HEATBEAT=  "heatbeat"
+export const MESSAGE_HEATBEAT = "heatbeat"
+
+export enum ContentTypeEnum {
+    TEXT = 1,
+    FILE = 2,
+    IMAGE = 3,
+    AUDIO = 4,
+    VIDEO = 5,
+    AUDIO_ONLINE = 6,
+    VIDEO_ONLINE = 7,
+}
