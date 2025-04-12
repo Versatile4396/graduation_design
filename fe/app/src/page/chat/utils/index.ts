@@ -11,7 +11,6 @@ import { watch } from 'vue'
 export const useWebSocket = (uid: string, chatWrapperDom: any) => {
   const historyMessage = ref<ChatInstance[]>([])
   const currentChat = ref<userInfo>({})
-  var peer = new RTCPeerConnection();
   const socket = new WebSocket('ws://localhost:5555/api/chat/ws?uid=' + uid)
   const heartCheck = {
     timeout: 10000, // 10s
@@ -45,17 +44,19 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
   }
 
   const sendMessage = (messageData: any,) => {
-
+    console.log(messageData, "sendMessage ===message")
     let data = {
       from: uid,
       to: String(currentChat.value.user_id),
       ...messageData,
     }
-
-    // 发送给服务端的也要再本地存储一份
     const messagePB = create(MessageSchema, data)
     socket.send(toBinary(MessageSchema, messagePB))
-
+    // webrtc 内容不需要再本地存储
+    if (messageData.type === Constant.MESSAGE_TRANS_TYPE) {
+      return
+    }
+    // 发送给服务端的也要再本地存储一份
     const getDataReflectValue = (data: any) => {
       if (data.contentType === 3) {
         data.contentType = GetContentTypeBySuffix(data.fileSuffix || "")
@@ -93,8 +94,6 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
   socket.onopen = () => {
     heartCheck.start()
     console.log("connected")
-    webrtcConnection()
-    // this.props.setSocket(socket);
   }
 
   socket.onmessage = (message) => {
@@ -108,9 +107,18 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
       if (messagePB.type === "heatbeat" || messagePB.from === "System") {
         return;
       }
+      console.log(messagePB, "onMessage ===message")
+      if (messagePB.type === Constant.MESSAGE_TRANS_TYPE) {
+        try {
+          // 处理webrtc
+          handleWebrtcOnMessage(messagePB)
+          return
+        } catch (error) {
+
+        }
+      }
       const reflectMessage = {
         ...messagePB,
-        type: Constant.MESSAGE_TRANS_TYPE,
         contentType: messagePB.messageType,
         fromUserId: Number(messagePB.from),
         toUserId: Number(messagePB.to),
@@ -142,46 +150,158 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
   }
 
   const localPeer = new RTCPeerConnection()
-  const remoteAudioStream = ref(null)
-  /**
-   * 语音通话模块
-   * webrtc 绑定事件
-   */
-  const webrtcConnection = () => {
-    /**
-    * 对等方收到ice信息后，通过调用 addIceCandidate 将接收的候选者信息传递给浏览器的ICE代理。
-    * @param {候选人信息} e 
-    */
-    localPeer.onicecandidate = (e) => {
-      if (e.candidate) {
-        // rtcType参数默认是对端值为answer，如果是发起端，会将值设置为offer
-        let candidate = {
-          type: 'offer_ice',
-          iceCandidate: e.candidate
-        }
-        let message = {
-          content: JSON.stringify(candidate),
-          type: Constant.MESSAGE_TRANS_TYPE,
-        }
-        sendMessage(message)
-      }
+  const remotePeer = new RTCPeerConnection()
+  const chatModalStatus = ref(false)
+  const caller = ref(false)
+  const called = ref(false)
+  const peer = ref()
+  const localStream = ref()
+  const handleWebrtcOnMessage = async (messagePB: any) => {
+    if (
+      messagePB.contentType >= Constant.DIAL_MEDIA_START &&
+      messagePB.contentType <= Constant.DIAL_MEDIA_END
+    ) {
+      dealMediaCall(messagePB);
+      return;
     }
-    /**
-     * 当连接成功后，从里面获取语音视频流
-     * @param {包含语音视频流} e
-     */
-    localPeer.ontrack = (e) => {
-      if (e && e.streams) {
-        let remoteAudio = document.getElementById("remoteAudioPhone");
-        //@ts-ignore
-        remoteAudio!.srcObject = e.streams[0];
+    const { type } = JSON.parse(messagePB.content)
+    if (type === 'offer') {
+      // 用户B需要创建自己的RTCPeerConnection，
+      // 添加本地音视频流，设置远端描述信息，生成answer，并且通过信令服务器发送给用户A
+      const offer = JSON.parse(messagePB.content);
+      peer.value = new RTCPeerConnection()
+      const stream = await getLocalStream(true)
+      peer.value.addStream(stream)
+      // 设置远端描述信息
+      await peer.value.setRemoteDescription(offer);
+      const answer = await peer.value.createAnswer()
+      // 发送answer给信令服务器
+      await peer.value.setLocalDescription(answer);
+      sendMessage({
+        type: Constant.MESSAGE_TRANS_TYPE,
+        content: JSON.stringify(answer)
+      })
+    } else if (type === "answer") {
+      const answer = JSON.parse(messagePB.content);
+      peer.value.setRemoteDescription(answer)
+      // 通过监听onicecandidate事件获取candidate信息
+      peer.value.onicecandidate = (event: any) => {
+        if (event.candidate) {
+          // 通过信令服务器发送candidate信息给用户B
+          sendMessage({
+            type: Constant.MESSAGE_TRANS_TYPE,
+            content: JSON.stringify(event.candidate),
+          })
+        }
       }
-    };
+    } else if (type === "candidate") {
+      const candidate = JSON.parse(messagePB.content)
+      peer.value.addIceCandidate(candidate);
+      peer.value.onicecandidate = (event: any) => {
+        if (event.candidate) {
+          // 通过信令服务器发送candidate信息给用户A
+          sendMessage({
+            type: Constant.MESSAGE_TRANS_TYPE,
+            content: JSON.stringify(event.candidate)
+          })
+        }
+      }
+    } else {
+      const candidate = JSON.parse(messagePB.content)
+      await peer.value.addIceCandidate(candidate);
+      peer.value.onaddstream = (event: any) => {
+        const remoteVideo = document.getElementById("remoteVideo") as HTMLVideoElement
+        remoteVideo!.srcObject = event.stream
+        remoteVideo!.play()
+      }
+
+    }
   }
 
-  /**
-   * 视频通话模块
-   */
+  const dealMediaCall = async (message: any) => {
+    if ([Constant.DIAL_AUDIO_ONLINE, Constant.DIAL_VIDEO_ONLINE].includes(message.contentType)) {
+      chatModalStatus.value = true
+    }
+    if (
+      [Constant.CANCELL_AUDIO_ONLINE,
+      Constant.CANCELL_VIDEO_ONLINE].includes(message.contentType)
+    ) {
+      chatModalStatus.value = false
+      return;
+    }
+    if (
+      [Constant.REJECT_AUDIO_ONLINE,
+      Constant.REJECT_VIDEO_ONLINE].includes(message.contentType)
+    ) {
+      chatModalStatus.value = false
+      return;
+    }
+
+    if (
+      [Constant.ACCEPT_VIDEO_ONLINE,
+      Constant.ACCEPT_AUDIO_ONLINE].includes(message.contentType)
+    ) {
+      // caller 创建RTCPeerConnection 添加本地音视频流，生成offer，并且通过信令服务器将offer发送给用户B
+      // 创建RTCPeerConnection
+      peer.value = new RTCPeerConnection()
+      // 添加本地音视频流
+      peer.value.addStream(localStream.value)
+      // 生成offer
+      const offer = await peer.value.createOffer({
+        offerToReceiveAudio: 1,
+        offerToReceiveVideo: 1
+      })
+      // 设置本地描述的offer
+      await peer.value.setLocalDescription(offer);
+      // 通过信令服务器将offer发送给用户B
+      sendMessage({
+        type: Constant.MESSAGE_TRANS_TYPE,
+        content: JSON.stringify(offer),
+      })
+      return;
+    }
+  };
+
+  // 获取本地音视频流
+  const getLocalStream = async (local: boolean = false) => {
+    const localVideoDom = document.getElementById("localVideo") as HTMLVideoElement
+    if (local) {
+      const videoElement = document.createElement('video');
+      videoElement.src = "/src/page/chat/utils/local.mp4"
+      videoElement.muted = true;
+      videoElement.autoplay = true;
+
+      // 等待视频加载并播放
+      await new Promise((resolve, reject) => {
+        videoElement.onloadedmetadata = () => {
+          videoElement.play().then(() => {
+            resolve(true);
+          }).catch((error) => {
+            reject(error);
+          });
+        };
+        videoElement.onerror = () => {
+          reject(new Error('视频加载失败'));
+        };
+      });
+
+      // 使用 MediaStream API 从视频元素创建媒体流
+      // @ts-ignore
+      const mediaStream = videoElement.captureStream();
+      return mediaStream;
+
+    }
+    const stream = await navigator.mediaDevices.getUserMedia({ // 获取音视频流
+      audio: true,
+      video: true
+    })
+    localStream.value = stream
+    if (localVideoDom) {
+      localVideoDom!.srcObject = stream
+      localVideoDom!.play()
+    }
+    return stream
+  }
 
   return {
     chatList,
@@ -193,8 +313,12 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
     sendMessage,
     getHistoryMessage,
     // 音视频通话模块
-    webrtcConnection,
+    called,
+    caller,
     localPeer,
+    remotePeer,
+    chatModalStatus,
+    getLocalStream,
   }
 }
 
@@ -210,3 +334,4 @@ export const GetContentTypeBySuffix = (suffix: string) => {
   }
   return Constant.ContentTypeEnum.FILE
 }
+

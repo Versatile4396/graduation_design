@@ -1,3 +1,20 @@
+export const ConstantDetail = {
+    TEXT: "文本", // 文本类型
+    AUDIO_ONLINE: "语音聊天", // 语音聊天
+    VIDEO_ONLINE: "视频聊天", // 视频聊天
+    MESSAGE_TYPE_TEXT: "文本消息类型", // 文本消息类型
+
+    DIAL_MEDIA_START: "拨打媒体开始占位符", // 拨打媒体开始占位符
+    DIAL_AUDIO_ONLINE: "语音聊天拨号", // 语音聊天拨号
+    ACCEPT_AUDIO_ONLINE: "语音聊天接听", // 语音聊天接听
+    CANCELL_AUDIO_ONLINE: "语音聊天取消", // 语音聊天取消
+    REJECT_AUDIO_ONLINE: "语音聊天拒接", // 语音聊天拒接
+
+    DIAL_VIDEO_ONLINE: "视频聊天拨号", // 视频聊天拨号
+    ACCEPT_VIDEO_ONLINE: "视频聊天接听", // 视频聊天接听
+    CANCELL_VIDEO_ONLINE: "视频聊天取消", // 视频聊天取消
+}
+
 export const TEXT = 1; // 文本类型
 export const AUDIO_ONLINE = 6; // 语音聊天
 export const VIDEO_ONLINE = 7; // 视频聊天
@@ -18,6 +35,11 @@ export const DIAL_MEDIA_END = 20; // 拨打媒体结束占位符
 
 
 export const MESSAGE_TRANS_TYPE = "webrtc"; // 消息传输类型：如果是心跳消息，该内容为heatbeat,在线视频或者音频为webrtc
+
+export const OFFER = "offer"
+export const ANSWER = "answer"
+export const CANDIDATE_SEND = "candidate_send"
+export const CANDIDATE_GET = "candidate_get"
 
 export const MESSAGE_HEATBEAT = "heatbeat"
 

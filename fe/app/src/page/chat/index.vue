@@ -30,6 +30,33 @@
       </div>
     </div>
   </div>
+  <video id="localVideo" ref="localVideo" class="local-video"></video>
+  <video id="remoteVideo" ref="remoteVideo" class="remote-video"></video>
+  <el-dialog
+    v-model="chatModalStatus"
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    :show-close="false"
+    :width="350"
+  >
+    <template #footer>
+      <div class="chat-footer">
+        <svg-icon
+          style="cursor: pointer"
+          icon-name="icon-jujie"
+          size="45px"
+          @click="handleReject"
+        ></svg-icon>
+        <svg-icon
+          style="cursor: pointer"
+          icon-name="icon-jietong"
+          size="45px"
+          @click="handleConnect"
+          v-if="!caller"
+        ></svg-icon>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
@@ -37,6 +64,7 @@ import { getUrlQuery } from '@/utils/common'
 import inputChat from './component/input-chat.vue'
 import chatWrapper from './component/chat-wrapper.vue'
 import ChatList from './component/chat-list.vue'
+import SvgIcon from '@/assets/iconfont/SvgIcon.vue'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { userInfoStore } from '@/store/user'
 import { useWebSocket } from './utils'
@@ -59,8 +87,11 @@ const {
   getChatList,
   historyMessage,
   currentChat,
-  webrtcConnection,
-  localPeer
+  localPeer,
+  chatModalStatus,
+  called,
+  caller,
+  getLocalStream
 } = useWebSocket(uid as string, chatWrapperDom)
 
 const messageList = computed(() => {
@@ -80,18 +111,23 @@ const handleSendMsg = (msg: any) => {
   sendMessage(msg)
 }
 
+// 在线聊天
+
 // 点击 发起语音通话
 const handleSendAudio = async () => {
-  webrtcConnection()
+  await getLocalStream()
+  // 拉起视频窗口
+  caller.value = true
+  called.value = false
+  chatModalStatus.value = true
   await navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     stream.getTracks().forEach((track) => {
       localPeer.addTrack(track, stream)
     })
-    // 一定注意：需要将该动作，放在这里面，即流获取成功后，再进行offer创建。不然不能获取到流，从而不能播放视频。
     localPeer.createOffer().then((offer) => {
       localPeer.setLocalDescription(offer)
       let data = {
-        contentType: Constant.AUDIO_ONLINE, // 消息内容类型
+        contentType: Constant.DIAL_AUDIO_ONLINE, // 消息内容类型
         content: JSON.stringify(offer),
         type: Constant.MESSAGE_TRANS_TYPE // 消息传输类型
       }
@@ -100,11 +136,49 @@ const handleSendAudio = async () => {
   })
 }
 
+// 同意 接听语音通话
+const handleConnect = () => {
+  const data = {
+    contentType: Constant.ACCEPT_AUDIO_ONLINE, // 消息内容类型
+    type: Constant.MESSAGE_TRANS_TYPE // 消息传输类型
+  }
+  sendMessage(data)
+}
+
+const handleReject = (isReject: boolean = true, isAudio: boolean = true) => {
+  chatModalStatus.value = false
+  // 如果是拒接聊天
+  const contentType = isReject ? Constant.REJECT_AUDIO_ONLINE : Constant.CANCELL_AUDIO_ONLINE
+  if (isAudio) {
+    let data = {
+      contentType,
+      type: Constant.MESSAGE_TRANS_TYPE,
+      //@ts-ignore
+      content: Constant.ConstantDetail[contentType]
+    }
+    sendMessage(data)
+  }
+}
+
 onUnmounted(() => {
   socket.close()
 })
 </script>
 <style scoped lang="scss">
+.local-video {
+  position: fixed;
+  top: 50px;
+  height: 600px;
+  width: 300px;
+  z-index: 9999;
+}
+.remote-video {
+  position: fixed;
+  right: 0px;
+  height: 600px;
+  width: 300px;
+  z-index: 9999;
+}
 .chat-container-box {
   display: flex;
   margin: 0 auto;
@@ -164,5 +238,13 @@ onUnmounted(() => {
       height: 180px;
     }
   }
+}
+.chat-footer {
+  margin: 0 auto;
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 68px;
 }
 </style>
