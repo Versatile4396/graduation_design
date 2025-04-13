@@ -12,7 +12,19 @@
           </div>
         </div>
       </div>
-      <div class="content" v-html="assistance.content"></div>
+      <div class="assistance-content">
+        <div class="content" v-html="assistance.content"></div>
+        <div class="image-list">
+          <el-image
+            v-for="image of imageList"
+            :key="image"
+            fit="cover"
+            style="max-height: 120px; max-width: 140px; border-radius: 8px"
+            :src="image"
+            :preview-src-list="[image]"
+          />
+        </div>
+      </div>
     </div>
     <div class="option-wrapper">
       <div class="operate">
@@ -54,6 +66,20 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {})
 const createAt = computed(() => {
   return props.assistance.create_at.slice(0, 10)
+})
+const imageList = computed(() => {
+  function isJsonString(str: string) {
+    try {
+      JSON.parse(str)
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+  if (!isJsonString(props.assistance?.cover)) {
+    return []
+  }
+  return JSON.parse(props.assistance?.cover)
 })
 const commentStatus = ref(false)
 const showComment = () => {
@@ -153,9 +179,14 @@ onMounted(async () => {
       }
     }
   }
-  .content {
-    padding-left: 50px;
-    padding-bottom: 12px;
+  .assistance-content {
+    display: flex;
+    flex-direction: column;
+    .image-list {
+      display: flex;
+      gap: 12px;
+      margin: 12px 0;
+    }
   }
   .option-wrapper {
     display: flex;

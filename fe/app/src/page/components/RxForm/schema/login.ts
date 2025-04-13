@@ -121,7 +121,7 @@ export const registerSchema = (form: Form) => {
           validatorPassword(form)
         ],
         // 根据页面url判断是否显示
-        'x-visible': window.location.pathname !== '/forum/backend',
+        'x-visible': ['/forum/login'].includes(window.location.pathname),
         'x-decorator': 'FormItem',
         'x-component': 'Password',
         'x-component-props': {
@@ -137,7 +137,7 @@ export const registerSchema = (form: Form) => {
           },
           validatorConfirmPassWord(form)
         ],
-        'x-visible': window.location.pathname !== '/forum/backend',
+        'x-visible': ['/forum/login'].includes(window.location.pathname),
         'x-decorator': 'FormItem',
         'x-component': 'Password',
         'x-component-props': {
@@ -180,7 +180,7 @@ export const registerSchema = (form: Form) => {
       },
       role: {
         type: 'number',
-        title: '橘色',
+        title: '角色',
         'x-decorator': 'FormItem',
         'x-component': 'Radio.Group',
         'x-component-props': {
@@ -206,7 +206,7 @@ export const registerSchema = (form: Form) => {
         'x-component-props': {
           placeholder: '输入验证码'
         },
-        'x-visible': window.location.pathname !== '/forum/backend'
+        'x-visible': ['/forum/login'].includes(window.location.pathname)
       }
     }
   }
