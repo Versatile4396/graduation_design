@@ -16,7 +16,6 @@
     </div>
     <div class="option-wrapper">
       <div class="operate">
-        <div class="share"><svg-icon iconName="icon-zhuanfa" color="#4F4F4F"></svg-icon>分享</div>
         <div class="comment" @click="showComment">
           <svg-icon iconName="icon-pinglun" color="#4F4F4F" size="1.1rem" top="2px"></svg-icon
           ><span>评论</span>
@@ -156,6 +155,7 @@ onMounted(async () => {
   }
   .content {
     padding-left: 50px;
+    padding-bottom: 12px;
   }
   .option-wrapper {
     display: flex;
