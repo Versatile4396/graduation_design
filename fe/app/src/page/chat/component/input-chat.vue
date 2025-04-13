@@ -45,7 +45,7 @@
         </template>
         <Emoji @selectEmoji="handleSelectEmoji"></Emoji>
       </el-popover>
-      <el-popover placement="top">
+      <el-popover v-if="needShowAllChatIcon" placement="top">
         <template #reference>
           <el-upload
             class="avatar-uploader"

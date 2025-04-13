@@ -132,7 +132,8 @@ const previewInfos = ref<Array<PreviewInfo>>([])
 const getPreviewInfos = async (order = true) => {
   const { data } = await Ajax.post('/article/list', {
     order_by_time: order,
-    category_id: activeSideItem.value === 0 ? null : activeSideItem.value
+    category_id: activeSideItem.value === 0 ? null : activeSideItem.value,
+    article_status: 1
   })
   previewInfos.value = data?.map((item: any) => {
     return {

@@ -42,6 +42,7 @@ func SignUp(fo *models.User) (user models.User, err error) {
 		Gender:       fo.Gender,
 		UserName:     fo.UserName,
 		UserId:       fo.UserId,
+		Role:         fo.Role,
 		Avatar:       fo.Avatar,
 		Nickname:     fo.Nickname,
 		Overview:     fo.Overview,
@@ -78,6 +79,7 @@ func Login(u *models.LoginForm) (user *models.User, error error) {
 	user.Gender = dbuser.Gender
 	user.Nickname = dbuser.Nickname
 	user.Overview = dbuser.Overview
+	user.Role = dbuser.Role
 	return
 }
 

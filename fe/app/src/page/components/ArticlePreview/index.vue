@@ -3,7 +3,12 @@
     <div class="detail-info">
       <div class="title-row">
         <div class="title-text">
-          <el-tag class="status" v-if="previewInfo?.status" size="small" :type="statusMap?.type">
+          <el-tag
+            class="status"
+            v-if="previewInfo?.article_status && needShowStatus"
+            size="small"
+            :type="statusMap?.type"
+          >
             {{ statusMap?.text }}
           </el-tag>
           {{ previewInfo?.title }}
@@ -65,22 +70,24 @@ interface Props {
     likes: number
     comments: number
     collects: number
+    article_status: number
   }>
+  needShowStatus: boolean
 }
 const props = defineProps<Partial<Props>>()
-
+console.log(props.previewInfo, 'previewInfo')
 const statusMap = computed((): any => {
-  if (props.previewInfo?.status === ArticleStatus.Published) {
+  if (props.previewInfo?.article_status === ArticleStatus.Published) {
     return {
       text: '已发布',
       type: 'success'
     }
-  } else if (props.previewInfo?.status === ArticleStatus.Draft) {
+  } else if (props.previewInfo?.article_status === ArticleStatus.Unpublished) {
     return {
-      text: '草稿',
+      text: '未通过',
       type: 'info'
     }
-  } else if (props.previewInfo?.status === ArticleStatus.Deleted) {
+  } else if (props.previewInfo?.article_status === ArticleStatus.Deleted) {
     return {
       text: '已删除',
       type: 'danger'

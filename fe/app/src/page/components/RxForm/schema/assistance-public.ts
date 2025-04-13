@@ -19,7 +19,7 @@ export const publicSchema = (form: Form) => {
         'x-component': 'Input',
       },
       cover: {
-        title: '帖子封面',
+        title: '帖子图片',
         required: true,
         'x-decorator': 'FormItem',
         'x-decorator-props': {
@@ -27,7 +27,10 @@ export const publicSchema = (form: Form) => {
         },
         'x-component': 'RUpload',
         'x-component-props': {
-          desc: '建议尺寸：192*128px (封面仅展示在首页信息流中)'
+          desc: '建议尺寸：192*128px (封面仅展示在首页信息流中)',
+          multiple: true,
+          width: '80px',
+          height: '80px'
         }
       },
       category_id: {

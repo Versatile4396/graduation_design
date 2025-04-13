@@ -91,6 +91,7 @@ func UserLoginController(c *gin.Context) {
 		"nickname":      user.Nickname,
 		"overview":      user.Overview,
 		"email":         user.Email,
+		"role":          user.Role,
 		"access_token":  user.AccessToken,
 		"refresh_token": user.RefreshToken,
 	})

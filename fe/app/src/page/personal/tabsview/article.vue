@@ -6,6 +6,7 @@
         @click="goToArticle(previewInfo?.aid!)"
         v-for="previewInfo in previewInfos"
         :previewInfo="previewInfo"
+        :need-show-status="true"
       ></ArticlePreview>
     </section>
   </div>

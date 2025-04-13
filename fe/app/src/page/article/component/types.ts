@@ -59,4 +59,5 @@ export interface UserInfo {
   username: string
   nickname: string
   overview: string
+  role: number
 }

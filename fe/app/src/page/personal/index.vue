@@ -8,7 +8,10 @@
         <div class="right-box">
           <div class="briefly">{{ userInfo.nickname }}</div>
           <div class="editor-content">
-            <el-button type="primary" @click="setUserInfo">设置</el-button>
+            <el-button type="primary" @click="setUserInfoInPersonal">修改个人信息</el-button>
+          </div>
+          <div class="overview">
+            {{ userInfo.overview }}
           </div>
         </div>
       </div>
@@ -17,6 +20,8 @@
           <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane v-for="pane in paneConfig" :label="pane.label" :name="pane.name">
               <Article v-if="!loading" :article-list="articleList" :key="activeName"></Article>
+            </el-tab-pane>
+            <el-tab-pane v-for="pane in paneConfig2" :label="pane.label" :name="pane.name">
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -29,24 +34,41 @@
 <script lang="ts" setup>
 import { userInfoStore } from '@/store/user'
 import Article from './tabsview/article.vue'
-import { onMounted, ref } from 'vue'
-import type { TabsPaneContext } from 'element-plus'
+import { h, onMounted, ref } from 'vue'
+import { ElMessageBox, type TabsPaneContext } from 'element-plus'
 import { getUrlQuery } from '@/utils/common'
 import Ajax from '@/ajax'
+import userForm from '@/components/user-form.vue'
+import type { userInfo } from '@/ajax/type/user'
+import { useAssistance } from '.'
 
-const { userInfo } = userInfoStore()
+const { userInfo, setUserInfo } = userInfoStore()
 const paneConfig = [
   {
     label: '个人文章',
     name: 'article'
   },
   {
-    label: '收藏',
+    label: '收藏文章',
     name: 'collection'
   },
   {
-    label: '赞',
+    label: '点赞文章',
     name: 'like'
+  }
+]
+const paneConfig2 = [
+  {
+    label: '互助信息',
+    name: 'assistance'
+  },
+  {
+    label: '关注列表',
+    name: 'follow'
+  },
+  {
+    label: '粉丝列表',
+    name: 'fans'
   }
 ]
 
@@ -54,6 +76,8 @@ const loading = ref(false)
 
 const activeName = ref('article')
 const articleList = ref([])
+
+const { assistanceList, getAssistanceList } = useAssistance()
 
 const handleClick = async (tab: TabsPaneContext, _event: Event) => {
   switch (tab.index) {
@@ -76,6 +100,7 @@ const handleClick = async (tab: TabsPaneContext, _event: Event) => {
       break
   }
 }
+
 const getArticlePersonalList = async () => {
   const uid = getUrlQuery().uid
   const res = await Ajax.post('/article/list', { user_id: uid })
@@ -93,7 +118,39 @@ const getCollectionList = async () => {
   articleList.value = res.data
 }
 
-const setUserInfo = () => {}
+const setUserInfoInPersonal = () => {
+  const onUpdate = async (data: any) => {
+    data['user_id'] = Number(data['user_id'])
+    function removeKeys(data: { [key: string]: any }): { [key: string]: any } {
+      const keysToRemove = ['user_name', 'refresh_token', 'access_token']
+      keysToRemove.forEach((key) => {
+        if (data.hasOwnProperty(key)) {
+          delete data[key]
+        }
+      })
+      return data
+    }
+
+    await Ajax.post('/user/update', removeKeys(data))
+    setUserInfo(data)
+    // 替换存储在local里面的用户信息
+    ElMessageBox.close()
+  }
+  ElMessageBox({
+    title: '用户信息修改',
+    showConfirmButton: false,
+    message: h(userForm, {
+      row: {
+        username: userInfo.user_name,
+        ...userInfo
+      },
+      onUpdate,
+      onCancel: () => {
+        ElMessageBox.close()
+      }
+    })
+  })
+}
 onMounted(async () => {
   loading.value = true
   await getArticlePersonalList()
@@ -139,6 +196,10 @@ onMounted(async () => {
         .editor-content {
           font-size: 14px;
           color: #909090;
+        }
+        .overview {
+          font-size: 12px;
+          color: #a4a2a2;
         }
       }
     }
