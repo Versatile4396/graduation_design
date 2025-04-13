@@ -288,6 +288,15 @@ CREATE TABLE
         KEY `idx_user_friends_friend_id` (`friend_id`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT '好友信息表';
 
+CREATE TABLE
+    IF NOT EXISTS follows (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        follower_id VARCHAR(20) NOT NULL COMMENT '关注者 ID',
+        followed_id VARCHAR(20) NOT NULL COMMENT '被关注者 ID',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    );
+
 -- 插入 article_categories 数据
 INSERT INTO
     article_categories (category_name, parent_id)
