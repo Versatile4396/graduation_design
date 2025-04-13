@@ -30,15 +30,20 @@
       </div>
     </div>
   </div>
-  <video id="localVideo" ref="localVideo" class="local-video"></video>
-  <video id="remoteVideo" ref="remoteVideo" class="remote-video"></video>
+
   <el-dialog
+    ref="dialog"
     v-model="chatModalStatus"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :show-close="false"
     :width="350"
+    :height="700"
   >
+    <div class="chat-online-video">
+      <video id="localVideo" ref="localVideo" class="local-video"></video>
+      <video id="remoteVideo" ref="remoteVideo" class="remote-video"></video>
+    </div>
     <template #footer>
       <div class="chat-footer">
         <svg-icon
@@ -52,7 +57,7 @@
           icon-name="icon-jietong"
           size="45px"
           @click="handleConnect"
-          v-if="!caller"
+          v-if="called && !calling"
         ></svg-icon>
       </div>
     </template>
@@ -71,13 +76,14 @@ import { useWebSocket } from './utils'
 import type { userInfo } from '@/ajax/type/user'
 import router, { routerName } from '@/router'
 import * as Constant from './utils/constant'
-
+import { nextTick } from 'vue'
 // 获取聊天列表用户信息？
 const queryInfo = getUrlQuery()
 const uid = queryInfo?.uid as string
 const { userInfo } = userInfoStore()
 const chatWrapperDom = ref<HTMLElement>()
-
+const dialog = ref()
+const connectVisible = ref(true)
 // 建立ws链接 发起聊天
 const {
   socket,
@@ -89,9 +95,11 @@ const {
   currentChat,
   localPeer,
   chatModalStatus,
+  calling,
   called,
   caller,
-  getLocalStream
+  getLocalStream,
+  stopVideoOnline
 } = useWebSocket(uid as string, chatWrapperDom)
 
 const messageList = computed(() => {
@@ -120,6 +128,7 @@ const handleSendAudio = async () => {
   caller.value = true
   called.value = false
   chatModalStatus.value = true
+  await nextTick()
   await navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     stream.getTracks().forEach((track) => {
       localPeer.addTrack(track, stream)
@@ -145,19 +154,21 @@ const handleConnect = () => {
   sendMessage(data)
 }
 
-const handleReject = (isReject: boolean = true, isAudio: boolean = true) => {
+const handleReject = () => {
   chatModalStatus.value = false
   // 如果是拒接聊天
-  const contentType = isReject ? Constant.REJECT_AUDIO_ONLINE : Constant.CANCELL_AUDIO_ONLINE
-  if (isAudio) {
-    let data = {
-      contentType,
-      type: Constant.MESSAGE_TRANS_TYPE,
-      //@ts-ignore
-      content: Constant.ConstantDetail[contentType]
-    }
-    sendMessage(data)
+  if (calling.value) {
+    calling.value = false
   }
+  const contentType = calling.value ? Constant.REJECT_AUDIO_ONLINE : Constant.CANCELL_AUDIO_ONLINE
+  let data = {
+    contentType,
+    type: Constant.MESSAGE_TRANS_TYPE,
+    //@ts-ignore
+    content: Constant.ConstantDetail[contentType]
+  }
+  stopVideoOnline()
+  sendMessage(data)
 }
 
 onUnmounted(() => {
@@ -167,17 +178,24 @@ onUnmounted(() => {
 <style scoped lang="scss">
 .local-video {
   position: fixed;
-  top: 50px;
-  height: 600px;
-  width: 300px;
-  z-index: 9999;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20rem;
+  height: 26rem;
+  object-fit: cover;
+  z-index: 2999;
 }
 .remote-video {
   position: fixed;
-  right: 0px;
-  height: 600px;
-  width: 300px;
-  z-index: 9999;
+  top: 55%;
+  left: 58%;
+  transform: translate(-50%, -50%);
+  width: 7rem;
+  height: 10rem;
+  margin-bottom: 1rem;
+  object-fit: cover;
+  z-index: 2999;
 }
 .chat-container-box {
   display: flex;
@@ -239,11 +257,15 @@ onUnmounted(() => {
     }
   }
 }
+.chat-online-video {
+  height: 400px;
+}
 .chat-footer {
   margin: 0 auto;
   width: 200px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 24px;
   align-items: center;
   height: 68px;
 }

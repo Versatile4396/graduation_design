@@ -59,7 +59,7 @@
         </template>
         <div style="text-align: center">点击插入图片</div>
       </el-popover>
-      <el-popover placement="top" :width="80">
+      <el-popover v-if="needShowAllChatIcon" placement="top" :width="80">
         <template #reference>
           <svg-icon
             @mousedown="startAudio"
@@ -72,7 +72,7 @@
         <div style="text-align: center">按下开始录音</div>
       </el-popover>
       <input type="file" :onchange="uploadFile" v-show="false" id="chatFile" hidden />
-      <el-popover placement="top" :width="80">
+      <el-popover v-if="needShowAllChatIcon" placement="top" :width="80">
         <template #reference>
           <svg-icon
             @click="fileClick"
@@ -84,7 +84,7 @@
         </template>
         <div style="text-align: center">发送文件</div>
       </el-popover>
-      <el-popover placement="top" :width="80">
+      <el-popover v-if="needShowAllChatIcon" placement="top" :width="80">
         <template #reference>
           <svg-icon
             @click="initAudioOnline"
@@ -95,7 +95,7 @@
         </template>
         <div style="text-align: center">发起语音通话</div>
       </el-popover>
-      <el-popover placement="top" :width="80">
+      <el-popover v-if="needShowAllChatIcon" placement="top" :width="80">
         <template #reference>
           <svg-icon
             @click="startVideoOnline"
@@ -134,11 +134,14 @@ import * as Constant from '../utils/constant'
 interface Props {
   enterLock?: boolean
   footerMsg?: string
+  needShowAllChatIcon?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   enterLock: false,
-  footerMsg: '按 Enter 发送消息'
+  footerMsg: '按 Enter 发送消息',
+  needShowAllChatIcon: true
 })
+console.log(props, 'asdljkhljk')
 
 const emits = defineEmits(['sendMsg', 'AudioOnline'])
 
@@ -177,6 +180,7 @@ const uploadFile = (e: any) => {
       fileSuffix: fileSuffix,
       file: u8,
       fileName: fileName,
+      messageType: Constant.MESSAGE_TYPE_TEXT,
       url: localUrl
     }
     emits('sendMsg', data)
@@ -299,6 +303,7 @@ const stopAudio = () => {
       let data = {
         content: undefined,
         contentType: 3,
+        messageType: Constant.MESSAGE_TYPE_TEXT,
         fileSuffix: 'wav',
         file: new Uint8Array(imgData),
         url: localUrl

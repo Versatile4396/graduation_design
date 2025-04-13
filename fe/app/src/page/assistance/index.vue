@@ -3,7 +3,12 @@
     <div class="left-box">
       <div class="submit-wrapper">
         <div class="input-wrapper">
-          <InputChat ref="inputChat" :enter-lock="true" footer-msg=""></InputChat>
+          <InputChat
+            ref="inputChat"
+            :enter-lock="true"
+            footer-msg=""
+            :needShowAllChatIcon="false"
+          ></InputChat>
         </div>
         <div class="submit-botton">
           <el-popover

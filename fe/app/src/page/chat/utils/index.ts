@@ -44,12 +44,12 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
   }
 
   const sendMessage = (messageData: any,) => {
-    console.log(messageData, "sendMessage ===message")
     let data = {
       from: uid,
       to: String(currentChat.value.user_id),
       ...messageData,
     }
+    console.log(data, "sendMessage ===message")
     const messagePB = create(MessageSchema, data)
     socket.send(toBinary(MessageSchema, messagePB))
     // webrtc 内容不需要再本地存储
@@ -119,7 +119,7 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
       }
       const reflectMessage = {
         ...messagePB,
-        contentType: messagePB.messageType,
+        contentType: messagePB.contentType,
         fromUserId: Number(messagePB.from),
         toUserId: Number(messagePB.to),
       }
@@ -154,6 +154,7 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
   const chatModalStatus = ref(false)
   const caller = ref(false)
   const called = ref(false)
+  const calling = ref(false)
   const peer = ref()
   const localStream = ref()
   const handleWebrtcOnMessage = async (messagePB: any) => {
@@ -207,26 +208,29 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
         }
       }
     } else {
+      calling.value = true
       const candidate = JSON.parse(messagePB.content)
+      console.log(candidate, "candidate")
       await peer.value.addIceCandidate(candidate);
-      peer.value.onaddstream = (event: any) => {
+      peer.value.ontrack = (event: any) => {
         const remoteVideo = document.getElementById("remoteVideo") as HTMLVideoElement
         remoteVideo!.srcObject = event.stream
         remoteVideo!.play()
       }
-
     }
   }
 
   const dealMediaCall = async (message: any) => {
     if ([Constant.DIAL_AUDIO_ONLINE, Constant.DIAL_VIDEO_ONLINE].includes(message.contentType)) {
       chatModalStatus.value = true
+      called.value = true
     }
     if (
       [Constant.CANCELL_AUDIO_ONLINE,
       Constant.CANCELL_VIDEO_ONLINE].includes(message.contentType)
     ) {
       chatModalStatus.value = false
+      stopVideoOnline()
       return;
     }
     if (
@@ -234,6 +238,7 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
       Constant.REJECT_VIDEO_ONLINE].includes(message.contentType)
     ) {
       chatModalStatus.value = false
+      stopVideoOnline()
       return;
     }
 
@@ -302,7 +307,25 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
     }
     return stream
   }
+  const stopVideoOnline = () => {
+    let preview = document.getElementById("localVideo") as HTMLVideoElement;
+    //@ts-ignore
+    if (preview && preview.srcObject && preview.srcObject.getTracks()) {
+      //@ts-ignore
+      preview.srcObject.getTracks().forEach((track) => track.stop());
+    }
 
+    //@ts-ignore
+    let remoteVideo = document.getElementById("remoteVideo") as HTMLVideoElement;
+    //@ts-ignore
+    if (remoteVideo && remoteVideo.srcObject && remoteVideo.srcObject.getTracks()) {
+      //@ts-ignore
+      remoteVideo.srcObject.getTracks().forEach((track) => track.stop());
+    }
+    localStream.value?.getTracks().forEach((track: any) => {
+      track.stop()
+    })
+  }
   return {
     chatList,
     getChatList,
@@ -315,10 +338,12 @@ export const useWebSocket = (uid: string, chatWrapperDom: any) => {
     // 音视频通话模块
     called,
     caller,
+    calling,
     localPeer,
     remotePeer,
     chatModalStatus,
     getLocalStream,
+    stopVideoOnline
   }
 }
 
@@ -334,4 +359,3 @@ export const GetContentTypeBySuffix = (suffix: string) => {
   }
   return Constant.ContentTypeEnum.FILE
 }
-
