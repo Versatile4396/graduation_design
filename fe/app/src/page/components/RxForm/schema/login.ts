@@ -1,4 +1,3 @@
-import router from '@/router'
 import type { Form } from '@formily/core'
 import type { ISchema } from '@formily/vue'
 
@@ -40,6 +39,9 @@ const validatorConfirmPassWord = (form: Form) => {
     return true
   }
 }
+const xDecoratorProps = {
+  labelWidth: 80,
+}
 
 const validatorPassword = (form: Form) => {
   return (field: string) => {
@@ -55,6 +57,7 @@ export const registerSchema = (form: Form) => {
     type: 'object',
     properties: {
       username: {
+        'x-decorator-props': xDecoratorProps,
         title: '用户名',
         type: 'string',
         required: true,
@@ -68,6 +71,7 @@ export const registerSchema = (form: Form) => {
         }
       },
       nickname: {
+        'x-decorator-props': xDecoratorProps,
         title: '昵称',
         type: 'string',
         required: true,
@@ -82,6 +86,7 @@ export const registerSchema = (form: Form) => {
       },
 
       email: {
+        'x-decorator-props': xDecoratorProps,
         title: '邮箱',
         type: 'string',
         'x-decorator': 'FormItem',
@@ -95,6 +100,7 @@ export const registerSchema = (form: Form) => {
         }
       },
       overview: {
+        'x-decorator-props': xDecoratorProps,
         title: '一句话',
         type: 'string',
         'x-decorator': 'FormItem',
@@ -112,6 +118,7 @@ export const registerSchema = (form: Form) => {
         }
       },
       password: {
+        'x-decorator-props': xDecoratorProps,
         type: 'string',
         'x-validator': [
           {
@@ -129,6 +136,7 @@ export const registerSchema = (form: Form) => {
         }
       },
       confirm_password: {
+        'x-decorator-props': xDecoratorProps,
         type: 'string',
         'x-validator': [
           {
@@ -145,6 +153,7 @@ export const registerSchema = (form: Form) => {
         }
       },
       gender: {
+        'x-decorator-props': xDecoratorProps,
         type: 'number',
         title: '性别',
         'x-decorator': 'FormItem',
@@ -169,6 +178,7 @@ export const registerSchema = (form: Form) => {
         ]
       },
       avatar: {
+        'x-decorator-props': xDecoratorProps,
         type: 'string',
         title: '头像',
         'x-decorator': 'FormItem',
@@ -179,6 +189,7 @@ export const registerSchema = (form: Form) => {
         }
       },
       role: {
+        'x-decorator-props': xDecoratorProps,
         type: 'number',
         title: '角色',
         'x-decorator': 'FormItem',

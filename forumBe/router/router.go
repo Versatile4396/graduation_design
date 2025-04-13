@@ -130,6 +130,13 @@ func SetupRouter() *gin.Engine {
 		comment.POST("/list", controller.CommentGetListController)
 		comment.DELETE("/delete/:cid", controller.CommentDeleteController)
 	}
+	follow := router.Group("/api/follow")
+	{
+		follow.POST("/create", controller.FollowCreateController)
+		follow.POST("/delete", controller.FollowDeleteController)
+		follow.POST("/list/:uid", controller.FollowGetListController)
+		follow.POST("/isfollow", controller.IsFollow)
+	}
 	chatRouter := router.Group("/api/chat")
 	{
 		chatRouter.GET("/file/:filename", controller.GetFile)
