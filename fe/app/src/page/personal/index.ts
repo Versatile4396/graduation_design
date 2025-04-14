@@ -1,4 +1,5 @@
 import Ajax from "@/ajax"
+import type { UserInfo } from "@/ajax/type/user"
 import { ref } from "vue"
 
 export const useAssistance = () => {
@@ -10,5 +11,21 @@ export const useAssistance = () => {
     return {
         assistanceList,
         getAssistanceList
+    }
+}
+
+export const useFollower = () => {
+    const followerList = ref<UserInfo[]>()
+    const followedList = ref<UserInfo[]>()
+    const getFollowerList = async (uid?: number) => {
+        const { data } = await Ajax.post('/follow/list/' + uid,)
+        console.log(data, "datadatadatadata")
+        followerList.value = data.followList || []
+        followedList.value = data.followedList || []
+    }
+    return {
+        followerList,
+        followedList,
+        getFollowerList,
     }
 }
