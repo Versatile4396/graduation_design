@@ -7,7 +7,6 @@ export const useAssistance = () => {
     const getAssistanceList = async (filterValue: any = {}) => {
         const { data } = await Ajax.post('/assistance/list', filterValue)
         assistanceList.value = data
-        console.log("assistanceassistanceassistance", assistanceList.value)
     }
     return {
         assistanceList,

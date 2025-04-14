@@ -81,7 +81,7 @@ const paneConfig2 = [
 
 const loading = ref(false)
 
-const activeName = ref('follow')
+const activeName = ref('article')
 const articleList = ref([])
 
 const handleClick = async (tab: TabsPaneContext, _event: Event) => {
