@@ -124,11 +124,7 @@ const naviConfig: naviNode[] = [
     name: 'home',
     label: '首页'
   },
-  {
-    path: '/recommend',
-    name: 'recommend',
-    label: '推荐'
-  },
+
   {
     path: '/course',
     name: 'course',

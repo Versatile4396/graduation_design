@@ -33,14 +33,6 @@ export const routes: RouteRecordRaw[] = [
     component: () => import('@/page/login/index.vue')
   },
   {
-    path: '/recommend',
-    name: routerName.RECOMMEND,
-    meta: {
-      title: '推荐页'
-    },
-    component: () => import('@/page/recommend/index.vue')
-  },
-  {
     path: '/course',
     name: routerName.COURSE,
     meta: {
