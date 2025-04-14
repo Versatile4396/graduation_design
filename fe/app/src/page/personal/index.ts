@@ -4,9 +4,10 @@ import { ref } from "vue"
 
 export const useAssistance = () => {
     const assistanceList = ref<any>([])
-    const getAssistanceList = async (filterValue: any) => {
+    const getAssistanceList = async (filterValue: any = {}) => {
         const { data } = await Ajax.post('/assistance/list', filterValue)
         assistanceList.value = data
+        console.log("assistanceassistanceassistance", assistanceList.value)
     }
     return {
         assistanceList,
@@ -19,7 +20,6 @@ export const useFollower = () => {
     const followedList = ref<UserInfo[]>()
     const getFollowerList = async (uid?: number) => {
         const { data } = await Ajax.post('/follow/list/' + uid,)
-        console.log(data, "datadatadatadata")
         followerList.value = data.followList || []
         followedList.value = data.followedList || []
     }
@@ -29,3 +29,4 @@ export const useFollower = () => {
         getFollowerList,
     }
 }
+

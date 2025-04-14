@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"fmt"
+	"forum/global"
 	"forum/logic"
 	"forum/models"
 	"strconv"
@@ -68,6 +70,26 @@ func AssistanceUpdateController(c *gin.Context) {
 	err := logic.UpdateAssistance(assistance)
 	if err != nil {
 		zap.L().Error("assistance update with invalid Param", zap.Error(err))
+	}
+	ResponseSuccess(c, nil)
+}
+
+func AssistanceChangtStatusController(c *gin.Context) {
+	type StatusForm struct {
+		AssistanceId uint64 `json:"assistance_id"`
+		Status       int    `json:"status"`
+	}
+	var statusForm *StatusForm
+	if err := c.ShouldBindJSON(&statusForm); err != nil {
+		zap.L().Error("assistance change status with invalid Param", zap.Error(err))
+		ResponseErrorWithMsg(c, CodeInvalidParams, "参数传递错误")
+		return
+	}
+	fmt.Println(statusForm.Status, statusForm.AssistanceId)
+	err := global.Db.Model(&models.Assistance{}).Where("assistance_id =?", statusForm.AssistanceId).Update("status", statusForm.Status).Error
+	if err != nil {
+		zap.L().Error("assistance change status with invalid Param", zap.Error(err))
+		ResponseError(c, CodeServerBusy)
 	}
 	ResponseSuccess(c, nil)
 }

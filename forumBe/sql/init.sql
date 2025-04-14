@@ -246,6 +246,7 @@ CREATE TABLE
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
         updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
         assistance_status INT NOT NULL DEFAULT 0,
+        status INT NOT NULL DEFAULT 0,
         -- 外键关联互助分类表，设置级联更新和删除
         FOREIGN KEY (category_id) REFERENCES article_categories (category_id) ON UPDATE CASCADE ON DELETE RESTRICT,
         UNIQUE KEY assistance_id (assistance_id),
