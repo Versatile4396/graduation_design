@@ -1,15 +1,20 @@
 <template>
   <div class="assistance-item-container-box">
     <div class="detail-info">
-      <div class="userinfo">
-        <chatAvatar :user-info="assistance.user_info"></chatAvatar>
-        <div class="overview-wrapper">
-          <div class="name">{{ assistance.user_info.nickname }}</div>
-          <div class="overview">
-            <span>{{ assistance.user_info.overview }}</span>
-            <span style="margin: 0 4px; font-size: 12px">|</span>
-            <span class="time">{{ createAt }}</span>
+      <div class="abstract-detail-info">
+        <div class="userinfo">
+          <chatAvatar :user-info="assistance.user_info"></chatAvatar>
+          <div class="overview-wrapper">
+            <div class="name">{{ assistance.user_info.nickname }}</div>
+            <div class="overview">
+              <span>{{ assistance.user_info.overview }}</span>
+              <span style="margin: 0 4px; font-size: 12px">|</span>
+              <span class="time">{{ createAt }}</span>
+            </div>
           </div>
+        </div>
+        <div class="status">
+          <el-tag>{{ assistance.status ? '已发布' : '未发布' }}</el-tag>
         </div>
       </div>
       <div class="assistance-content">
@@ -26,7 +31,7 @@
         </div>
       </div>
     </div>
-    <div class="option-wrapper">
+    <div class="option-wrapper" v-if="commentVisible">
       <div class="operate">
         <div class="comment" @click="showComment">
           <svg-icon iconName="icon-pinglun" color="#4F4F4F" size="1.1rem" top="2px"></svg-icon
@@ -62,8 +67,11 @@ import { getUrlQuery } from '@/utils/common'
 
 interface Props {
   assistance: Assistance
+  commentVisible?: boolean
 }
-const props = withDefaults(defineProps<Props>(), {})
+const props = withDefaults(defineProps<Props>(), {
+  commentVisible: true
+})
 const createAt = computed(() => {
   return props.assistance.create_at.slice(0, 10)
 })
@@ -161,27 +169,32 @@ onMounted(async () => {
   .detail-info {
     display: flex;
     flex-direction: column;
-    .userinfo {
+    .abstract-detail-info {
       display: flex;
-      align-items: center;
-      .overview-wrapper {
-        margin-left: 8px;
-        font-weight: 500;
-        font-size: 16px;
-        color: #252933;
-        .overview {
-          font-size: 12px;
-          color: #8a919f;
-        }
-      }
-      .popover-wrapper {
+      justify-content: space-between;
+      .userinfo {
         display: flex;
+        align-items: center;
+        .overview-wrapper {
+          margin-left: 8px;
+          font-weight: 500;
+          font-size: 16px;
+          color: #252933;
+          .overview {
+            font-size: 12px;
+            color: #8a919f;
+          }
+        }
+        .popover-wrapper {
+          display: flex;
+        }
       }
     }
   }
   .assistance-content {
     display: flex;
     flex-direction: column;
+    border-bottom: 1px solid #e8e8e8;
     .image-list {
       display: flex;
       gap: 12px;
@@ -193,7 +206,6 @@ onMounted(async () => {
     flex-direction: column;
 
     .operate {
-      border-top: 1px solid #e8e8e8;
       display: flex;
       align-items: center;
       padding: 0 24px;

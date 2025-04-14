@@ -87,6 +87,7 @@ func SetupRouter() *gin.Engine {
 		assistance.POST("/delete/:aid", controller.AssistanceDeleteController)
 		assistance.POST("/list", controller.AssistanceGetListController)
 		assistance.POST("/update", controller.AssistanceUpdateController)
+		assistance.POST("/status", controller.AssistanceChangtStatusController)
 	}
 	assistanceComment := router.Group("/api/assistanceComment")
 	{

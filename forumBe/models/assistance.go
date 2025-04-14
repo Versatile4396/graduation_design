@@ -10,6 +10,7 @@ type Assistance struct {
 	CategoryId   int       `json:"category_id"`
 	TopicId      int       `json:"topic_id" `
 	TagId        int       `json:"tag_id"`
+	Status       int       `json:"status"`
 	Cover        string    `json:"cover"`
 	Abstract     string    `json:"abstract"`
 	UserInfo     *UserInfo `json:"user_info" gorm:"-"`

@@ -33,4 +33,5 @@ export interface Assistance {
   update_at: string
   user_id: number
   user_info: UserInfo
+  status: number
 }
