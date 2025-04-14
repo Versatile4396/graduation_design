@@ -12,10 +12,11 @@
 import { onMounted } from 'vue'
 import { useAssistance } from '../index'
 import Assistance from '@/page/assistance/components/assistance-item.vue'
+import { getUrlQuery } from '@/utils'
 
 const { assistanceList, getAssistanceList } = useAssistance()
 onMounted(async () => {
-  await getAssistanceList()
+  await getAssistanceList({ user_id: Number(getUrlQuery().uid) })
 })
 </script>
 <style scoped lang="scss">

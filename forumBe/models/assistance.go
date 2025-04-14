@@ -24,7 +24,7 @@ type AssistanceFilter struct {
 	CategoryId   uint64 `json:"category_id"`
 	TopicId      uint64 `json:"topic_id" `
 	TagId        uint64 `json:"tag_id"`
-	Status       int    `json:"status"`
+	Status       *int   `json:"status"`
 	OrderByTime  bool   `json:"order_by_time" gorm:"default:0"`
 	Pagination   *Pagination
 }

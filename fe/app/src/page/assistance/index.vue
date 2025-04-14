@@ -85,7 +85,9 @@ const submitHandle = async (value: Iparams) => {
 }
 const asssistanceList = ref()
 onMounted(async () => {
-  const res = await Ajax.post('/assistance/list', {})
+  const res = await Ajax.post('/assistance/list', {
+    status: 1
+  })
   asssistanceList.value = res.data
 })
 </script>

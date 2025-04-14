@@ -33,5 +33,6 @@ type AssistanceComment struct {
 type AssistanceCommentFilter struct {
 	AssistanceId uint64      `json:"assistance_id"`
 	UserId       uint64      `json:"user_id"`
+	Status       *int        `json:"status"`
 	Pagination   *Pagination `json:"pagination"`
 }

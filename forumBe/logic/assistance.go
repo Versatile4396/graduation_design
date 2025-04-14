@@ -51,7 +51,10 @@ func GetAssistanceList(f models.AssistanceFilter) (rAssistance []*models.Assista
 	if f.UserId != 0 {
 		query = query.Where("user_id =?", f.UserId)
 	}
-
+	fmt.Println(f.Status, "status")
+	if f.Status != nil {
+		query = query.Where("status =?", f.Status)
+	}
 	orderDir := "desc"
 	if f.OrderByTime {
 		orderDir = "asc"
