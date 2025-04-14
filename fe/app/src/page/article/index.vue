@@ -89,6 +89,17 @@
         </div>
       </div>
       <div class="chat-author">
+        <el-popover v-if="isFollowed">
+          <template #reference>
+            <el-button @click="handleCancleFollowClick">
+              <template #default><span class="chat-btn">已关注</span></template>
+            </el-button>
+          </template>
+          <div style="text-align: center">点击取消关注</div>
+        </el-popover>
+        <el-button v-else type="primary" plain @click="handleFollowClick">
+          <template #default><span class="chat-btn">关注</span></template>
+        </el-button>
         <el-button type="primary" @click="handleChatClick">
           <template #default><span class="chat-btn">私聊</span></template>
         </el-button>
@@ -119,6 +130,7 @@ const mode = 'default'
 const aInfo = ref<Partial<IArticle>>({})
 const authorInfo = ref<Partial<IAuthor>>({})
 const aBrief = ref<IArticleBrief>()
+const isFollowed = ref(false)
 
 const operatorIconConfig = computed(() => [
   {
@@ -193,6 +205,24 @@ const handleChatClick = async () => {
   const { uid } = getUrlQuery()
   const toUid = authorInfo.value?.user_id
   await goToChat(Number(uid), toUid!)
+}
+const handleFollowClick = async () => {
+  const { uid } = getUrlQuery()
+  const toUid = authorInfo.value?.user_id
+  await Ajax.post('/follow/create', {
+    follower_id: Number(uid),
+    followed_id: toUid!
+  })
+  isFollowed.value = true
+}
+const handleCancleFollowClick = async () => {
+  const { uid } = getUrlQuery()
+  const toUid = authorInfo.value?.user_id
+  await Ajax.post('/follow/delete', {
+    follower_id: Number(uid),
+    followed_id: toUid!
+  })
+  isFollowed.value = false
 }
 
 const articleLike = async () => {
@@ -301,11 +331,23 @@ const getAuthorCount = async () => {
   authorInfo.value.like_count = data?.like_count
   authorInfo.value.article_count = data?.article_count
 }
+const isFollowedRequest = async () => {
+  // 判断是否已经关注
+  const { uid } = getUrlQuery()
+  const { data } = await Ajax.post('/follow/isfollow', {
+    follower_id: Number(uid),
+    followed_id: authorInfo.value.user_id
+  })
+  if (data?.isFollow) {
+    isFollowed.value = true
+  }
+}
 onMounted(async () => {
   await getAContent()
   await getLikeAndCollectStatus()
   await getCommentList()
   await getAuthorCount()
+  await isFollowedRequest()
 })
 </script>
 <style scoped lang="scss">
@@ -413,9 +455,12 @@ onMounted(async () => {
     }
 
     .chat-author {
-      display: grid;
+      display: flex;
+      justify-content: center;
       margin-top: 16px;
-      width: 100%;
+      .chat-btn {
+        width: 100px;
+      }
     }
   }
 

@@ -21,7 +21,14 @@
             <el-tab-pane v-for="pane in paneConfig" :label="pane.label" :name="pane.name">
               <Article v-if="!loading" :article-list="articleList" :key="activeName"></Article>
             </el-tab-pane>
-            <el-tab-pane v-for="pane in paneConfig2" :label="pane.label" :name="pane.name">
+            <el-tab-pane :label="paneConfig2[0].label" :name="paneConfig2[0].name">
+              <Assistance></Assistance>
+            </el-tab-pane>
+            <el-tab-pane :label="paneConfig2[1].label" :name="paneConfig2[1].name">
+              <Follow :is-follower="true"></Follow>
+            </el-tab-pane>
+            <el-tab-pane :label="paneConfig2[2].label" :name="paneConfig2[2].name">
+              <Follow :is-follower="false"></Follow>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -30,7 +37,6 @@
     <div class="right-box"></div>
   </div>
 </template>
-
 <script lang="ts" setup>
 import { userInfoStore } from '@/store/user'
 import Article from './tabsview/article.vue'
@@ -40,7 +46,8 @@ import { getUrlQuery } from '@/utils/common'
 import Ajax from '@/ajax'
 import userForm from '@/components/user-form.vue'
 import type { userInfo } from '@/ajax/type/user'
-import { useAssistance } from '.'
+import Assistance from './tabsview/assistance.vue'
+import Follow from './tabsview/follow.vue'
 
 const { userInfo, setUserInfo } = userInfoStore()
 const paneConfig = [
@@ -74,10 +81,8 @@ const paneConfig2 = [
 
 const loading = ref(false)
 
-const activeName = ref('article')
+const activeName = ref('follow')
 const articleList = ref([])
-
-const { assistanceList, getAssistanceList } = useAssistance()
 
 const handleClick = async (tab: TabsPaneContext, _event: Event) => {
   switch (tab.index) {
@@ -151,6 +156,7 @@ const setUserInfoInPersonal = () => {
     })
   })
 }
+
 onMounted(async () => {
   loading.value = true
   await getArticlePersonalList()

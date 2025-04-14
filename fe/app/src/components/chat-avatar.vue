@@ -18,5 +18,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   avatarSize: ''
 })
+console.log(props, 'avatarSize')
 </script>
 <style scoped lang="scss"></style>
