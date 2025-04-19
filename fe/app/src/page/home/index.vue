@@ -47,7 +47,6 @@
             <div class="desc">点亮在社区的每一天~</div>
           </div>
         </div>
-        <div class="hot-article">热门文章</div>
       </div>
     </div>
   </div>
