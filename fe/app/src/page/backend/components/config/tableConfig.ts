@@ -135,9 +135,9 @@ export const useUserList = () => {
     {
       label: '操作',
       render(row: any) {
-        let buttonText = ['禁用', '删除']
+        let buttonText = ['编辑', '删除']
         if (row.deleted === 1) {
-          buttonText = ['启用', '删除']
+          buttonText = ['编辑', '启用']
         }
         return h(Operator, { row, handleDelete, handleEditor, buttonText })
       }
