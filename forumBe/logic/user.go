@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"fmt"
 	mysql "forum/dao"
 	"forum/global"
 	"forum/models"
@@ -189,6 +190,7 @@ func Friend(fo *models.UserFriendForm) (err error) {
 		UserId:   fo.FriendId,
 		FriendId: fo.UserId,
 	}
+	fmt.Println(fo, "foflaksd")
 	global.Db.Create(&userFriend)
 	global.Db.Create(&userFriendReverse)
 	return err

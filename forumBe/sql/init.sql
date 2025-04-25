@@ -191,23 +191,6 @@ CREATE TABLE
         UNIQUE KEY article_user (article_id, user_id)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
--- 创建视频表
-CREATE TABLE
-    videos (
-        video_id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id VARCHAR(20) NOT NULL,
-        title VARCHAR(255) NOT NULL,
-        abstract VARCHAR(255) NOT NULL,
-        upload_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        duration INT,
-        views INT DEFAULT 0,
-        likes INT DEFAULT 0,
-        dislikes INT DEFAULT 0,
-        tag_ids JSON,
-        category VARCHAR(100),
-        video_url VARCHAR(255) NOT NULL
-    );
-
 -- 信息表
 DROP TABLE IF EXISTS `messages`;
 
@@ -295,7 +278,7 @@ CREATE TABLE
         follower_id VARCHAR(20) NOT NULL COMMENT '关注者 ID',
         followed_id VARCHAR(20) NOT NULL COMMENT '被关注者 ID',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
     );
 
 -- 插入 article_categories 数据
@@ -334,37 +317,3 @@ INSERT into
 values
     ('校园OKR', null);
 
-INSERT INTO
-    topics (topic_name, topic_desc)
-values
-    ('新人报道', '新人报道赛道');
-
--- 插入数学学习方法主题
-INSERT INTO
-    topics (topic_name, topic_desc)
-VALUES
-    ('数学学习方法', '探讨数学学科的高效学习方法与技巧');
-
--- 插入英语单词记忆主题
-INSERT INTO
-    topics (topic_name, topic_desc)
-VALUES
-    ('英语单词记忆', '分享英语单词的记忆方法和策略');
-
--- 插入编程学习经验主题
-INSERT INTO
-    topics (topic_name, topic_desc)
-VALUES
-    ('编程学习经验', '交流编程学习过程中的经验和遇到的问题');
-
--- 插入历史事件分析主题
-INSERT INTO
-    topics (topic_name, topic_desc)
-VALUES
-    ('历史事件分析', '对重要历史事件进行深入分析和解读');
-
--- 插入物理实验技巧主题
-INSERT INTO
-    topics (topic_name, topic_desc)
-VALUES
-    ('物理实验技巧', '分享物理实验中的操作技巧和注意事项');
