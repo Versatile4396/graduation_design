@@ -55,3 +55,4 @@ func main() {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.Run(config.AppConf.AppBaseConfig.Port)
 }
+// 家电舒适
