@@ -18,5 +18,5 @@ function deleteNodeModules(dir) {
   }
 }
 
-// 从当前目录开始删除
+// 从当前目录开始删除 realy
 deleteNodeModules(process.cwd());
